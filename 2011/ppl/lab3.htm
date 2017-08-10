@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>lab3</TITLE>
+<META NAME="Template" CONTENT="C:\Program Files\Microsoft Office\Office\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<H3>MSc Principles of Programming Language - Lab 3 - Spring 2003<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"></H3>
+<H4>Parsing using JJTree/JavaCC</H4>
+<P>The TPL parser and AST builder is in directory <TT>/soi/sw/courses/daveb/PPL/tpl</TT>. See the TPL grammar and the contextual analysis of TPL for full details. Copy this directory to the current and make it your current directory, and load the JDK etc as follows: </P>
+<PRE>
+   cp -R /soi/sw/courses/daveb/PPL/tpl .
+   cd tpl
+   module add soi java javacc 
+</PRE>
+<P>Example programs are in <TT>*.tpl</TT>. Run the parser on <TT>fact.tpl</TT> and see the AST created with: </P>
+<PRE>
+  java TPL fact.tpl
+</PRE>
+<B><P>Exercise:</B> Introduce a remainder operator like that of Java to TPL. This operator is denoted '<TT>%</TT>' and has the same priority as multiplication. You need to modify file <TT>TPL.jjt</TT> to introduce the appropriate token and a production annotated appropriately to produce a <TT>Rem</TT> node, say. Then recompile: </P>
+<PRE>
+   jjtree TPL.jjt
+   javacc TPL.jj
+   javac *.java
+</PRE>
+<P>Check that your new node has been created by running a test program that uses the <TT>%</TT> operator through the parser (remember a class <TT>ASTRem</TT> in file <TT>ASTRem.java</TT> is created for you by JJTree). </P>
+<H4>Identification and Typechecking</H4>
+<P>This version of TPL is found in <TT>/soi/sw/courses/daveb/PPL/tpl-types</TT>. The JJTree source files are unmodified: instead <TT>identification</TT> and <TT>typecheck</TT> methods have been added to interface <TT>Node</TT> and class <TT>SimpleNode</TT> and all the AST node classes, and method calls invoked on the root node in class <TT>TPL</TT>'s <TT>main()</TT>. </P>
+<B><P>Exercise:</B> Copy <EM>only</EM> the necessary files from this directory to your <TT>tpl</TT> directory with (overwrite those already there): </P>
+<PRE>
+   cp /soi/sw/courses/daveb/PPL/tpl-types/AST*.* .
+   cp /soi/sw/courses/daveb/PPL/tpl-types/*Node.* .
+   cp /soi/sw/courses/daveb/PPL/tpl-types/TPL.java .
+   cp /soi/sw/courses/daveb/PPL/tpl-types/TPL.class .
+</PRE>
+<P>Try the typechecker with: </P>
+<PRE>
+   java TPL types.tpl
+</PRE>
+<P>Then implement <TT>identification()</TT> and <TT>typecheck()</TT> methods in your <TT>ASTRem</TT> class, and test your implementation. Use the <TT>ASTMult</TT> class as a model for the new remainder operator. This time only your <TT>ASTRem</TT> class has changed, so you need only recompile it with: </P>
+<PRE>
+   javac ASTRem.java
+</PRE>
+<H4>Interpretation</H4>
+<P>This version of TPL is found in <TT>/soi/sw/courses/daveb/PPL/tpl-interpret</TT>. </P>
+<B><P>Exercise:</B> Copy <EM>only</EM> the node-related and TPL class files from this directory to your <TT>tpl</TT> directory with (overwrite those already there): </P>
+<PRE>
+   cp /soi/sw/courses/daveb/PPL/tpl-interpret/AST*.* .
+   cp /soi/sw/courses/daveb/PPL/tpl-interpret/*Node.* .
+   cp /soi/sw/courses/daveb/PPL/tpl-interpret/TPL.java .
+   cp /soi/sw/courses/daveb/PPL/tpl-interpret/TPL.class .
+</PRE>
+<P>Try the interpreter with: </P>
+<PRE>
+   java TPL fact.tpl
+</PRE>
+<P>Then implement and test an <TT>interpret()</TT> method in your <TT>ASTRem</TT> class. </P>
+<P><HR></P></BODY>
+</HTML>

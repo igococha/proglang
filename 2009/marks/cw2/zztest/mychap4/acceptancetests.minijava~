@@ -1,0 +1,50 @@
+ 
+class Test {
+  public static void main(String[] args) 
+    {   System.out.println((new A()).m()); }}
+
+class A {
+    public int m() { 
+        int x; 
+	int y; 
+	int z;
+	int a;
+
+	// tests or with a few types of expressions
+	x = x || y;
+	x = true || false;
+	x = (x + 5) || (x * 50);
+
+	// tests or in a repeat statement
+	repeat x = x + 5; until ((x < 3) || (y < 5));
+
+	// tests try with many catches
+        try { x = x+2; }
+        catch (int x) { x = X+1; }
+        catch (int y) { y = y+3;}
+        finally { x = x + 50; }
+
+	//tests try with one catch
+	try { x = x + 2; }
+	catch (int c) { x = x + 4; }
+        finally { x = x * 40; }
+
+	// tests throw with a few types of expression
+	throw ( true && true );
+	throw ( 5 < 3 );
+	throw ( 7 + 90 );
+	throw ( 7 - 2 );
+	throw ( 7 * 2 );
+	throw ( 7 / 2 );
+	throw ( false || true );
+
+
+	// tests repeat until with a block as the statement
+        repeat { x = x - 1; } until (x < 2);
+        // tests repeat until with an assignment statement
+	repeat x = x - 1; until (x < 2);
+
+
+
+	return (x / y); 
+}}

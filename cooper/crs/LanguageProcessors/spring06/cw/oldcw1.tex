@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage{a4wide}
+\usepackage{semantic}
+\usepackage{verbatim}
+
+\usepackage{color}
+
+\usepackage[breaklinks=true,colorlinks=true,urlcolor=cyan]{hyperref}
+
+\reservestyle{\nonterm}{\textit}
+\nonterm{Statement,Exp,id,Case}
+
+\reservestyle{\keyword}{\textbf}
+\keyword{var,function,let,in,end,if,then,else,while,do,for,break,to,switch,of,case,default}
+
+\thispagestyle{empty}
+
+\begin{document}
+
+\subsection*{Language Processors Coursework 1}
+
+\paragraph{Organisation:}
+Do this work in pairs if you wish. You will hand
+work in as individuals but the handin procedure will allow 
+you to say who you collaborated with. 
+\emph{Pairs} only -- not threesomes!
+
+\paragraph{Handin:} 
+The deadline and the electronic handin procedure, and exactly what you should 
+hand-in, are documented online.
+Obviously you should change file and directory permissions while you 
+are working so that your work is not visible to others -- 
+remember plagiarism carries penalties.
+
+
+\begin{enumerate}
+\item
+
+Use regular expressions to define precisely signed floating
+ point numbers.
+ Such numbers must contain a decimal point, and at least one
+ digit before and after the decimal point.
+ They may optionally be followed by a signed exponent
+ that begins with the letter `\verb"E"' and is followed
+ by a (possibly signed) integer.
+ There should be no leading zeros before the decimal point or the
+ exponent integer, and no trailing zeros after the decimal point.
+ In this notation, \verb"39.37", \verb"-6.336E4", \verb"0.894E-4" and
+ \verb"0.0" are legal, while \verb".36", \verb"4.",
+ \verb"+.7E6",  \verb+01.7+, \verb+1.70+ and \verb+1.7E04+
+ are illegal.
+ (Note: these are not Java floating point numbers; the Java definition
+ is more complex than this.)
+Implement and test your expressions using JavaCC (make your
+	expressions readable and understandable).
+
+\item Copy the MiniJava implementation directory
+	to where you want to work, using:
+\begin{verbatim}
+   cp -R /soi/sw/courses/daveb/IN2009/minijava/chap4 
+\end{verbatim}
+({\em OR}\/ download it from WebCT).
+Files README in the various directories
+give a brief
+description of the structure of the implementation.
+
+\begin{enumerate}
+\item Add a Java-like for-statement to the MiniJava 
+	implementation.
+\[
+\<Statement> \; -> \; \<for> \; ( \<id> = \<Exp> \; ; \; \<Exp> \; ; \; \<id> = \<Exp> ) \; \<Statement>
+\]
+%	The token definitions and abstract syntax tree code
+%	for it is included in the \verb+mjabs+ implementation directories.
+	You will need to add the for-statement to the JavaCC specification
+        (including appropriately adjusting the token regular expressions), 
+	so that it builds the correct abstract syntax trees,
+        and write new appropriate abstract syntax tree classes.
+        The pretty-printer will also
+        need to be updated to appropriately print the for statement 
+        abstract syntax you have introduced.
+%\item The short-circuit boolean operators \verb+&+ and \verb+|+ have
+	%also been removed from the CUP specification grammar.
+	%They are not represented in the abstract syntax as
+	%\verb+OpExp+s but instead should be represented as \verb+IfExp+
+	%nodes (see Appel page 105). Put these operators back in
+	%the grammar so that it builds the correct abstract syntax trees
+	%for them.
+\item In a similar way, 
+      add the Java-like switch-statement defined below to the implementation:
+\[
+\;\;\;\;\;\;\;\;\;\<Statement> \; -> \; \<switch> \; ( \; \<Exp> \; ) \; \{ \; \<Case>^{*} \; \}
+\]
+\[
+-> \; \<break> \; ;
+\]
+\[
+\<Case> \; -> \; \<case> \; \<Exp> \; : \; \<Statement>^{*}
+\]
+\[
+\;\;\;\;\;\;\;\; -> \; \<default> \; : \; \<Statement>^{*}
+\]
+Note that the $\<Case>$s may be represented as a list in your abstract syntax
+(and hence programmed like the other lists).
+\end{enumerate}
+
+\end{enumerate}
+
+\bigskip\noindent
+{\em Note: remember that these exercises deal only with lexical and 
+syntax analysis and producing appropriate abstract syntax trees: you do
+not yet have to worry about how MiniJava programs are type-checked,
+execute or have code produced for them!}
+
+\end{document}

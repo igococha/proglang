@@ -1,0 +1,13 @@
+package ast;
+import java.util.*;
+import visitor.*;
+
+public class MainFunction {
+    public List<Stm> statements;
+    public MainFunction(List<Stm> s) { statements=s;}
+    public int accept(Visitor v)  throws VisitorException
+    { return v.visit(this); }
+}
+
+
+

@@ -1,0 +1,38 @@
+/* Test Plan, for testing all the literals, done by Mihir & Seun 
+A Complete Testplan for binary, hex, octal, int, floating point, 
+error, comments literals */
+
+/* Here we are testing for binary, hex, octal, int, floating point,
+error and comment literals together */
+
+/* Worked in Pair */ b111 34 zF 3.142 b3b o2
+
+B0110 O372 -42f /* Seun */ Z1f Mihir 150998
+
+// Here we are testing for Binary Literals
+
+b1 B01 b011 B0111 b11111 B11110
+
+/* Here we Are Testing For Floating Point Literals */
+
+1e1f 2.f .3f 0f 3.14f 6.022137E23f 1e1 2. 0.3 0.0 3.14 
+
+1e-9d 1e137 -5.56e4263 -42f
+
+/* Here we are Testing for Errors */
+
+b3b Seun Mihir Sangani ABCX451 ABCZ980
+
+// Here We are testing for Integers
+
+0 1996 0372 0777L 426355690003133711121133114641
+
+// Here we are testing the Octal Literals
+
+O65 o0372 O0777 o0245 O22 o44
+
+/* Here we will be testing the Hex Literals */
+
+z11 Z12 zA18 Z2A zB2 ZD55 zCCE2 Zc0B0
+
+Thank You For Reading

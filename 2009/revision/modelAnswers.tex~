@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage{a4wide}
+\usepackage{verbatim}
+
+\usepackage{color}
+
+\begin{document}
+
+\subsection*{Language Processors - Coursework 3}
+
+\paragraph{Organisation:}
+Do this work in pairs if you wish. You will hand work in as individuals but the handin procedure will allow you to say who you collaborated with. 
+\emph{Pairs} only -- not threesomes!
+
+\paragraph{Handin:}
+\begin{itemize} 
+\item A zipped version of your solution directory after removing all the \verb+.class+ files (just to save space). Alternatively, you can only include the files that were modified and added by your implementation. 
+\item A test file (MiniJava program) with all the new cases added to the language, including expressions and statements that should throw type errors. Point these expressions out (good and bad ones) by adding a comment (find out how you can add comments in MiniJava). The typechecker will report the first type error and quit. You can test your program by only including one ill-typed expression/statement at a time and commenting out the rest (that's what I will do with your file).
+
+\end{itemize}
+
+\subsubsection*{The work}
+
+You will extend the MiniJava implementation, including the typechecker, with two new expressions and a new statement. Copy the MiniJava implementation directory to where you want to work, using:  
+\begin{verbatim}
+   cp -R /soi/sw/courses/daveb/IN2009/minijava/chap5 .
+\end{verbatim}
+Files README in the various directories give a brief description of the structure of the implementation. 
+
+
+
+\begin{enumerate}
+\item Add the \verb+||+ (or) operator to MiniJava (implemented in CW2).
+
+\item Add the \verb+?:+ (shortcut if-else) operator to MiniJava, where \verb+op1?op2:op3+ returns \verb+op2+ if \verb+op1+ is true, and returns \verb+op3+ if \verb+op1+ is false. The syntax is:
+\begin{verbatim}
+      <Exp> ''?'' <Exp> '':''  <Exp>
+\end{verbatim}
+
+\item Add the repeat-until statement to MiniJava (implemented in CW2).
+\end{enumerate}
+
+Your implementation should correctly typecheck the new expressions and statement.
+Lab6 explains how to extend MiniJava (typechecker included) with a new expression. The process is similar for statements where, instead of modifying \verb+TypeCheckExpVisitor+, you will have to modify \verb+TypeCheckVisitor+. In a nutshell, you will have to:
+
+\begin{itemize}
+\item Modify the \verb+minijava.jj+ file.
+\item Add the classes representing the new expressions and statement to the \verb+syntaxtree+ directory. Note that this time you will also have to include an \verb+accept+ method to be used by the Type visitor (lab6).
+\item Update the pretty-printer visitor by adding the new \verb+visit+ declarations to \verb+Visitor.java+ and the new implementations of \verb+visit+ to the \verb+DBPrettyVisitor.java+ file.
+\item Update the default Type visitor by adding the new \verb+visit+ declarations to \verb+TypeVisitor.java+ and the new implementations of \verb+visit+ to the \verb+TypeDepthFirstVisitor.java+ file.
+\item Implement the actual type checking of the new expressions and statement by adding the respective \verb+visit+ method to \verb+TypeCheckExpVisitor.java+ (expressions) and \\
+\verb+TypeCheckVisitor.java+ (statements).
+\end{itemize}
+
+
+\end{document}

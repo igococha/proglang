@@ -1,0 +1,162 @@
+PARSER_BEGIN(RegularExpressions)
+
+public class RegularExpressions {
+
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    RegularExpressions parser = new RegularExpressions(System.in);
+    parser.TokenList();
+  }
+}
+
+
+PARSER_END(RegularExpressions)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+| <("--"((<LETTER>|" "|<DIGIT>|",")+)("\n"|"\r"|"\r\n"))> /* Allows for comments in my test file to explain what the inout tests for */
+}
+
+TOKEN : /* Float and Double */
+{
+  <INTEGER_LITERAL_BINARY: ((<SIGN>)?)("b"|"B")(("0"|"1")+)(("L")?) >
+|
+  <INTEGER_LITERAL_DECIMAL: (<INT>(("L")?)) >
+|
+  <INTEGER_LITERAL_HEXADECIMAL: ((<SIGN>)?)("z"|"Z")((<DIGIT>|["a"-"f"]|["A"-"F"])+)(("L")?) >
+|
+  <INTEGER_LITERAL_OCTAL: ((<SIGN>)?)("o"|"O")((["0"-"7"])+)(("L")?) >
+
+}
+
+TOKEN : /* Float and Double. */
+{ 
+  <FLOAT: ((<FLOATING_POINT_LITERAL>(("f")?))|(<INT>(("f")?))) >
+|
+  <DOUBLE: ((<FLOATING_POINT_LITERAL>"d")|(<INT>("d"))) >
+|
+  <COMMENT: (<SINGLE_LINE_COMMENT>|<MULTI_LINE_COMMENT>) >
+
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+|
+  < #SIGN: ["+","-"] >
+|
+  < #INT: ("0"|((<SIGN>)?)["1"-"9"]((<DIGIT>)*)) >
+|
+  < #DECIMAL_NUMBER: (((<INT>)?)"."<INT>)|(<INT>"."((<INT>)?)) >
+|
+  < #EXPONENTIAL_NUMBER: (<INT>|<DECIMAL_NUMBER>)("e"|"E")(("+"|"-")?)<INT> >
+|
+  < #FLOATING_POINT_LITERAL:(("+"|"-")?)(<DECIMAL_NUMBER>|<EXPONENTIAL_NUMBER>) >
+|
+  // Starts with // and only ands when it reaches a new line character string
+  < #SINGLE_LINE_COMMENT: "//"((~["\n","\r","\r\n"])+)("\n"|"\r"|"\r\n") >
+|
+  < #MULTI_LINE_COMMENT: ("/*"(((~["*"])*)"*/")) >
+
+}
+
+TOKEN :
+{
+  // Any of the above will also match as ERROR but because this is last to be difined the others will always used first
+  <ERROR:  (~[" ","\n","\t","\r","\f"])+ >
+}
+
+
+
+void TokenList() :
+{
+  Token t;
+}
+
+{
+   (
+
+     (t = <INTEGER_LITERAL_BINARY> | t= <INTEGER_LITERAL_DECIMAL> | t= <INTEGER_LITERAL_HEXADECIMAL> | 
+      t= <INTEGER_LITERAL_OCTAL> | t = <FLOAT> | t = <DOUBLE> | t = <COMMENT> | t = <ERROR>)
+
+     { 
+       String type = tokenImage[t.kind];
+       // COMMENTS
+       if(type == "<COMMENT>") {
+         System.out.print ("COMMENT ");
+       } else {
+         // Type DOUBLE
+         if(type == "<DOUBLE>") {
+           System.out.print ("FLOAT(" + t.image + ") "); 
+         } else {
+	   // Type FLOAT
+           if (type == "<FLOAT>") {
+             System.out.print ("FLOAT(" + t.image + ") ");
+           } else {
+             if(type == "<ERROR>") {
+               System.out.print("ERROR ");
+             } else {
+               // Interger Types, removes trailing L
+               String number = t.image;
+               if(number.endsWith("L")) {
+                 number = number.substring(0, number.length() - 1);
+               }
+               // Print sign
+               String start = "INT(";
+               String end = ")";
+               long value = 0;
+               if(number.startsWith("+") || number.startsWith("-")) {
+                 start = start + number.substring(0, 1);
+                 number = number.substring(1);
+               }
+               // Binary
+               if(type == "<INTEGER_LITERAL_BINARY>") {
+                 number = number.substring(1);
+                 value = Long.parseLong(number, 2);
+               } else {
+                 // Decimal
+                 if(type == "<INTEGER_LITERAL_DECIMAL>") {
+                   value = Long.parseLong(number);
+                 } else {
+                   // Hexadecimal
+                   if(type == "<INTEGER_LITERAL_HEXADECIMAL>") {
+                     number = number.substring(1);
+                     value = Long.parseLong(number, 16);
+                   } else {
+                     // Octal
+                     if(type == "<INTEGER_LITERAL_OCTAL>") {
+                       number = number.substring(1);
+                       value = Long.parseLong( number, 8);
+                     }
+                   }
+                 }
+               }
+               System.out.print(start + value + end + " ");
+             }
+           }
+         }
+       }
+     }
+
+     )* <EOF>
+
+}
+
+
+
+
+
+

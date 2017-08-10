@@ -1,0 +1,220 @@
+\question
+
+\begin{subquestions}
+
+\subquestion
+The following regular expression recognises certain strings consisting of the
+letters $a$, $b$ and $c$:
+\[
+a(b|(bc))\!*c*
+\]
+Indicate which of these five strings are recognised by the above regular expression:
+\begin{quote}
+$acc$, $abac$, $a$, $abcbcbccc$, $abbbccbc$
+\end{quote}
+Also, show three more strings that are recognised by the above expression.
+Finally, show two more strings consisting of 
+the letters $a$, $b$ and $c$ that are \emph{not} 
+recognised by the above regular expression.
+\marks{25}
+
+\begin{modelanswer}
+Yes, No, Yes, Yes, Yes. 3 marks each. 
+Five further strings, 2 marks each.
+\end{modelanswer}
+
+
+\subquestion
+Consider the following grammar, which we will call {\it E\/}:
+\begin{quote}
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+E \> $\rightarrow$ \> {\it E\/} \verb!+! {\it E} \\
+\it
+E \> $\rightarrow$ \> {\it E\/} \verb!-! {\it E} \\
+\it
+E \> $\rightarrow$ \> ( {\it E\/} ) \\
+\it
+E \> $\rightarrow$ \> \verb!num!
+\end{tabbing}
+\end{quote}
+
+\begin{subsubquestions}
+\subsubquestion
+Explain what it means for a context-free grammar to be ambiguous. 
+Show that grammar {\it E\/} is ambiguous.
+\marks{20}
+
+\begin{modelanswer}
+Two parse trees, two derivations, for same sentence. 5 marks.
+15 for the two trees/derivations.
+\end{modelanswer}
+
+\subsubquestion
+Explain why grammar {\it E\/} is not suitable to form the basis for a 
+recursive descent parser.
+\marks{10}
+
+\begin{modelanswer}
+Because it's left-recursive and so the usual way of writing the 
+procedures leads to immediate recursive call.
+\end{modelanswer}
+
+\subsubquestion
+Rewrite the rules to obtain an equivalent grammar which can
+be used as the basis for a recursive descent parser.
+\marks{25}
+
+\begin{modelanswer}
+\begin{verbatim}
+E -> num E'
+E -> (E) E'
+E' -> + E E'
+E' -> - E E'
+E' -> empty
+\end{verbatim}
+\end{modelanswer}
+
+\end{subsubquestions}
+
+\subquestion
+Consider the following Java method:
+\begin{verbatim}
+1  class A {
+2   String a; int c;
+3   public void f(int b, String c) {
+4     System.out.println(c);
+5     int d = 3;
+6     int a = b;
+7     System.out.println(a+d); System.out.println(b);
+8     System.out.println(c); System.out.println(d);
+9   }
+10 }
+\end{verbatim}
+Given an initial environment $\sigma_0$, 
+derive the type binding environments for the method at each
+use of an identifier and indicate where type lookups will occur.
+\marks{20}
+
+\begin{modelanswer}
+0  $\sigma_0$ is starting environment\\
+2  $\sigma_1 = \sigma_0 + \{a\rightarrow string,c\rightarrow int\}$\\
+3  $\sigma_2 = \sigma_1 + \{b\rightarrow int,c\rightarrow String\}$ (overrides instance c)\\
+4  lookup id c  in $\sigma_2$\\
+5  $\sigma_3 = \sigma_2 + \{d\rightarrow int\}$ \\
+6  lookup id b, then $\sigma_4 = \sigma_3 + \{a\rightarrow int\}$ (overrides instance a)\\
+7  lookup a, d, b  in $\sigma_4$\\
+8  lookup c, b in $\sigma_4$\\
+9  discard $\sigma_4$ revert to $\sigma_1$\\
+10 discard $\sigma_1$ revert to $\sigma_0$
+\end{modelanswer}
+
+
+\end{subquestions}
+\question
+
+The reference manual for a MiniJava-like programming language contains
+the following grammar for a for-statement: 
+
+\[
+\<Statement> \; -> \; \<for> \; ( \<id> = \<Exp> \; ; \; \<Exp> \; ; \; \<id> = 
+\<Exp> ) \; \<Statement>
+\]
+
+
+\begin{subquestions}
+
+\subquestion
+Sketch a possible abstract syntax for the for-statement.
+\marks{15}
+
+\begin{modelanswer}
+\begin{verbatim}
+For Id Exp Exp Id Exp Statement
+(be flexible about how this is expressed - it might be Java and have types)
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Show how semantic actions in a grammar for a parser-generator such as JavaCC
+can be used to produce abstract syntax trees for the for-statement. 
+\marks{25}
+
+\begin{modelanswer}
+\begin{verbatim}
+Statement ForStatement() : 
+{ Identifier i1, i2;
+  Exp e1, e2, e3;
+  Statement s;
+}
+{
+  "for" "(" i1=Identifier() "=" e1=Expression() ";"
+            e2=Expression() ";"
+            i2=Identifier() "=" e3=Expression() 
+         ")" s=Statement() 
+  { return new For(i1,e1,e2,i2,e3,s); }
+}
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Informally describe an appropriate typecheck for the for-statement.
+\marks{10}
+
+\begin{modelanswer}
+i1 should be same type as e1, i2 same type as e3;
+e2 must be a boolean expression. 
+\end{modelanswer}
+
+\subquestion
+
+
+Suppose a compiler for a MiniJava-like language that includes
+a for-statement translates all statements and expressions
+into intermediate code (eg intermediate representation (IR) trees).
+
+\begin{subsubquestions}
+
+\subsubquestion
+Draw or write down
+the intermediate representation
+required to access a local variable declared in a method.
+Explain your answer.
+\marks{15}
+
+\begin{modelanswer}
+MEM(BINOP(PLUS,TEMP fp, CONST k)) where k is offset of var in frame, fp the
+register holding the framepointer. Has to compute place in frame.
+\end{modelanswer}
+
+\subsubquestion
+Outline the intermediate code that might be generated
+in translation of the for-statement. You may wish to use a simple
+example to explain your translation, eg:
+\begin{verbatim}
+for (i = j; i < k; i=i+1) 
+   { x = i*i; System.out.println (x); }
+\end{verbatim}
+You can assume that the expression tree for any variable \verb"v" is
+simply \verb"TEMP v". Do not show translations for the body of the
+example for-statement (in braces in this example \verb+{...}+).
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+MOVE(TEMP i,TEMP j)
+LABEL(Lstart)
+CJUMP(<,TEMP i,TEMP k,Lbody,Lend)
+LABEL(Lbody)
+code for body (here square and print)
+MOVE(TEMP i,BINOP(+,TEMP i,1))
+JUMP(Lstart)
+LABEL(Lend)
+\end{verbatim}
+Might be expressed as trees.
+\end{modelanswer}
+
+\end{subsubquestions}
+
+\end{subquestions}

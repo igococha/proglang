@@ -1,0 +1,208 @@
+/*
+ * Nicholas Diakomihalis - abcb515 
+ */
+
+PARSER_BEGIN(Literal)
+
+public class Literal {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...");
+    Literal parser = new Literal(System.in);
+    parser.TokenList();
+	}
+  
+	/* Parses integer literals of base 2 (binary) into their base 10 (decimal) correspondant */
+	public static int parseBin(String binary) throws Exception 
+	{
+		string cleanBinary = "";
+		if (binary.startsWith("+") || binary.startsWith("-")
+		{
+			cleanBinary = binary.substring(2); // This deletes the sign and the 'B' or 'b' in front of the number so that it may be parsed easily
+		}
+		else
+		{
+			cleanBinary = binary.substring(1); // This deletes the 'B' or 'b' in front of the number so that it may be parsed easily 
+		}
+		
+		if (cleanBinary.endsWith("L"))
+			cleanBinary = cleanBinary.substring(0, cleanBinary.length() - 1);
+		
+		int val=0, l;
+		short base 2;
+		char ch;
+		StringBuffer buf = new StringBuffer(cleanBinary);
+		l = buf.length();
+		
+		for (int i = 0; i < l; i++)
+		{
+			ch = buf.charAt(l - (i + 1));
+			
+			if (ch == '1')
+				val += base^i;			
+		}
+		return val;
+	}
+
+	/* Parses integer literals of base 8 (octal) into their base 10 (decimal) correspondant */
+	public static int parseOct(String oct) throws Exception 
+	{
+		string cleanOct = "";
+		if (oct.startsWith("+") || oct.startsWith("-")
+			cleanOct = oct.substring(2) // This deletes the sign and thr 'O' or 'o' in front of the number so that it may be parsed easily 
+		else
+			cleanOct = oct.substring(1); // This deletes the 'O' or 'o' in front of the number so that it may be parsed easily 
+			
+		if (cleanOct.endsWith("L"))
+			cleanOct = cleanOct.substring(0, cleanOct.length() - 1);
+			
+		int val=0, l;
+		short base 8;
+		char ch;
+		StringBuffer buf = new StringBuffer(cleanOct);
+		l = buf.length();
+		
+		for (int i = 0; i < l; i++)
+		{
+			ch = buf.charAt(l - (i + 1));
+			
+			if(ch >= '0' && ch <= '7')
+				val += ch * (base^i);							
+		}
+		return val;
+	}
+
+	/* Parses integer literals of base 16 (hexadecimal) into their base 10 (decimal) correspondant */
+	public static int parseHex(String hex) throws Exception 
+	{
+		string cleanHex = "";
+		if (hex.startsWith("+") || hex.startsWith("-")
+			cleanHex = hex.substring(2) // This deletes the sign and thr 'Z' or 'z' in front of the number so that it may be parsed easily 
+		else
+			cleanHex = hex.substring(1); // This deletes the 'Z' or 'z' in front of the number so that it may be parsed easily 
+			
+		if (cleanHex.endsWith("L"))
+			cleanHex = cleanHex.substring(0, cleanHex.length() - 1);
+	
+		int exp, valchar=0, val=0, l;
+		short base=16;
+		char ch;
+		StringBuffer buf = new StringBuffer(cleanHex);
+		l = buf.length();
+		
+		exp = 1;
+		for(int i = l-1; i >= 0; i--) 
+		{
+			ch = buf.charAt(i);
+			if (ch >= '0' && ch <= '9')
+				valchar = ch - '0';
+			else if (ch >= 'a' && ch <= 'f')
+				valchar = 10 + (ch - 'a');
+			else if (ch >= 'A' && ch <= 'F')
+				valchar = 10 + (ch - 'A');
+			
+			val = val + valchar*exp;
+			exp = exp*base;
+		}
+		return val;
+	}
+}
+
+PARSER_END(Literal)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* SPACES */
+{
+  " "  | 		/* Empty space */
+  "\t" |		/* Tab */
+  "\n" |		/* Newline */
+  "\r" |		/* Return */
+  "\f"			/* Formfeed */
+}
+ 
+TOKEN : /* Definitions used in other lexical definitions */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] > |
+  < #DIGIT: [ "0"-"9" ] > |
+  < #PREFIX: ("+"|"-") > |
+  < #LONG: "L" > |
+  < #DECIMAL: (<PREFIX>)?(["1"-"9"](<DIGIT>)* | "0") >
+}
+
+TOKEN : /* Binary */
+{
+  < BINARY: (<PREFIX>)?("b"|"B")("0"|"1")+(<LONG>)? >
+}
+
+TOKEN : /* Octal */
+{
+  < OCTAL: (<PREFIX>)?("o"|"O")(["0"-"7"])+(<LONG>)? >
+}
+
+TOKEN : /* Hexadecimal */
+{
+  < HEXADECIMAL: (<PREFIX>)?("z"|"Z")(<DIGIT>|["a"-"f"]|["A"-"F"])+(<LONG>)? >
+}
+
+TOKEN : /* Decimal Number */
+{
+  < DECIMALNUMBER: <DECIMAL>(<LONG>)?   >
+}
+
+TOKEN : /* Floating Literal */
+{
+  < FLOAT:  ((<DECIMAL>)? (".")?((<DIGIT>)+("e"("-")?<DECIMAL>)?("d"|"f")?)(<LONG>)?) | 
+                       (((<DECIMAL>) | (<PREFIX>)) (".")?(((<DIGIT>)*("e"("-")?<DECIMAL>)?("d"|"f")?)?(<LONG>)?)?) >
+}
+
+TOKEN : /* Comment */
+{ 
+  < COMMENT: ("/*" (~["*"] | ("*")+ ~["*","/"])* ("*")+ "/") | ("//"(~["\n","\r"])* ("\n"|"\r"|"\r\n")?)  >
+}
+
+/*
+ * Match and print tokens.
+ */
+void TokenList() :
+{Token t;}
+{
+	(
+		for (Token t = getNextToken(); t.kind != EOF; t = getNextToken())
+		{
+			if(t.kind == HEXADECIMAL)
+			{
+				System.out.println ("INT(" + Literal.parseHex(t.image) + ")"); 
+			}
+			else if(t.kind == BINARY)
+			{
+				System.out.println ("INT(" + Literal.parseBin(t.image) + ")");
+			}
+			else if(t.kind == OCTAL)
+			{
+				System.out.println ("INT(" + Literal.parseOct(t.image) + ")");
+			}
+			else if(t.kind == DECIMALNUMBER)
+			{
+				System.out.println ("INT(" + t.image + ")");
+			}
+			else if(t.kind == FLOAT)
+			{
+				System.out.println ("FLOAT(" + t.image + ")");
+			}
+			else if(t.kind == COMMENT)
+			{
+				System.out.println ("COMMENT(" + t.image + ")");
+			}
+			else
+			{
+				System.out.println ("ERROR(" + t.image + ")");
+			}
+		}
+	)*	
+	      
+    <EOF>
+}
+

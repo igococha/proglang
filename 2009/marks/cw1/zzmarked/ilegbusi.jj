@@ -1,0 +1,202 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+  
+  // MAIN PARSER FUNCTION
+  public static int parseValue ( String str ) throws Exception {
+	
+	if ( str.charAt(0) == 'z' || str.charAt(0) == 'Z' )
+		return parseHex ( str );
+	else if ( str.charAt(0) == 'b' || str.charAt(0) == 'B' )
+		return parseBinary ( str );
+	else if ( str.charAt(0) == 'o' || str.charAt(0) == 'O' )
+		return parseOctal ( str );
+	else
+		return -1;
+	
+  }
+  
+  // OCTAL PARSER FUNCTION
+  public static int parseOctal(String oct) throws Exception {
+	
+		String trimmed = "";
+					
+		for ( int i = 1; i < oct.length(); i++ )
+			trimmed = trimmed + oct.charAt(i);
+	
+		StringBuffer buf = new StringBuffer(trimmed);
+	    int l = buf.length();
+
+		int output = 0;
+				
+		for ( int i = 0; i < buf.length(); i++ )
+		{
+			int ans = 1;
+			if ( buf.charAt(i) >= '0' && buf.charAt(i) <= '7' )
+			{
+				for ( int x = 0; x < buf.length() - 1 - i; x++ )
+					ans = ans * 8;
+				
+				ans = ans * ( (int)( buf.charAt(i) - 48 ) );
+				output += ans;
+			}
+			else
+				throw new Exception ( "Bad Number Format" );
+		}
+		
+	    return output;
+	}
+	
+  // BINARY PARSER FUNCTION
+  public static int parseBinary(String bin) throws Exception {
+	
+		String trimmed = "";
+					
+		for ( int i = 1; i < bin.length(); i++ )
+			trimmed = trimmed + bin.charAt(i);
+	
+		StringBuffer buf = new StringBuffer(trimmed);
+	    int l = buf.length();
+
+		int output = 0;
+				
+		for ( int i = 0; i < buf.length(); i++ )
+		{
+			int ans = 1;
+			if ( buf.charAt(i) == '1' )
+			{
+				for ( int x = 0; x < buf.length() - 1 - i; x++ )
+					ans = ans * 2;
+					
+				output += ans;
+			}
+		}
+		
+	    return output;
+	}
+  
+  // HEXADECIMAL PARSER FUNCTION
+  public static int parseHex(String hex) throws Exception {
+	    int exp, valchar=0, val=0, l;
+	    short base=16;
+	    char ch; 
+	    
+		String trimmed = "";
+					
+		for ( int i = 1; i < hex.length(); i++ )
+			trimmed = trimmed + hex.charAt(i);
+	
+		StringBuffer buf = new StringBuffer(trimmed);
+	    l = buf.length();
+
+	    exp = 1;
+	    for(int i=l-1; i >= 0; i--) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9')
+		    valchar = ch-'0';
+		else if (ch >= 'a' && ch <= 'f')
+		    valchar = 10 + (ch-'a');
+		else if (ch >= 'A' && ch <= 'F')
+		    valchar = 10 + (ch-'A');
+		else
+		    throw new Exception("Bad Char "+ch);
+		val = val + valchar*exp;
+		// System.out.println(val);
+		exp = exp*base;
+	    }
+	    return val;
+	}
+
+  
+}
+
+PARSER_END(LexTest)
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+/* 
+ * Lexical items. 
+ */
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : /* Literal integers. */
+{
+  <INT: ("-")? (<DIGIT>)+ (["L"])? >
+| <BINARY_LITERAL : ["b","B"] (["0"-"1"])+ (["L"])? >
+| <HEX_LITERAL:  ["z","Z"] (["0"-"9","a"-"f","A"-"F"])+ (["L"])? >
+| <OCTAL_LITERAL: ["o","O"] (["0"-"7"])* (["L"])? >
+| <FLOATING_POINT_LITERAL:
+        ("-")? (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | ("-")? "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | ("-")? (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | ("-")? (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | ("-")? (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"] >
+}
+
+TOKEN :
+{
+  <SINGLELINE_COMMENT: "//" (~["\n","\r"])* >
+| <MULTILINE_COMMENT: "/*" (~["*"] | ("*")+ ~["*","/"])* ("*")+ "/">
+}
+
+TOKEN:
+{
+  <ERROR: (~["\n","\r"," "])+  >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #DIGIT: [ "0"-"9"] >
+|
+  < #BINARY_FORMAT_SPEC : "0" ["b","B"] (["0"-"1"])+ >
+|
+  < #HEX_FORMAT_SPEC: "0" ["z","Z"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < #OCTAL_FORMAT_SPEC: ["o","O"] (["0"-"7"])* >
+|
+  < #EXPONENT: ["e","E"] (["+","-","."])? (["0"-"9"])+ >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <INT> | t = <BINARY_LITERAL> | t = <HEX_LITERAL> | t = <OCTAL_LITERAL> | t = <FLOATING_POINT_LITERAL> | t = <SINGLELINE_COMMENT> | t = <MULTILINE_COMMENT> | t = <ERROR>)
+           { 
+				System.out.println ("token found: "+ tokenImage[t.kind] + " (`"+t.image+"')"); 
+				try
+				{
+					int parsedInt = parseValue ( new String ( t.image ) );
+					if ( parsedInt != -1 && parsedInt != 0 )
+						System.out.println ("The Output of " + t.image + " is INT " + " (`"+parsedInt+"')");
+				}
+				catch ( Exception e ) 
+				{
+					System.out.println ( "Exception Encountered.. awww.." );
+					e.printStackTrace();
+				}
+	   }
+   )* <EOF>
+   
+}
+

@@ -1,0 +1,148 @@
+% Herewith two questions for Principles and Tools
+
+\question
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+
+The following is an extract from the BNF syntax for
+a programming language:
+\begin{bnf}
+\Rule{\nt{stms}}{\nt{stm stms}\Or{\nt{stm}}} \\
+\Rule{\nt{stm}}{\nt{if}\Or{\nt{assign}}} \\
+\Rule{\nt{assign}}{\nt{var} \verb":=" \nt{aexp} \verb";"} \\
+\Rule{\nt{if}}{\verb"if" \nt{bexp} \verb"then" \nt{stms} \verb"else" \nt{stms} \verb"endif ;"}\\
+\Rule{\nt{bexp}}{\nt{aexp} \verb"=" \nt{aexp}\Or{\nt{aexp} \verb"<=" \nt{aexp}}}\\
+\Rule{\nt{aexp}}{\nt{var}\Or{\nt{num}}\Or{\nt{aexp} \verb"+" \nt{aexp}}
+        \Or{\nt{aexp} \verb"-" \nt{aexp}} \Or{\nt{aexp} \verb"*" \nt{aexp}}}
+\end{bnf}
+where \nt{var} and \nt{num} have obvious interpretations.
+\begin{subquestions}
+\subsubquestion
+Show that this is an ambiguous grammar by constructing different
+concrete syntax trees for the assignment:\marks{4} 
+\begin{verbatim}
+       t := m + 60 * h
+\end{verbatim}
+%\subquestion
+%Modify the grammar so that the \verb"+" and \verb"-" operators
+%have equal precedence lower than that of \verb"*".
+%\marks{4}
+\subquestion
+The meaning of an \nt{if} is as follows:
+\begin{itemize}
+\item On entry to the \nt{if}, the \nt{bexp} is 
+        evaluated. 
+\item If the value of \nt{bexp} is true,
+        the \nt{stms} following the \verb"then" are
+        executed and then control transfers to the statement following
+        the \verb"endif". 
+\item Otherwise, the \nt{stms} following the \verb"else" are
+        executed,
+        and then control tranfers to the statement following
+        the \verb"endif".
+\end{itemize}
+\begin{subsubquestions}
+\subsubquestion
+	Outline the structure of the
+        code that might be generated in translation of
+        an \nt{if} with a typical \nt{bexp} (\verb"a+1 <= b-1", say). 
+	Assume code generation for a simple
+        stack or register machine, and briefly explain the
+	instructions you use in your outline.
+\marks{4}
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{if} and \nt{bexp} which produces such code.
+        Describe, in detail, any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{aexp}, but you need not produce translations for
+	\nt{aexp}.
+\marks{10}
+\end{subsubquestions}
+
+\subquestion
+Outline the Sethi-Ullman numbering algorithm and
+note two potential uses for it.  Assuming two registers
+are required for loading a variable, and one for loading a literal number,
+draw the labelled
+tree produced by your algorithm for the expression:
+\marks{7}
+\begin{verbatim}
+       (a - 3) + ((c + 4) + (e * f))
+\end{verbatim}
+
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+\subquestion
+Draw a diagram of the usual run time memory
+subdivision (memory model) for execution of
+programs compiled from languages such as
+Pascal and C.  Briefly describe the function of each
+of the subdivisions (areas), and discuss
+the programming language features which influence
+the organisation and functioning of run time storage.
+\marks{7}
+
+\subquestion
+Sketch a possible structure for a stack activation
+record (stack frame) and briefly explain the purpose of
+each component. Comment on how local variables,
+parameters and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use,
+and explain the need for a register `spill' area
+in some records.
+\marks{9}
+
+\subquestion
+
+        Explain what is meant by the parameter passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+%                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is printed by the 
+        program shown below, assuming that all parameters are
+	passed with the same mechanism.
+        In each case briefly justify your answer.
+\begin{verbatim}
+       MODULE prettypass; 
+       
+       IMPORT InOut;
+
+       VAR a, b: INTEGER;
+ 
+       PROCEDURE pass (Param x,y,z: INTEGER);
+       BEGIN
+            y := y + 1;
+            z := z + x
+       END pass;
+               
+       BEGIN
+            a := 2;
+            b := 3;
+            pass (a+b, a, a);
+            InOut.WriteInt (a)  /* Prints value of `a'. */
+       END.
+\end{verbatim}                   
+Although the program is written in a Modula-2-like syntax, it
+is not a valid Modula-2 program.
+\marks{9}
+
+\end{subquestions}

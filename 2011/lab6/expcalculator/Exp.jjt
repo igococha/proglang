@@ -1,0 +1,53 @@
+options {
+   MULTI=true;
+}
+
+
+PARSER_BEGIN(ExpParser)
+
+public class ExpParser {
+}
+
+PARSER_END(ExpParser)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+void S() #void :
+{  }
+{
+     E() <EOL>
+  | <EOL>
+  | <EOF>
+}
+
+void E() #void :
+{  }
+{
+    T() (  "+" T() #PlusExp(2)
+         | "-" T() #MinusExp(2)
+        )*
+}
+
+void T() #void:
+{  }
+{
+   F() (  "*"  F() #TimesExp(2) 
+         | "/" F() #DivExp(2) 
+       )*
+}
+
+void F() #void :
+{ Token t; }
+{
+     (t=<NUM> { jjtThis.val = Integer.parseInt(t.image); })#NumExp
+  | "(" E() ")"
+}
+

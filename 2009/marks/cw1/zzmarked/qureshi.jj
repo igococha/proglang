@@ -1,0 +1,125 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException 
+{
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+}
+
+public static String removeChar(String s, char c) 
+{
+   String r = "";
+   for (int i = 0; i < s.length(); i ++) 
+      {
+      if (s.charAt(i) != c) r += s.charAt(i);
+      }
+   return r;
+
+}
+}
+
+PARSER_END(LexTest)
+
+/*
+ * Lexical items.
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"          /* Tab */
+| "\n"          /* Newline */
+| "\r"          /* Return */
+| "\f"          /* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: (<DIGIT>)+ >
+}
+
+TOKEN : /* Literal booleans. */
+{
+  < KEYTRUE: "true" >
+ |
+  < KEYFALSE: "false" >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+}
+
+TOKEN : /* Binary */
+{
+ < BINARY: ("b"|"B")("+"|"-")?("0"|"1")*("L")>
+}
+
+TOKEN : /* Decimal */
+{
+  < DECIMAL: (("+"|"-")?["1"-"9"](["0"-"9"])*("L")?|("+"|"-")?"0"("L")?)>
+}
+
+TOKEN : /* Float */
+{
+  < FLOAT: ("-")*(["0"-"9"])*("e"|"E")*("-"|".")*(["0"-"9"])*("e"|"E")*("-")*("d"|"f")* >
+}
+
+TOKEN : /* Octal */
+{
+  < OCTAL: ("o"|"O")(["0"-"7"])* >
+}
+
+TOKEN : /* Hexadecimal */
+{
+  < HEXADECIMAL: ("Z"|"z")("+"|"-")?("Z"|"z")(["0"-"9"]|["a"-"f"]|["A"-"F"])*("L") >
+}
+
+TOKEN : /* Comments */
+{
+  < COMMENTS: "//"|("/*")(<LETTER>|<DIGIT>)*("*/")* >
+}
+
+TOKEN : /* Error */
+{
+ < ERROR: (~[]) >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <INTEGER_LITERAL> | t = <KEYTRUE> | t = <KEYFALSE> |
+         t = <BINARY> | t = <DECIMAL> | t = <FLOAT> | t = <OCTAL> | t = <HEXADECIMAL> | t = <COMMENTS> | t = <ERROR>)
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " ("+t.image+")");
+if (tokenImage[t.kind] == "BINARY"){
+removeChar (t.image ,'b');
+removeChar (t.image ,'B');}
+
+if (tokenImage[t.kind] == "HEXADECIMAL"){
+removeChar (t.image ,'z');
+removeChar (t.image ,'Z');}
+
+if (tokenImage[t.kind] == "OCTAL"){
+removeChar (t.image ,'o');
+removeChar (t.image ,'O');}}
+
+
+
+
+
+   )* <EOF>
+}

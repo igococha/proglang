@@ -1,0 +1,76 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN :
+{
+  < INTEGER_LITERAL:
+      (<OPERATOR>)?
+      (<DECIMAL_NUMERAL> ("L")?
+      | <HEX_NUMERAL> ("L")?
+      | <OCTAL_NUMERAL> ("L")?
+      | <BINARY_NUMERAL> ("L")?)
+  >
+|
+   < OPERATOR: ("+" | "-") >
+|
+   < DECIMAL_NUMERAL: ("0" | (["1"-"9"] (["0"-"9"])*)) >
+|
+   < HEX_NUMERAL: ["z","Z"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+   < OCTAL_NUMERAL: ["o", "O"] (["0"-"7"])+ >
+|
+   < BINARY_NUMERAL:["b", "B"](["0", "1"])+ >
+|
+   < FLOATING_POINT:
+        <DIGITS> "." (<DIGITS>)? (<EXPONENT>)? (<TYPESUFFIX>)?
+      | "." <DIGITS> (<EXPONENT>)? (<TYPESUFFIX>)?
+      | <OPERATOR> <DIGITS> <TYPESUFFIX>
+      | <DIGITS> <EXPONENT> (<TYPESUFFIX>)?
+      | <DIGITS> (<EXPONENT>)? <TYPESUFFIX>
+  >
+|
+  < DIGITS: (["0"-"9"])+ >
+|
+  < TYPESUFFIX: (["d","f"]) >
+|
+  < EXPONENT: "e" (["+","-"])? (["0"-"9"])+ >
+}
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+      (t = <FLOATING_POINT> | t = <INTEGER_LITERAL>)
+            { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )*  <EOF>
+
+}
+

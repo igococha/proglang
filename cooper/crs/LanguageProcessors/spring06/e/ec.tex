@@ -1,0 +1,359 @@
+%From seb Wed May 11 17:13:30 1994
+%%Date: Wed, 11 May 1994 17:13:27 +0100 (BST)
+%From: Sebastian Hunt <seb>
+%Subject: 
+%To: David Bolton <daveb>
+%Message-Id: <Pine.3.89.9405111714.A12954-0100000@barney.cs.city.ac.uk>
+%Mime-Version: 1.0
+%Content-Type: TEXT/PLAIN; charset=US-ASCII
+%Status: RO
+
+\documentstyle[/homes/daveb/doc/exam_style/cityexam,11pt]{article}
+\begin{document}
+\examnumber{00.00}
+\begin{preamble}
+\degrees{EC2 retread}
+\part{II}
+\title{Programming Systems and Principles of Programming Languages}
+\examdate{XXX, 00 XXX, 1994}
+\examtime{00 to 00}
+\rubric{Two from section A, two from B}
+\end{preamble}
+\externals{XXX \\ XXX}
+\internals{S Hunt \\ DJ Bolton}
+
+\examsection{A}
+
+% Herewith three questions for Language Processors modified for PS, EC student DB 12.5.94
+
+\begin{questions}
+
+\question
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+
+The following is an extract from the BNF syntax for
+a programming language:
+\begin{bnf}
+\Rule{\nt{stms}}{\nt{stm stms}\Or{\nt{stm}}} \\
+\Rule{\nt{stm}}{\nt{loop}\Or{\nt{assign}}} \\
+\Rule{\nt{assign}}{\nt{id} \verb":=" \nt{exp} \verb";"} \\
+\Rule{\nt{loop}}{\verb"for" \nt{id} \verb"=" \nt{exp$_1$} \verb"to" \nt{exp$_2$}
+ \verb"do" \nt{stms} \verb"endfor ;"} \\
+\Rule{\nt{exp}}{\nt{id}\Or{\nt{integer}}\Or{\nt{exp} \verb"+" \nt{exp}}
+        \Or{\nt{exp} \verb"-" \nt{exp}} \Or{\nt{exp} \verb"*" \nt{exp}}}
+\end{bnf}
+where \nt{id} and \nt{integer} have obvious interpretations.
+\begin{subquestions}
+\subsubquestion
+Show that this is an ambiguous grammar by constructing different
+syntax trees for the assignment:\marks{6}
+\begin{verbatim}
+       t := m + 60 * h
+\end{verbatim}
+%\subquestion
+%Modify the grammar so that the \verb"+" and \verb"-" operators
+%have equal precedence lower than that of \verb"*".
+%\marks{4}
+\subquestion
+The meaning of a \nt{loop} is as follows:
+\begin{itemize}
+\item On entry to the loop, arithmetic expressions \nt{exp$_1$} and \nt{exp$_2$}
+        are evaluated. The value of \nt{exp$_1$} is the {\em lower
+        bound}, and is assigned to the identifier \nt{id}.
+        The value of \nt{exp$_2$} is the {\em upper bound}.
+        Neither may be changed after entry to the loop by 
+        execution of \nt{stms}.
+\item If the value of \nt{exp$_2$} is less than \nt{id},
+        the loop body \nt{stms} is
+        not executed and control transfers to the statement following
+        the \verb"endfor" (leaving the loop).
+\item Otherwise, the loop body \nt{stms} is
+        executed,  
+        then the value of \nt{id} is incremented by 1,
+        and control tranfers back to the start of the loop.
+\end{itemize}
+\begin{subsubquestions}
+\subsubquestion
+	Outline and describe the structure of the three-address
+        code that might be generated in translation of
+        a \nt{loop}.  
+        Briefly explain the
+	three-address code you use in your outline.
+\marks{6}
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{loop} which produces such code.
+        Describe, in detail, any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{exp}, but do not produce translations for
+	\nt{exp}.
+\marks{13}
+\end{subsubquestions}
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+\subquestion
+Draw a diagram of the usual run time memory
+subdivision (memory model) for execution of
+programs compiled from languages such as
+Pascal and C.  Briefly describe the function of each
+of the subdivisions (areas), and discuss
+the programming language features which influence
+the organisation and functioning of run time storage.
+\marks{8}
+
+\subquestion
+Sketch a possible structure for a stack activation
+record (stack frame) and briefly explain the purpose of
+each component. Comment on how local variables,
+parameters and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use,
+and explain the need for a register `spill' area
+in some records.
+\marks{10}
+
+\subquestion
+
+Using examples describe the structure and function of the
+assembly code
+that must be produced by a code generator to manage a run-time
+stack at the time of procedure call and return.
+\marks{7}
+
+\end{subquestions}
+
+
+ 
+\question
+
+\begin{subquestions}
+
+\subquestion
+Outline the Sethi-Ullman numbering algorithm and 
+describe potential uses for it.  Assuming two registers
+are required for loading a variable, and one for loading a literal number, 
+draw the labelled
+tree produced by your algorithm for the expression:
+\marks{9}
+\begin{verbatim}
+       (a - 3) + ((c + 4) + (e * f))
+\end{verbatim}
+
+\subquestion
+        Explain what is meant by the parameter passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is printed by the 
+        program shown below, assuming that all parameters are
+	passed with the same mechanism.
+        In each case briefly justify your answer.
+\begin{verbatim}
+       MODULE prettypass; 
+       IMPORT InOut;
+
+       VAR a, b: INTEGER;
+ 
+       PROCEDURE pass (Param x,y,z: INTEGER);
+       BEGIN
+            y := y + 1;
+            z := z + x
+       END pass;
+               
+       BEGIN
+            a := 2;
+            b := 3;
+            pass (a+b, a, a);
+            InOut.WriteInt (a)
+       END.
+\end{verbatim}                   
+Although the program is written in a Modula-2-like syntax, it
+is not a valid Modula-2 program.  The procedure \verb"InOut.WriteInt"
+simply writes the value of its argument to the standard output and
+\verb"a" and \verb"b" are global variables.
+\marks{16}
+
+\end{subquestions}
+
+
+
+
+% Seb's bit here. 12.5.94
+
+\examsection{B}
+
+	\question
+
+	\begin{subquestions}
+
+		\subquestion 
+
+What is meant by the term {\em aliasing}? Using examples,
+describe two ways in which aliasing can occur in Pascal programs
+{\em without} using pointers.
+	\marks{8}
+
+		\subquestion
+
+What is meant by the term {\em block-structure}?
+Explain why both an environment and a store are used to describe the semantics of
+a block-structured language. Explain what is meant by
+the terms {\em scope} and {\em hole in scope}.
+	\marks{8}
+
+		\subquestion
+
+Explain the distinction between {\em static binding} and {\em dynamic binding}
+in a block-structured language with user defined procedures.
+Use an example to show how the choice between static and dynamic binding can
+determine the effect of a procedure invocation.
+
+What are the advantages of static binding?
+	\marks{9}
+
+	\end{subquestions}
+
+	\question
+
+Part of the syntax of a simple language of commands is as follows:
+
+	\begin{quote}
+	\begin{tabular}{lcl}
+	 C $\in$ Command	&$::=$& {\bf skip}
+				$\vert$ I $:=$ E
+				$\vert$ C ; C \\
+%%				$\vert$ {\bf if} B {\bf then} C {\bf else} C\\
+%%	 B $\in$ Bexp		&$::=$& E $<$ E
+%%				$\vert$ E $=$ E
+%%				$\vert$ B {\bf or} B
+%%				$\vert$ B {\bf and} B
+%%				$\vert$ {\bf not} B
+	 E $\in$ Aexp		&$::=$& I
+				$\vert$ N
+				$\vert$ E $+$ E
+				$\vert$ E $*$ E
+				$\vert$ E $-$ E	\\
+	 I $\in$ Identifier \\
+	 N $\in$ Numeral
+        \end{tabular}
+        \end{quote}
+
+For this simple language, stores can be modelled by the semantic domain
+        \begin{quote}
+         s $\in$ Store $=$ Identifier $\rightarrow$ ${\cal Z}$
+        \end{quote}
+where ${\cal Z}$ is the set of integers.
+
+	\begin{subquestions}
+
+                \subquestion
+
+Assuming the existence of a map
+{\bf N} : Numeral $\rightarrow$ ${\cal Z}$,
+give equations defining the semantic maps
+        \begin{quote}
+         {\bf E} : Aexp $\rightarrow$ Store $\rightarrow$ ${\cal Z}$ \\
+         {\bf C} : Command $\rightarrow$ Store $\rightarrow$ Store
+        \end{quote}
+	\marks{10}
+
+		\subquestion
+
+\begin{enumerate}
+  \item Suggest a grammar for boolean expressions, including tests for
+	equality and inequality of arithmetic expressions, boolean
+	conjunction, disjunction and negation.
+	\marks{5}
+
+  \item	Write down the type of an appropriate semantic map for boolean
+	expressions and give equations defining this map.
+	\marks{5}
+\end{enumerate}
+
+		\subquestion
+
+Extend the grammar of commands to include the if-then-else construct.
+Add one or more equations to the definition of the semantic map {\bf C}
+to cater for the if-then-else construct.
+	\marks{5}
+
+	\end{subquestions}
+
+	\question
+
+The higher-order functions \verb"map" and \verb"foldr" are defined as follows:
+	\begin{quote}
+	\begin{tabular}{l}
+	 \verb"map f []     = []" \\
+	 \verb"map f (x:xs) = f x : map f xs" \\
+	 \\
+	 \verb"foldr f b []     = b" \\
+	 \verb"foldr f b (x:xs) = f x (foldr f b xs)"
+	\end{tabular}
+	\end{quote}
+
+	\begin{subquestions}
+
+		\subquestion 
+
+Define the term {\em higher-order function}.
+		\marks{3}
+
+		\subquestion 
+
+The functions {\it map} and {\it foldr} have polymorphic types. Use these
+functions as examples to explain what is meant by {\em polymorphic function},
+and write down the types of both {\it map} and {\it foldr}.
+		\marks{8}
+
+		\subquestion 
+
+Explain what is meant by the term {\em shallow type}. Write down a
+{\em non}-shallow type for the following function:
+\begin{quote}
+ \verb"strange f = f 3 + f True"
+\end{quote}
+		\marks{6}
+
+		\subquestion 
+
+The function
+\begin{quote}
+\verb"and : (list bool) -> bool"
+\end{quote}
+returns \verb"False" for lists
+which contain \verb"False", and returns \verb"True" for all other lists.
+Define \verb"and" in two different ways:
+\begin{enumerate}
+ \item Using explicit recursion.
+ \item Using \verb"foldr".
+\end{enumerate}
+		\marks{8}
+
+	\end{subquestions}
+
+\end{questions}
+
+\end{document}
+
+
+
+

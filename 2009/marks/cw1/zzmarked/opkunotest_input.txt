@@ -1,0 +1,6 @@
+/* binary */ b011001 B11011L +B010011 -b101101 -b10111011L 
+/* octal */ o123 O54612 -O23451 +o1276 -O13567L
+/* decimal */ 1234 +4586 -2196568 10111L 0 100 0 -101
+/* hex */ ZC0B0 zC0B0L +ZDadaCafe -ZDadaCafe
+/* error */ b3b ZHelloWorldL -B101121 1ea -Dada.Cafed e1
+/* floating point */ 1e1f 2.f .3d 3.14f 6.022137E23f 1e1 2. 0.3d 0.0 3.14 1e-9d 1e-137d -5.56e4263d -42f 

@@ -1,0 +1,199 @@
+//Coursework 1
+//By abdv443
+
+PARSER_BEGIN(LexNumber)
+
+public class LexNumber {
+  public static void main(String args[]) throws ParseException {
+    System.out.println("Pleae input tokens (and press ctr + D to exit): ");
+    LexNumber parser = new LexNumber(System.in);
+    parser.TokenList();
+	System.out.println();
+  }
+}
+
+PARSER_END(LexNumber)
+
+/* 
+ * Lexical items. 
+ */
+
+//Integer Literals
+
+//Binary
+TOKEN : 
+{  
+	< BINARY: (<PREFIX>)? ("B" | "b") (["0"-"1"])+ (<LONG>)? >
+}
+
+//Decimal
+TOKEN : 
+{  
+	< DECIMAL: "0" | ((<PREFIX>)? ["1"-"9"] (<DIGIT>)* (<LONG>)?) >
+}
+
+//Hexadecimal
+TOKEN : 
+{  
+	< HEXADECIMAL: (<PREFIX>)? ("Z" | "z") (<DIGIT> | ["a"-"f"] | ["A"-"F"])+ (<LONG>)? >
+}
+
+//Octal
+TOKEN : 
+{  
+	< OCTAL: (<PREFIX>)? ("O" | "o") (["0"-"7"])+ (<LONG>)? >
+}
+
+//Floating Point Literals
+TOKEN : 
+{  
+	< FLOATING_POINT: (<PREFIX>)? ( ((<DIGIT>)* (".")? (<DIGIT>)+) | ((<DIGIT>)+ (".")? (<DIGIT>)*) )  (<SUB_FP>) >	
+}
+
+//Comment
+TOKEN : 
+{
+	< MULT_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/" >
+}
+
+TOKEN : 
+{
+	< SINGLE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n") >
+}
+
+TOKEN :
+{
+	< ERROR: (~[" ","\t","\n","\r","\f"])+ >
+}
+
+//Local def.
+TOKEN :
+{
+  < #PREFIX: "+" | "-" >
+|
+  < #LONG: "L" >
+|
+  < #EXP: "E" | "e" >
+|
+  < #FLOAT: "f" >
+|
+  < #DOUBLE: "d" >
+|
+  < #DIGIT: ["0"-"9"] >
+|
+  < #LETTER: ["a"-"z","A"-"Z"] >
+|
+  < #SUB_FP: ((<EXP>)? (<PREFIX>)? (["0"-"9"])+)? (<FLOAT> | <DOUBLE>)? >
+}
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+	 (t = <BINARY> | t = <DECIMAL> | t = <HEXADECIMAL> | t = <OCTAL> | t = <FLOATING_POINT> | t = <MULT_COMMENT> | t = <SINGLE_COMMENT> | t = <ERROR> )
+	 {
+		String img = t.image;
+		String str_no = "";
+		String type = "";
+		String type2 = "";
+		Integer dec_no = -1;
+		String output = "";
+		
+		//System.out.print("t-image: "+t.image);
+		int start = 0;
+		if ( t.kind == BINARY || t.kind == HEXADECIMAL || t.kind == OCTAL)  { start = 1; }
+		
+		if(img.charAt(img.length()-1) == 'L' || t.kind == FLOATING_POINT && img.charAt(img.length()-1) == 'd' || t.kind == FLOATING_POINT && img.charAt(img.length()-1) == 'f')
+		{
+			type = "LONG";
+			if(img.charAt(img.length()-1) == 'd') { type2 = "DOUBLE"; }
+			else { type2 = "FLOAT"; }
+			
+			if(img.charAt(0) == '+')
+			{
+				str_no = img.substring(start+1,img.length()-1);
+			}
+			else if(img.charAt(0) == '-')
+			{
+				str_no = "-"+img.substring(start+1,img.length()-1);
+			}
+			else
+			{
+				str_no = img.substring(start+0,img.length()-1);
+			}
+		}
+				
+		else
+		{
+			type = "INT";
+			type2 = "FLOAT";
+			
+			if(img.charAt(0) == '+')
+			{
+				str_no = img.substring(start+1);
+			}
+			else if(img.charAt(0) == '-')
+			{
+				str_no = "-" + img.substring(start+1);
+			}
+			else
+			{
+				str_no = img.substring(start+0);
+			}
+		}
+		//System.out.print("str_no: "+str_no);
+		
+		if ( t.kind == BINARY ) 
+		{ 
+			java.math.BigInteger big_no = new java.math.BigInteger(str_no, 2);
+			output = type+"("+ big_no.toString(10) +")";
+		}
+		else if ( t.kind == DECIMAL ) 
+		{ 
+			java.math.BigInteger big_no = new java.math.BigInteger(str_no, 10);
+			output = type+"("+ big_no.toString(10) +")";
+		}
+		else if ( t.kind == HEXADECIMAL ) 
+		{ 
+			java.math.BigInteger big_no = new java.math.BigInteger(str_no, 16);
+			output = type+"("+ big_no.toString(10) +")";
+		}
+		else if ( t.kind == OCTAL ) 
+		{ 
+			java.math.BigInteger big_no = new java.math.BigInteger(str_no, 8);
+			output = type+"("+ big_no.toString(10) +")";
+		}
+	
+		else if( t.kind ==  FLOATING_POINT )
+		{
+			output = type2+"("+ str_no +")";
+		}
+		
+		else if( t.kind == MULT_COMMENT || t.kind == SINGLE_COMMENT )
+		{
+			output = "COMMENT";
+		}
+		
+		else if( t.kind == ERROR )
+		{
+			output = "Error";
+		}
+		
+		System.out.print(output+" ");
+	 }
+	
+   )* <EOF>
+}

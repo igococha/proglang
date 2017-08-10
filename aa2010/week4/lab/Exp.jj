@@ -1,0 +1,48 @@
+PARSER_BEGIN(Exp)
+
+public class Exp {
+}
+
+PARSER_END(Exp)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+/* Entry Point to parser */
+void S() :
+{}
+{
+    E() <EOL> 
+  | <EOL>
+  | <EOF>
+}
+
+// Productio: E -> T ( + T | - T)*
+void E() :
+{}
+{
+  T() ( "+" T() | "-" T() )*
+}
+
+// Production: T -> ??????
+void T() :
+{}
+{
+  F() 
+}
+
+// Production: F -> number | ( E )
+void F() :
+{}
+{
+    <NUM> 
+  | "(" E() ")"
+}
+

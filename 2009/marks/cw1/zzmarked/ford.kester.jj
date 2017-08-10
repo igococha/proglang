@@ -1,0 +1,157 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("*******************************************************************");
+    System.out.println ("* A lexical analyser that accepts comments, integer and floating  *");
+	System.out.println ("* point literals. Any other input is treated as an error          *");
+	System.out.println ("* Start with \"java LexTest < test.txt\" to analyse a test          *");
+	System.out.println ("* set of tokens or manually input text below                      *");
+	System.out.println ("*******************************************************************");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+  
+  public static String getImage(Token t) {
+    String imageString = "";
+	if(t.kind == LexTestConstants.INT) {
+	
+	   imageString = getValueAsDecimal(t.image);
+	   imageString = "(" + imageString + ")";
+	}
+	if(t.kind == LexTestConstants.FLOAT) {
+	   imageString = "(" + t.image + ")";
+	}
+	return tokenImage[t.kind] + imageString + " ";
+  }
+  
+  public static String getValueAsDecimal(String image) {
+	int radix = 10;
+	if(image.startsWith("+")) {
+	    image = image.substring(1);
+	}
+	if(image.startsWith("-")) {
+	    return "-" + getValueAsDecimal(image.substring(1));
+	}
+	if(image.toUpperCase().endsWith("L")) {
+	    image = image.substring(0, image.length() - 1); 
+	}
+	// B before Z otherwise we could be stripping out the value B from a hexadecimal literal
+	if(image.toUpperCase().startsWith("B")) {
+	    radix = 2;
+        image = image.substring(1); 		
+    }
+    if(image.toUpperCase().startsWith("Z")) {
+        radix = 16;	
+		image = image.substring(1);
+	}
+	if(image.toUpperCase().startsWith("O")) {
+        radix = 8;	
+		image = image.substring(1);
+	}
+	String result = null;
+	try {
+	    result = Long.toString(Long.parseLong(image, radix));
+	}
+    catch(NumberFormatException nfe) {
+        result = image + " in base " + radix;
+    }
+    return result;	
+}
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : /* Literal booleans. */
+{ 
+  < KEYTRUE: "true" > 
+ |
+  < KEYFALSE: "false" >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+}
+
+TOKEN:
+{
+    < INT: (["+","-"])? <BASE> (["L", "l"])? >	
+|
+    < #BASE:
+	      (["B","b"]) (["0","1"])+                /*Binary*/
+        | ("0")                                   /*Special Case: Decimal Zero*/  
+        | (["1"-"9"]) (["0"-"9"])*                /*Decimal */
+		| (["Z","z"]) (["0"-"9","a"-"f","A"-"F"])+  /*Hexidecimal*/
+		| (["O","o"]) (["0"-"7"])+                /*Octal*/ 
+	>
+|
+    < FLOAT:
+	      <WHOLE_NUMBER> "." (<FRACTIONAL>)? (<EXPONENT>)? (<TYPE>)?
+		| "." (<FRACTIONAL>) (<EXPONENT>)? (<TYPE>)?
+		| <WHOLE_NUMBER> <EXPONENT> (<TYPE>)?
+		| <WHOLE_NUMBER> (<EXPONENT>)? <TYPE>
+    >
+|
+    < #WHOLE_NUMBER: (["+","-"])? (["0"-"9"])+ >
+|
+    < #FRACTIONAL: (["0"-"9"])+ >
+|
+    < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|
+    < #TYPE: ["f","F","d","D"] >
+}
+
+
+
+
+TOKEN:
+{
+    < COMMENT:
+          ("//") (~["\n", "\r"])* ("\n" | "\r")          /*single line comment*/
+        | ("/*") ( "*"(~["/"]) | ~["*"]"/" | ~["*"] )* ("*/")   /*multi-line comment*/
+	>
+}
+
+TOKEN :
+{
+    <ERROR: (~["\n"," ","\r"])+>
+	/*<ERROR: ~[] >*/
+}
+
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <KEYTRUE> | t = <KEYFALSE> | 
+         t = <INT> | t = <FLOAT> | t = <COMMENT> | t = <ERROR> )
+           { 
+          	  System.out.println (getImage(t)); 
+		    }
+   )* <EOF>
+}
+

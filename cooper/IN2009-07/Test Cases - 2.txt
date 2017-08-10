@@ -1,0 +1,39 @@
+TASK 1: 2 marks for each pass/fail recognised, cap at 30.  Mark quality of code only if fails some cases
+
+PASS CASES
+----------
+1 / 4
+6 / 2
+5 > 7
+4 > 6
+true || false
+false || false
+true ? false : true
+false ? true : true
+
+FAIL CASES
+----------
+1 / false
+true / 6
+false > 7
+4 > true
+true || 5
+9 || false
+true ? false : 5
+5 ? 4 : 7
+
+TASK 2: 10 marks each recognised, mark quality of code only if fails some cases.  If a version of for() using the definition from CW1 is used, mark appropriately.
+PASS CASES
+----------
+for(a=5; a < 6; a=a+1) { b=0 }
+for(a=42; b > 5 ; a=a+1) { b=0 }
+for(a=63; true; a=a+1) { b=0 }
+
+FAIL CASES (10 marks each recognised)
+----------
+for(a=0; 6; a=a+1) { b=0 }
+for(a=0; a < 6; a=a+1) { b=0 }
+
+TASK 3:
+Mark at discretion, according to quality of justification for typechecking rules 
+and implementation of whatever rules are described

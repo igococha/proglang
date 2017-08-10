@@ -1,0 +1,108 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section*{Language Processors Lab 6}
+
+{\bf Note:} Read this through {\em before\/} logging in.
+
+\medskip\noindent The goal for this lab is to see the MiniJava typechecker in operation.
+
+
+\subsection*{MiniJava typechecker}
+
+The MiniJava symbol table builder and typechecker is at
+ \verb+/soi/sw/courses/daveb/IN2009/minijava/chap5+.
+\verb+README+ files in each directory explain the basic structure
+and how to compile and run it.
+Move to where you want to do your work and copy it with:
+\begin{verbatim}
+cp -R /soi/sw/courses/daveb/IN2009/minijava/chap5 .
+\end{verbatim}
+Move to your copy of the \verb+chap5+ directory and copy the contents of the directory containing Minijava sample programs:
+\begin{verbatim}
+cp -R /soi/sw/courses/daveb/IN2009/minijava/programs .
+\end{verbatim}
+Compile with:
+\begin{verbatim}
+module add java soi javacc/3.2
+javacc minijava.jj
+javac Main.java
+\end{verbatim}
+and run with:
+\begin{verbatim}
+java Main filename
+\end{verbatim}
+where \verb+filename+ is a file containing a MiniJava program (eg one of
+those from the \verb+minijava/programs+ directory):
+\begin{verbatim}
+java Main programs/BinarySearch.java
+\end{verbatim}
+The output is a pretty-printed version of the program, and any error messages
+resulting from the typechecking.
+
+The programs supplied in directory \verb+programs+ contain no type errors so you won't see any error messages from them. You should now create some of
+your own test program files that contain simple errors that
+should be detected by the symbol table builder and type checker, and try them out. For example, you could make a copy of \verb+BinarySearch.java+ and introduce type errors.
+
+Then read the slides from Session 5 and the visitor programs and try to 
+understand how the symbol table is built and how the typechecker works.
+
+\subsection*{Extending MiniJava and the Type Checker}
+
+In the previous lab (Lab 5) you were asked to introduce the \verb+''/''+ operator. In this section we will go through the steps required to extend the typechecker for the new \verb+Division+ expression. 
+
+\begin{itemize}
+
+\item Extend MiniJava with the division operator. Follow the steps listed in lab5 (though you should know this by now). Note that the abstract syntax tree accepts a second visitor (\verb+TypeVisitor+, look at the other classes in \verb+syntaxtree+). Thus, the \verb+Division+ class implementation should look like this:
+
+\begin{verbatim}
+package syntaxtree;
+import visitor.Visitor;
+import visitor.TypeVisitor;
+
+public class Division extends Exp {
+  public Exp e1,e2;
+  
+  public Division(Exp ae1, Exp ae2) {
+    e1=ae1; e2=ae2;
+  }
+
+  public void accept(Visitor v) {
+    v.visit(this);
+  }
+
+  public Type accept(TypeVisitor v) {
+    return v.visit(this);
+  }
+}
+\end{verbatim}
+
+You will need to modify (as explained in lab5) the \verb+minijava.jj+, \verb+visitor/Visitor.java+ and \verb+visitor/DBPrettyVisitor.java+ files.
+
+Recompilation (compile the program again) should report an error. This is because we have not extended the typechecker visitor interface and implementation yet. The three visitors used by the typechecker and symbol table builder are subclasses of a general visitor - \verb+TypeDepthFirstVisitor+ - which implements the \verb+TypeVisitor+ interface. We should modify these files first.
+
+\item Modify the default visitor by adding:
+\begin{verbatim}
+          public Type visit(Division n);
+\end{verbatim}
+to the \verb+visitor/TypeVisitor.java+ file. Next, add a default \verb+visit+ implementation to the \verb+TypeDepthFirstVisitor.java+ file:
+\begin{verbatim}
+ public Type visit(Division n) {
+    // Same as visit(Times n)
+  }
+\end{verbatim}
+ Compilation should give you no errors. However, this default implementation will not perform typechecking but will make sure that the whole tree is traversed. For example, modify the \verb+return 0+ at the end of the \verb+Init+ method in \verb+BinarySearch.java+ to \verb+return 0 * true+ (first) and \verb+return 0 / true+, and compare the messages sent by the type checker. The first case will be correctly typechecked (since it's already implemented) but, in the second case, the checker will not notice that \verb+true+ is of the wrong type. The next step will implement correct  typechecking for \verb+Division+.
+
+\item Add \verb+visit(Division n)+ to \verb+TypeCheckExpVisitor.java+. The implementation of this method should be similar to the one used for \verb+Times+. Don't forget to display the right messages!
+
+
+\end{itemize}
+
+\end{document}
+

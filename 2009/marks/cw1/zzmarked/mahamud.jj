@@ -1,0 +1,95 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : /* Literal integers. */
+{
+   <INTEGER_LITERAL: (<DIGIT>)+>
+ | <BINARY_LITERAL: ["b","B"] (["0"-"1"])+>
+ | <OCTAL_LITERAL: ["o","0"] (["0"-"7"])+>
+}
+
+TOKEN : /* Literal hexadecimal. */
+{
+	<H: (<S>)? (<Prefix>) (<HEXADECIMAL_SPEC>)+ (<LONG>)?>
+}
+TOKEN : /* floating point literal. */
+{
+	<FLOATING_POINT: (<S>)? (<EXPONENT>)+ (<Suff>)?>
+}
+TOKEN : /* Literal booleans. */
+{ 
+  < KEYTRUE: "true" > 
+ |
+  < KEYFALSE: "false" >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ]>
+|
+  < #DIGIT: [ "0"-"9"]>
+|
+  < #BINARY_SPEC: ["b","B"] (["0"-"1"])>
+|
+  < #HEXADECIMAL_SPEC: [ "0"-"9","a"-"f","A"-"F"]>
+|
+   < #S : [ "-","+"] >
+|
+  < #Prefix: [ "z","Z"]>
+|
+  < #LONG: ["L"]>
+|
+  < #OCTAL_SPEC: ["o","0"] (["0"-"7"])>
+|
+  < #EXPONENT: ["e","E", "0"-"9",".","-"]>
+|
+  <#Suff: ["d","f"]>
+}
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <INTEGER_LITERAL> | t = <BINARY_LITERAL> | t = <H> | t = <OCTAL_LITERAL> | t = <FLOATING_POINT>)
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}
+

@@ -1,0 +1,137 @@
+This is TeX, Version 3.14159 (Web2C 7.3.1) (format=latex 2000.10.16)  28 JUL 2003 12:19
+**03p3
+(03p3.tex
+LaTeX2e <1999/12/01> patch level 1
+Babel <v3.6Z> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/homes/daveb/lib/tex/cityexam.cls
+Document Class: cityexam 
+Style 'City exam'. V5. March 2001 (David Bolton)
+[V5. March 2001 is in cityexamV4.sty]
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/base/article.cls
+Document Class: article 1999/09/10 v1.4a Standard LaTeX document class
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/base/size11.clo
+File: size11.clo 1999/09/10 v1.4a Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/misc/a4wide.sty
+Package: a4wide 1994/08/30
+
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/ntgclass/a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+))
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/base/ifthen.sty
+Package: ifthen 1999/09/10 v1.1b Standard LaTeX ifthen package (DPC)
+)
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/psnfss/times.sty
+Package: times 1999/03/29 PSNFSS v.7.2 Times font as default roman : S Rahtz
+)
+\theexamnumber=\box26
+\theexternals=\box27
+\theinternals=\box28
+\c@totalmarks=\count87
+)
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/semantic/semantic.sty
+Package: semantic 2000/08/03 v2.0(beta) Semantic Package
+\c@@@conflict=\count88
+
+Semantic Package.
+Loading (/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/semantic/ligature.sty
+\@pushedtoks=\toks14
+\@seentoks=\toks15
+)  math mode ligatures,
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/semantic/infernce.sty
+\@@tempa=\toks16
+\@@tempb=\toks17
+\@@pSpace=\skip43
+\@@pEnd=\skip44
+\@@nSpace=\skip45
+\@@aLineBox=\box29
+)
+ inference rules,
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/semantic/tdiagram.sty
+\@@xShift=\count89
+\@@yShift=\count90
+\@@symbol=\toks18
+\@@tempSymbol=\toks19
+)
+ T diagrams,
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/semantic/reserved.sty
+\@@spacing=\toks20
+\@@formating=\toks21
+)
+ reserved words,
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/semantic/shrthand.sty)
+ short hands, and general definitions.
+\@@maxwidth=\dimen103
+\@@pLineBox=\box30
+\@@cBox=\box31
+\@@pBox=\box32
+) (03p3.aux)
+\openout1 = `03p3.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 5.
+ (/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 1998/07/06 Fontinst v1.800 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 7.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 7.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 7.
+Default is without model answers...use `\withmodelanswers' to see them
+(...I don't think it writes them :->)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 34.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 34.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 34.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 91.
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 1998/07/06 Fontinst v1.800 font definitions for OT1/pcr.
+) [1
+
+]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 133.
+ [2
+
+]
+[3
+
+] (03p3.aux) ) 
+Here is how much of TeX's memory you used:
+ 691 strings out of 10901
+ 8354 string characters out of 72379
+ 54939 words of memory out of 263001
+ 3652 multiletter control sequences out of 10000+0
+ 11776 words of font info for 34 fonts, out of 400000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 29i,4n,21p,234b,428s stack positions out of 300i,100n,500p,50000b,4000s
+
+Output written on 03p3.dvi (3 pages, 8204 bytes).

@@ -1,0 +1,175 @@
+This is TeX, Version 3.14159 (Web2C 7.3.1) (format=latex 2000.10.16)  30 JAN 2006 10:02
+**cw1
+(cw1.tex
+LaTeX2e <1999/12/01> patch level 1
+Babel <v3.6Z> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/base/article.cls
+Document Class: article 1999/09/10 v1.4a Standard LaTeX document class
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/base/size11.clo
+File: size11.clo 1999/09/10 v1.4a Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/misc/a4wide.sty
+Package: a4wide 1994/08/30
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/ntgclass/a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+))
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/semantic/semantic.sty
+Package: semantic 2000/08/03 v2.0(beta) Semantic Package
+\c@@@conflict=\count87
+
+Semantic Package.
+Loading (/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/semantic/ligature.sty
+\@pushedtoks=\toks14
+\@seentoks=\toks15
+)  math mode ligatures,
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/semantic/infernce.sty
+\@@tempa=\toks16
+\@@tempb=\toks17
+\@@pSpace=\skip43
+\@@pEnd=\skip44
+\@@nSpace=\skip45
+\@@aLineBox=\box26
+)
+ inference rules,
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/semantic/tdiagram.sty
+\@@xShift=\count88
+\@@yShift=\count89
+\@@symbol=\toks18
+\@@tempSymbol=\toks19
+)
+ T diagrams,
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/semantic/reserved.sty
+\@@spacing=\toks20
+\@@formating=\toks21
+)
+ reserved words,
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/semantic/shrthand.sty)
+ short hands, and general definitions.
+\@@maxwidth=\dimen103
+\@@pLineBox=\box27
+\@@cBox=\box28
+\@@pBox=\box29
+) (/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/tools/verbatim.sty
+Package: verbatim 2000/01/07 v1.5m LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks22
+\verbatim@line=\toks23
+\verbatim@in@stream=\read1
+)
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/graphics/color.sty
+Package: color 1999/02/16 v1.0i Standard LaTeX Color (DPC)
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/config/color.cfg)
+Package color Info: Driver file: dvips.def on input line 125.
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+)
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2000/01/22 v6.69c Hypertext links for LaTeX
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks24
+)
+\@linkdim=\dimen104
+\Hy@linkcounter=\count90
+\Hy@pagecounter=\count91
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 1999/10/05 v0.6 PDFDocEncoding (Heiko Oberdiek)
+)
+Package hyperref Info: Option `breaklinks' set `true' on input line 1408.
+Package hyperref Info: Option `colorlinks' set `true' on input line 1408.
+Package hyperref Info: Bookmarks ON on input line 1459.
+Package hyperref Info: Hyper figures OFF on input line 1478.
+Package hyperref Info: Link nesting OFF on input line 1483.
+Package hyperref Info: Hyper index ON on input line 1486.
+Package hyperref Info: Plain pages ON on input line 1491.
+Package hyperref Info: Backreferencing OFF on input line 1498.
+
+Implicit mode ON; LaTeX internals redefined
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/misc/url.sty
+Package: url 1999/03/02  ver 1.4  Verb mode for urls, email addresses, and file
+ names
+)
+\Fld@menulength=\count92
+\Field@Width=\dimen105
+\Fld@charsize=\dimen106
+\Choice@toks=\toks25
+\Field@toks=\toks26
+Package hyperref Info: Hyper figures OFF on input line 2108.
+Package hyperref Info: Link nesting OFF on input line 2113.
+Package hyperref Info: Hyper index ON on input line 2116.
+Package hyperref Info: backreferencing OFF on input line 2123.
+Package hyperref Info: Link coloring ON on input line 2126.
+\c@Item=\count93
+\c@Hfootnote=\count94
+)
+*hyperref using default driver hypertex*
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/hyperref/hypertex.def)
+(cw1.aux)
+\openout1 = `cw1.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+Package hyperref Info: Link coloring ON on input line 18.
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/hyperref/nameref.sty
+Package: nameref 2000/01/19 v2.17 Cross-referencing by name of section
+\c@section@level=\count95
+)
+LaTeX Info: Redefining \ref on input line 18.
+LaTeX Info: Redefining \pageref on input line 18.
+
+
+Package hyperref Warning: No destination for bookmark of \addcontentsline,
+(hyperref)                destination is added on input line 23.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 42.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 42.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 42.
+[1
+
+] [2] (cw1.aux) ) 
+Here is how much of TeX's memory you used:
+ 2117 strings out of 10901
+ 28530 string characters out of 72379
+ 71450 words of memory out of 263001
+ 5065 multiletter control sequences out of 10000+0
+ 7806 words of font info for 28 fonts, out of 400000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 25i,5n,21p,188b,309s stack positions out of 300i,100n,500p,50000b,4000s
+
+Output written on cw1.dvi (2 pages, 6568 bytes).

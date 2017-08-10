@@ -1,0 +1,257 @@
+\documentstyle[/homes/daveb/doc/exam_style/cityexam,11pt]{article}
+\begin{document}
+\examnumber{00.00}
+\begin{preamble}
+\degrees{EC2 retread}
+\part{II}
+\title{Programming Systems and Principles of Programming Languages}
+\examdate{XXX, 00 XXX, 1994}
+\examtime{00 to 00}
+\rubric{Two from section A, two from B}
+\end{preamble}
+\externals{XXX \\ XXX}
+\internals{S Hunt \\ DJ Bolton}
+
+\begin{questions}
+
+% Herewith four questions for Language Processors
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+
+Give a definition for regular expressions which shows how
+arbitrary regular expressions can be constructed for a
+given alphabet (set) of symbols. Do not include shorthand
+notations you may know.
+\marks{15}
+
+\subquestion
+        In some editors, pattern matching notation is
+        provided as detailed in the table below.
+        For example, the expression \verb"{.*}" 
+        matches any sequence of characters with enclosing
+        curly brackets.
+        Show how these patterns can be represented by regular
+        expressions. Show also that regular expression notation is
+        more powerful than the editor pattern notation by
+        finding examples of patterns that can be expressed in the
+        regular expression notation but not in the editor pattern
+        notation.
+
+%\vspace{0.2in}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}        \hline
+Expression & Matches & Examples \\ \hline
+\verb"c"                & single character \verb"c"      & \verb"c", \verb"x", \verb"!"\\                     
+\verb"*"                & zero or more characters        & \verb"lo*p" matches \verb"lp", \verb"lop", \verb"loop", \verb"looop"\ldots\\
+\verb"."                & any character                  & \verb"c.t" matches \verb"cat", \verb"cct", \verb"c%t"\ldots\\
+\verb"["{\it s\/}\verb"]" & any character in {\it s}     & \verb"c[aou]t"  matches \verb"cat", \verb"cot", \verb"cut"\ldots\\
+ \hline
+\end{tabular}
+\end{center}
+\marks{30}
+
+\vspace{0.1in}
+
+\subquestion
+        Explain why left-recursion must be eliminated from
+        grammar productions which are to be used in
+        construction of a recursive-descent parser.
+        Write down a general rule for rewriting left-recursive
+        grammar productions to be right-recursive, and use the rule
+        to rewrite the following productions:
+\begin{bnf}
+\Rule{\nt{expr}}{\nt{expr} \verb"+" \nt{term}\Or{\nt{term}}}
+\end{bnf}
+\marks{30}
+
+\subquestion
+What is an ambiguous grammar? By giving suitable examples show that the
+        following grammar is ambiguous. 
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+stmt \> $\rightarrow$ \> \verb"if" {\it expr\/} \verb"then" {\it stmt} \\
+\it
+     \> $\mid$ \> \verb"if" {\it expr\/} \verb"then" {\it stmt\/} \verb"else" {\it stmt} \\
+     \> $\mid$ \> {\it other}
+\end{tabbing}
+Here {\it other\/} stands for any other statement.
+\marks{25}
+
+
+\end{subquestions}
+
+
+\question
+
+
+The following is an extract from the BNF syntax for
+a Modula-2-like programming language:
+\begin{bnf}
+\Rule{\nt{stms}}{\nt{stm}\Or{\nt{stm} \verb";" \nt{stms}}}\\
+\Rule{\nt{stm}}{\nt{\dots}\Or{\nt{case}}\Or{\nt{\ldots}}} \\
+\Rule{\nt{case}}{\verb"case" \nt{aexp} \verb"of" \nt{lstms} \nt{case-else}} \verb"end"\\
+\Rule{\nt{case-else}}{\verb"else" \verb"(" \nt{stms} \verb")"\Or{$\epsilon$}}\\
+\Rule{\nt{lstms}}{\nt{lstm}\Or{\nt{lstm} \verb"," \nt{lstms}}}\\
+\Rule{\nt{lstm}}{\nt{num} \verb": (" \nt{stms} \verb")"}
+\end{bnf}
+where \nt{stm}, \nt{num} and \nt{aexp} have their usual connotations,
+and $\epsilon$ signifies the empty production.
+\begin{subquestions}
+\subquestion
+Sketch parsing procedures for \nt{case}, \nt{case-else},
+\nt{lstms} and \nt{lstm}.
+\marks{25}
+\subsubquestion
+Write down an abstract syntax for \nt{case} and \nt{lstm}.
+\marks{20}
+\subquestion
+The meaning of a \nt{case} is as follows:
+On entry to the \nt{case}, 
+the arithmetic expression \nt{aexp} is evaluated,
+delivering an integer result, and control is transferred to
+the labelled \nt{lstm} which is preceded by that integer
+label. If the delivered integer does not appear as a label,
+and the \nt{case} contains a non-empty \nt{case-else},
+control is transferred to the \nt{stms} in the \nt{case-else}.
+If the delivered integer does not appear as a label,
+and the \nt{case} has an empty \nt{case-else}, 
+control is transferred to the statement following the \nt{case}.
+\begin{subsubquestions}
+\subsubquestion
+	Outline and describe the structure of the
+        code that might be generated in translation of
+        a \nt{case}.  Assume code generation for a simple
+        stack or register machine, and briefly explain the
+	instructions you use in your outline.
+\marks{25}
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{case} which produces such code.
+        Describe, in detail, any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for \nt{aexp}, 
+	but do not produce translations for \nt{aexp}.
+\marks{30}
+\end{subsubquestions}
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+\subquestion
+Draw a diagram of the usual run time memory
+subdivision (memory model) for execution of
+programs compiled from languages such as
+Modula-2 and C.  Briefly describe the function of each
+of the subdivisions (areas), and discuss
+the programming language features which influence
+the organisation and functioning of run time storage.
+Explain why a typical C language memory model does not
+have an area set aside for dynamically allocated
+storage. 
+\marks{30}
+
+\subquestion
+Sketch a possible structure for a stack activation
+record (stack frame) and briefly explain the purpose of
+each component. Comment on how local variables,
+parameters and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use.
+%and explain the need for a register `spill' area
+%in some records.
+\marks{30}
+
+\subquestion
+Explain the purpose of the {\em heap} storage structure and
+describe a simple heap allocator.  Explain what is 
+meant by {\em fragmentation}, and mention some methods
+for reducing fragmention in heaps.  The terms
+{\em garbage\/} and {\em dangling pointer} refer to
+problems which arise in programming languages which
+support explicit deallocation of heap objects. Define
+these terms and explain using simple example program
+fragments how these problems arise.
+%Sketch the simple mark-sweep garbage collection algorithm
+%for automatic deallocation of inaccessible heap objects.
+\marks{40}
+
+
+\end{subquestions}
+
+
+ 
+\question
+
+\begin{subquestions}
+
+\subquestion
+Outline the Sethi-Ullman numbering algorithm and 
+describe potential uses for it.  Assuming two registers
+are required for loading a variable, and one for loading a literal number, 
+draw the labelled
+tree produced by your algorithm for the expression:
+\marks{40}
+\begin{verbatim}
+       (a - 3) + ((c + 4) + (e * f))
+\end{verbatim}
+
+\subquestion
+
+        Explain what is meant by the parameter passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is printed by the 
+        program shown below, assuming that in each
+	case all parameters are passed with the same mechanism.
+        In each case briefly justify your answer.
+\begin{verbatim}
+       MODULE prettypass; 
+       
+       IMPORT InOut;
+
+       VAR a, b: INTEGER;
+ 
+       PROCEDURE pass (x,y,z: INTEGER);
+       BEGIN
+            y := y + 1;
+            z := z + x
+       END pass;
+               
+       BEGIN
+            a := 2;
+            b := 3;
+            pass (a+b, a, a);
+            InOut.WriteInt (a)
+       END.
+\end{verbatim}                   
+Although the program is written in a Modula-2-like syntax, it
+is not a valid Modula-2 program.
+\marks{60}
+
+\end{subquestions}
+\end{questions}
+
+\end{document}
+

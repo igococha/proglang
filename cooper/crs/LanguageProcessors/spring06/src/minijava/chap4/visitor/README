@@ -1,0 +1,7 @@
+The MiniJava visitor class, and a visitor PrettyPrintVisitor that
+simply traverses the abstract syntax tree and pretty-prints the
+program (ie prints it out in a standard indented form).
+
+I have written a better visitor (DBPrettyVisitor) that deals with
+nested statements (the supplied PrettyPrintVisitor doesn't).
+

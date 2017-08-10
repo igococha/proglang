@@ -1,0 +1,91 @@
+ PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+
+TOKEN : /* Binary Literal */
+{
+  < BINARY_LITERAL:
+        (["b","B"]) (["0","1"])* "L" 
+  >
+}
+
+TOKEN : /* Octal Literal */
+{
+  < OCTAL_LITERAL:
+        (["o","O"]) (["0"-"7"]) "L" 
+  >
+}
+
+TOKEN : /* Decimal */
+{
+  < DECIMAL:
+	(["+","-"])? (["0"-"9"])+ "L"
+  >
+}
+
+TOKEN : /* Binary Literal */
+{
+  < HEX_LITERAL:
+        (["z","Z"]) (["0"-"9","a"-"f","A"-"F"])+ "L"
+  >
+}
+
+TOKEN : /* Floating point */
+{
+  < FLOATING_POINT_LITERAL:
+      (<EXPONENT>)? (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+}
+
+TOKEN : {
+
+    < SINGLE_LINE_COMMENT: "//"(~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+}
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <BINARY_LITERAL> | t= <OCTAL_LITERAL> | t = <DECIMAL> | t = <HEX_LITERAL> | t = <FLOATING_POINT_LITERAL>)
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}
+

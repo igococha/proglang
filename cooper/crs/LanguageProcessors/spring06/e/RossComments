@@ -1,0 +1,29 @@
+From ross@soi.city.ac.uk Mon Mar 25 16:07:09 2002
+Date: Mon, 25 Mar 2002 15:58:06 +0000
+From: Ross Paterson <ross@soi.city.ac.uk>
+To: David Bolton <daveb@soi.city.ac.uk>
+Subject: comments on Language Processors paper
+
+1(a) no model answer
+1(b) The description seems to correspond to
+	[0-9]+(.[0-9]+)?(E[-+]?[0-9]+)?
+How many marks for the bare correct answer?  How do they make it readable?
+1(c) In the model answer, "_" should be "_?"
+1(d) question: "where" could be ambiguous: "in which type environment"?
+     model answer: allocation of marks to parts?  line 6: sigma_3
+
+2(b) "program fragment"?  Should this be expression/input fragment?
+2(c) Specify associativity?
+2(d) Model answers have different associativity for TIMES. NO!!!! ROss wrong
+	Part marks if they don't use wrapper classes?
+
+3 "between exp1 and exp2" doesn't specify the order:
+	"from the value of exp1 to that of exp2"?  (value pedantry optional)
+     "upper and lower" should be "lower and upper"?
+3(d) allocation of part marks in answer?
+3(e) "asbtract"
+     "representation" -> "code"?
+     in the answer, the moving between R1 and MEM(i) doesn't look right.
+     Also I couldn't work out the 5th line.
+
+4(b,c) part marks in model answer?

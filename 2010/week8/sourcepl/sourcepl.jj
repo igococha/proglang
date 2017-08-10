@@ -1,0 +1,168 @@
+/*
+ * Grammar for the Source Programming Language
+ *
+ * 14/3/2010 Igor Siveroni
+ */
+
+options {
+LOOKAHEAD=1;
+}
+
+PARSER_BEGIN(Parser)
+
+import java.io.*;
+import java.util.*;
+import ast.*;
+
+public class Parser {
+ }
+PARSER_END(Parser)
+
+SKIP :
+{
+ 	" "
+  |	"\r"
+  |	"\t"
+  |  	"\n"
+}
+
+
+
+TOKEN : /* RESERVED WORDS */
+{
+	< VOID: "void" >
+  |	< MAIN: "main" >
+  |	< TRUE: "true">
+  |	< FALSE: "false">
+}
+
+TOKEN : /* OPERATORS */
+{
+	< PLUS: "+" >
+  |	< MINUS: "-" >
+  |	< TIMES: "*" >
+  |	< DIV: "/" >
+  |	< GT: ">" >
+  |	< GEQ: ">=" >
+  |	< EQ: "==" >
+  |	< NOT: "!" >
+  |	< AND: "and" >
+  |	< OR: "or" >
+  |	< IF: "if" >
+  |	< THEN: "then" >
+  |	< ELSE: "else" >
+  |     < INTEGER: "int" >
+}
+
+TOKEN :
+{
+    < INTLITERAL: ( <DIGIT> )+ >
+|   < ID: ( <LETTER> )+ >
+|   < #DIGIT: ["0" - "9"] >
+|   < #LETTER: ["a"-"z","A"-"Z"] >
+}
+
+
+Program program() :
+{ MainFunction m; }
+{
+  m = mainFunction()
+  <EOF>
+  { return new Program(m); }
+}
+
+MainFunction mainFunction() :
+{ List<Stm> sl; List<String> varDecs; }
+{
+  "void" "main" "(" ")" "{" 
+     varDecs=varDeclList()  sl=stmList() 
+   "}"
+   { return new MainFunction(varDecs,sl); }
+}
+
+/* Simplest variable declaration of ints - stored as list of ids */
+List<String> varDeclList() :
+{ Token t; List<String> vdl = new LinkedList<String>();  }
+{
+   ( <INTEGER> t=<ID> ";" { vdl.add(t.image); } )*
+  { return vdl; }
+}
+
+List<Stm> stmList() :
+{ Stm s; List<Stm> l = new LinkedList<Stm>();  }
+{
+   (s=stm() { l.add(s);  } )+
+  { return l; }
+}
+
+Stm stm() :
+{ Token t; Exp e=null; Stm s; }
+{
+   t=<ID> ":=" e=exp() ";" { return new AssignStm(t.image,e); }
+|  "print(" e=exp() ")" ";" { return new PrintStm(e); }
+| s = ifstm() { return s; }
+}
+
+Stm ifstm() :
+{ Exp e=null; List<Stm> ls1=null,ls2=null; Stm s; }
+{
+ <IF> "(" e=exp() ")" <THEN> ls1 = block()
+ [ <ELSE> ls2 = block() ]
+ { return new IfStm(e,ls1,ls2);  }
+}
+
+List<Stm> block() :
+{ Stm s; List<Stm> l = new LinkedList<Stm>();  }
+{
+   "{" (s=stm() { l.add(s);  } )+ "}"
+  { return l; }
+}
+
+Exp exp() : 
+{ Exp e; }
+{
+   e=sum() { return e; }
+}
+
+Exp sum() :
+{ Exp e,e2=null; }
+{
+    e=term() ( 
+       (<PLUS> e2=term() { e = new OpExp(e,OpExp.AOp.PLUS,e2); })
+     | (<MINUS> e2=term() { e = new OpExp(e,OpExp.AOp.MINUS,e2); })
+     | (<AND> e2=term() { e = new BoolExp(e,BoolExp.BOp.AND,e2); })
+     | (<OR> e2=term() { e = new BoolExp(e,BoolExp.BOp.OR,e2); })
+    )*
+    { return e; }
+}
+
+Exp term() :
+{ Exp e,e2=null; }
+{
+    e=factor() (
+       (<TIMES> e2=factor() { e = new OpExp(e,OpExp.AOp.TIMES,e2); })
+     | (<DIV> e2=factor() { e = new OpExp(e,OpExp.AOp.DIV,e2); })
+     | (<GT> e2=factor() { e = new CmpExp(e,CmpExp.COp.GT,e2); })
+     | (<GEQ> e2=factor() { e = new CmpExp(e,CmpExp.COp.GEQ,e2); })
+     | (<EQ> e2=factor() { e = new CmpExp(e,CmpExp.COp.EQ,e2); })
+    )*
+    { return e; }
+}
+
+Exp factor() :
+{ Token token; int x=0; Exp e;}
+{
+      token=<INTLITERAL>
+	{   try {
+	    	x = Integer.parseInt(token.image);
+	    	return new IntLiteralExp(x);
+	    } catch (NumberFormatException ee) {
+		return new IntLiteralExp(x);
+	    }
+	}
+|     token=<ID> { return new IdExp(token.image); }
+|     <TRUE> { return new BoolLiteralExp(true); }
+|     <FALSE> { return new BoolLiteralExp(false); }
+|     <NOT> "(" e=exp() ")" { return new NotExp(e); }
+|     "(" e=exp() ")" { return e; }
+}

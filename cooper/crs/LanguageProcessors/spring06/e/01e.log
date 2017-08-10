@@ -1,0 +1,139 @@
+This is pdfTeX, Version 3.14159-14d (MiKTeX 1.20e) (preloaded format=latex 2000.10.20)  22 APR 2001 16:18
+**01e
+(01e.tex{pdftex.cfg}
+LaTeX2e <1999/06/01> patch level 1
+Babel <v3.6z> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(C:\localtexmf\tex\latex\cityexam.cls
+Document Class: cityexam 
+Style 'City exam'. V5. March 2001 (David Bolton)
+[V5. March 2001 is in cityexamV4.sty]
+(C:\texmf\tex\latex\base\article.cls
+Document Class: article 1999/01/07 v1.4a Standard LaTeX document class
+(C:\texmf\tex\latex\base\size11.clo
+File: size11.clo 1999/01/07 v1.4a Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (C:\texmf\tex\latex\misc\a4wide.sty
+Package: a4wide 1994/08/30
+
+(C:\texmf\tex\latex\ntgclass\a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+)) (C:\texmf\tex\latex\base\ifthen.sty
+Package: ifthen 1999/01/07 v1.1a Standard LaTeX ifthen package (DPC)
+)
+(C:\texmf\tex\latex\psnfss\times.sty
+Package: times 1999/03/29 PSNFSS v.7.2 Times font as default roman : S Rahtz
+)
+\theexamnumber=\box26
+\theexternals=\box27
+\theinternals=\box28
+\c@totalmarks=\count87
+)
+(C:\localtexmf\tex\latex\semantic\semantic.sty
+Package: semantic 2000/08/03 v2.0(beta) Semantic Package
+\c@@@conflict=\count88
+ Semantic Package.
+Loading (C:\localtexmf\tex\latex\semantic\ligature.sty
+\@pushedtoks=\toks14
+\@seentoks=\toks15
+)  math mode ligatures,
+(C:\localtexmf\tex\latex\semantic\infernce.sty
+\@@tempa=\toks16
+\@@tempb=\toks17
+\@@pSpace=\skip43
+\@@pEnd=\skip44
+\@@nSpace=\skip45
+\@@aLineBox=\box29
+)  inference rules,
+(C:\localtexmf\tex\latex\semantic\tdiagram.sty
+\@@xShift=\count89
+\@@yShift=\count90
+\@@symbol=\toks18
+\@@tempSymbol=\toks19
+)  T diagrams,
+(C:\localtexmf\tex\latex\semantic\reserved.sty
+\@@spacing=\toks20
+\@@formating=\toks21
+)  reserved words,
+(C:\localtexmf\tex\latex\semantic\shrthand.sty)  short hands,
+and general definitions.
+\@@maxwidth=\dimen103
+\@@pLineBox=\box30
+\@@cBox=\box31
+\@@pBox=\box32
+) (01e.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 5.
+ (C:\texmf\tex\latex\psnfss\ot1ptm.fd
+File: ot1ptm.fd 1998/07/06 Fontinst v1.800 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 7.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 7.
+
+Default is without model answers...use `\withmodelanswers' to see them
+(...I don't think it writes them :->)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 115.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 115.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 115.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 117.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 124.
+
+(C:\texmf\tex\latex\psnfss\ot1pcr.fd
+File: ot1pcr.fd 1998/07/06 Fontinst v1.800 font definitions for OT1/pcr.
+) [1
+
+{pdftex.map
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlcbot8rn': too big val
+ue of SlantFont (850)
+
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlcbt8rn': too big valu
+e of SlantFont (850)
+
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlcrot8rn': too big val
+ue of SlantFont (850)
+
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlcrt8rn': too big valu
+e of SlantFont (850)
+
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlsbot8rn': too big val
+ue of SlantFont (850)
+
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlsbt8rn': too big valu
+e of SlantFont (850)
+
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlsrot8rn': too big val
+ue of SlantFont (850)
+
+Warning: PDFLATEX (file pdftex.map): invalid entry for `hlsrt8rn': too big valu
+e of SlantFont (850)
+}] [2] (01e.aux) )<cmti8.pfb><cmmi8.pfb><cmr10.pfb><cmr8.pfb><cmmi10.pfb>{8r.en
+c}<cmsy10.pfb><utmr8a.pfb>
+Output written on 01e.pdf (2 pages, 27470 bytes).

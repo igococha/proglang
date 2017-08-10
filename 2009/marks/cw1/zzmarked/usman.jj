@@ -1,0 +1,91 @@
+PARSER_BEGIN(LexicalAnalyzer)
+import java.math.BigInteger;
+
+public class LexicalAnalyzer {
+  /** Main entry point. */
+  public static void main(String args[]) throws Exception {
+    LexicalAnalyzer parser = new LexicalAnalyzer(System.in);
+	for (Token t = parser.getNextToken(); t.kind != EOF; t = parser.getNextToken());
+  }
+}
+
+PARSER_END(LexicalAnalyzer)
+
+TOKEN_MGR_DECLS: {
+	static int commentNesting = 0;
+}
+
+TOKEN : {
+	<#POSITIVE_BINARY: ["b", "B"] (["0", "1"])+>	
+	| <#POSITIVE_DECIMAL: "0" | (["1" - "9"] (["0" - "9"])*) >
+	| <#POSITIVE_HEXA: ["z", "Z"] (["0" - "9", "a" - "f", "A" - "F"])+>
+	| <#POSITIVE_OCTAL: ["o", "O"] (["0" - "7"])+ >
+	| <#POSITIVE_INTEGER: <POSITIVE_BINARY> | <POSITIVE_DECIMAL> | <POSITIVE_HEXA> | <POSITIVE_OCTAL> >
+	| <#SIGNED_INTEGER: <POSITIVE_INTEGER> | (["+", "-"] <POSITIVE_INTEGER>) >
+	| <INTEGER: <SIGNED_INTEGER> | (<SIGNED_INTEGER> "L") >		
+				{	
+					String img = image.toString();
+					if (img.charAt(img.length() - 1) == 'L') {
+						img = img.substring(0, img.length() - 1);
+					}
+					int pos = 0;
+					if (img.charAt(pos) == '-') {
+						pos++;
+					}
+					char first = img.charAt(pos);
+					int radix = 10;
+					if (first == 'O' || first == 'o') {
+						radix = 8;
+						pos++;
+					} else if (first == 'B' || first == 'b') {
+						radix = 2;
+						pos++;
+					} else if (first == 'Z' || first == 'z') {
+						radix = 16;
+						pos++;
+					} 
+					BigInteger value = new BigInteger(img.substring(pos), radix);
+					if (img.charAt(0) == '0') {
+						value = value.negate();
+					}
+					System.out.println("INT(" + value + ")");
+				}
+	| <#SIGNED_DECIMAL: <POSITIVE_DECIMAL> | (["+", "-"] <POSITIVE_DECIMAL>) >
+	| <#EXPONENT: ["e", "E"] <SIGNED_DECIMAL> >
+	| <#FRACTIONAL: (["0"-"9"])+ >
+	| <#FLOAT_NO_E: (<SIGNED_DECIMAL> ".") | (<SIGNED_DECIMAL> "." <FRACTIONAL>) | ("." <FRACTIONAL>) >
+	| <#FLOAT_NO_SUFFIX: <FLOAT_NO_E> | (<FLOAT_NO_E> <EXPONENT>) | (<SIGNED_DECIMAL> <EXPONENT>) >
+	| <FLOAT: <FLOAT_NO_SUFFIX> | ((<FLOAT_NO_SUFFIX> | <SIGNED_DECIMAL>) ["d", "f"]) >  
+				{
+					System.out.println("FLOAT(" + image + ")");
+				}
+	| <MULTILINE_COMMENT: "/*"> 
+		{
+			commentNesting++;
+		} : IN_MULTILINE_COMMENT
+	| <INLINE_COMMENT: "//" (~["\n"])* "\n">
+				{
+					System.out.println("COMMENT");
+				}		
+	| <ERROR: (~[" ", "\t", "\r", "\n", "\f"])+ >
+				{
+					System.out.println("ERROR(" + image + ")");
+				}
+	| <OTHER: ~[]>
+}
+
+<IN_MULTILINE_COMMENT> TOKEN :{
+	"*/"
+		{
+			commentNesting--;
+			if (commentNesting == 0) {
+				System.out.println("COMMENT");
+				SwitchTo(DEFAULT);
+			}
+		}
+	| "/*"
+		{
+			commentNesting++;
+		}
+	| <OTHER_IN_COMMENT: ~[]>
+}

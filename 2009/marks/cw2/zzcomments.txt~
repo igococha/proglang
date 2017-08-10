@@ -1,0 +1,594 @@
+Coursework 2 - Marks and comments
+
+*************************************
+Suyanthan Vickineswaran (abbf187)
+
+         Or(25): 25
+RepeatUntil(25): 23
+Try-Finally(30): 0
+     Throws(10): 10
+       Test(10): 8
+     Total(100): 64
+
+
+Comments:
+- New line missing for Blocks inside Repeat.
+- Test file: No examples with blocks or nested repeat-until
+
+
+*************************************
+ Mouctar Diallo (abdd238)
+
+         Or(25): 20
+RepeatUntil(25): 18
+Try-Finally(30): 12
+     Throws(10): 0
+       Test(10): 7
+     Total(100): 57
+
+Comments:
+- Or prints like AND
+- Repeat: Does not print statement. new line missing. No handling of Blocks.
+- Wrong Catch Constructor
+- Problem with Try Constructor
+- Catch not handled as list.
+-Try: only syntax is correct
+- Test file: No example with blocks or nested repeat-untils. The try example is wrong.
+
+*************************************
+Kester Ford
+
+         Or(25): 25
+RepeatUntil(25): 25
+Try-Finally(30): 30
+     Throws(10): 10
+       Test(10): 10
+     Total(100): 100
+
+Comments: Great job!
+
+
+*************************************
+Chiara Desantis
+
+         Or(25): 25 
+RepeatUntil(25): 10
+Try-Finally(30): 0
+     Throws(10): 0
+       Test(10): 4
+     Total(100): 39
+
+Comments:
+- No javacc code for Repeat. I found a partial implementation for Repeat. The pretty printer does not compile - the code would print the statement with the incorrect indentations.
+- Incomplete
+
+*************************************
+Benjamin Confino
+
+         Or(25): 25
+RepeatUntil(25): 25
+Try-Finally(30): 30
+     Throws(10): 10
+       Test(10): 10
+     Total(100): 100
+
+Comments:
+- Check the case with blocks inside Try. The "}" of the block does not come out nicely. But this is because of the "incorrect" specification I gave.
+
+*************************************
+Richard Chapman (abcc318)
+
+         Or(25): 25
+RepeatUntil(25): 18
+Try-Finally(30): 0 
+     Throws(10): 0
+       Test(10): 5
+     Total(100): 48
+
+Comments:
+- Incomplete
+- Repeat pretty-printer does not indent the statement and expression properly.
+- Test file does not show nested repeat/until or complex Or expessions. Few exmples.
+
+*************************************
+Chirag Jamnadas (abdf020)
+Himesh Patel (abcy927)
+
+         Or(25): 25
+RepeatUntil(25): 21
+Try-Finally(30): 27
+     Throws(10): 10
+       Test(10): 5
+     Total(100): 88
+
+Comments:
+- RepeatUntil(s,e): "repeat" and "until" are not aligned in final output when s is not a block.
+- RepeatUntil(s,e): Extra space before "{" if s is a block. 
+- Wrong indentations for Try, Catch and Finally: The amount of space added should be the same space subtracted. It causes the program to crash when more then one Catch is used -> indent goes to zero!!!
+- Good use of data structures.
+- Test file: Test for RepeatUnitil is not conclusive. No tests for Try/Throw.
+
+
+
+*************************************
+Andrew Jones
+
+         Or(25): 25
+RepeatUntil(25): 21
+Try-Finally(30): 26
+     Throws(10): 10
+       Test(10): 8
+     Total(100): 90
+
+Comments:
+- RepeatUntil: Incorrect indentation for compound statements inside repeat's body. The variable indent has to be updated in order for the recursive printing of statments to work.
+- Try/Catch: Same problem as with Repeat.
+- Space missing after throw.
+- Test: Complex statements inside Repeat/Throw/Catch not included.
+
+*************************************
+Fay Adams
+
+         Or(25): 25
+RepeatUntil(25): 21
+Try-Finally(30): 30
+     Throws(10): 10
+       Test(10): 9
+     Total(100): 95
+
+Comment:  
+- I'll assume that you did mean to write RepeatUntil in a single-line when the body is a single statement (not a block). However, this is not a good idea because the body may include other complex statements (while,ifThen,...) that do break-up their substatements and need the indentation variable do be updated correctly i.e. indent = indent + .... This was not tested.
+- Problem when repeat is included inside a block.
+- TryCatch: Good idea using Blocks.
+- Test: Complex tests for repeat not included.
+
+
+*************************************
+Hiten Dudakia
+Amirarya toussi abcy602 
+
+         Or(25): 25
+RepeatUntil(25): 18
+Try-Finally(30): 13
+     Throws(10): 4
+       Test(10): 5
+     Total(100): 55
+
+Comments:
+- RepeatUntil: wrong indentation
+- Try: Visitor not implemented
+- throw: Not included in grammar (only partially). Visitor not implemented.
+- Test incomplete.
+
+*************************************
+Korkmaz
+
+         Or(25): 25
+RepeatUntil(25): 21
+Try-Finally(30): 30
+     Throws(10): 10
+       Test(10): 9
+     Total(100): 95
+
+Comments:
+- RepeatUntil: Wrong indentation. Create a new line for body and until - similar to while. Problem when body is a complex statement e.g if-statement.
+- Incomplete testing for Repeat.
+
+*************************************
+Shahram Kazemi
+Mohammed Choudhery
+
+         Or(25): 25
+RepeatUntil(25): 18
+Try-Finally(30): 21
+     Throw(10):  10
+       Test(10): 0 
+     Total(100): 74
+
+Comments:
+- Main does not call pretty-printer and, therefore, does nothing. I added a call to PrettyPrintVisitor, which is the one you modified (see, for example, while-statement).
+- Repeat: Does not create correct indentation and line-breaks.
+- Try: Correct parsing and AST. Incorrect pretty-printing: no indentation or line-breaks.
+- Throw: At least make sure there's an space after "throw".
+- I couldn't find your testfile.
+
+*************************************
+Lukasz Jelenski
+
+         Or(25): 25
+RepeatUntil(25): 19
+Try-Finally(30): 20
+     Throws(10): 9
+       Test(10): 9
+     Total(100): 82
+
+Comment:
+- Repeat: No line-breaks used (or placed incorrectly) when printing repeat (see while statement).
+- Try/Catch correctly parsed. Pretty-Printer is a mess.
+- Throw does not need parenthesis around the expression (and should be printed "throw")
+- Test file: No tests for complex structures inside repeat.
+
+*************************************
+Palmira Nhassengo 
+
+         Or(25): 25
+RepeatUntil(25): 19
+Try-Finally(30): 20
+     Throws(10): 9
+       Test(10): 9
+     Total(100): 82
+
+ Comment:
+- Your code looks like Jelenski's coursewrok. Why?
+- Repeat: No line-breaks used (or placed incorrectly) when printing repeat (see while statement for a coreect implementation).
+- Try/Catch correctly parsed. Pretty-Printer does not work as it should.
+- Throw does not need parenthesis around the expression (and should be printed "throw")
+- Test file: No tests for complex structures inside repeat.
+
+*************************************
+Mahamed Mahamud
+Mikias Girmay
+
+
+         Or(25): 25 
+RepeatUntil(25): 19
+Try-Finally(30): 0
+     Throws(10): 5
+       Test(10): 8
+     Total(100): 52
+
+Comment:
+- Repeat: Incorrect indentation and line-breaks (see while statement)
+- Test: Does not test complex statements inside repeat. Other statements missing (since they are not implemented).
+
+*************************************
+Nicholas Diakomihalis 
+
+         Errors: -10 (Compilation)
+         Or(25): 25 
+RepeatUntil(25): 20
+Try-Finally(30): 15
+     Throws(10): 7
+       Test(10): 0
+     Total(100): 57
+
+Comment:
+- I couldn't find your test file.
+- Minijava.jj errors: () missing after Statement inside Repeat. Colon missing after TryStatement definition.
+- I couldn't compile the program due to the references to TypeVisitor and ExclusiveOr.
+Now, your program didn't compile...how did you test it?
+After the fixes:
+- RepeatUntil: Incorrect indentation.
+- Wrong syntax for catch. Sequences of catches should not be between {}.
+- Indentation is not updated when printing. Sequence of catches (CatchBlock) is not printed.
+- Throw is printed without indentation. Semicolon missing.
+
+*************************************
+Radoslav Lutov (abcx768)
+
+         Or(25): 25
+RepeatUntil(25): 17
+Try-Finally(30): 0
+     Throws(10): 0
+       Test(10): 6
+     Total(100): 48
+
+Comments:
+- RepeatUntil: Incorrect indentation and line-breaks. Does not print the body if it is a block. Parenthesis instead of {} - see while statement for a correct implementation.
+- Tests incomplete.
+
+*************************************
+Derek Chan (abcy873)
+
+         Or(25): 25
+RepeatUntil(25): 18
+Try-Finally(30): 15
+     Throws(10): 1
+       Test(10): 8
+     Total(100): 65
+
+Comments:
+- Repeat: Correct parsing and AST. Wrong indentation and line-breaks for pretty-printer.
+- TryCatch. Note that Catch is not a statement , it is part of Try. Try and Finally only contains a single statement inside their bodies and do not require a statement list, unless you decide to use *. Same with the body of Catch.
+- Syntax: use "catch" instead of "catch ".
+- TryCatch: The pretty-printer does not use the correct indentations and line-breaks. It completely breaks 
+- Throw is a separate statement. Your syntax is wrong. It should be throw <Exp>, as indicated by the specification.
+- Test incomplete. No tests for complex statements inside bodies of repeat, try, etc. Eg include and if statement inside the repeat.
+
+*************************************
+Karl Newman-Smart (abcy859)
+
+         Or(25): 25 
+RepeatUntil(25): 18
+Try-Finally(30): 13
+     Throws(10): 10 
+       Test(10): 9
+     Total(100): 73
+
+Comments:
+- Repeat should create a new line for the body and update 'indent' depending on the type of body (block or not), and, similarly, create a new line for until (see while statement implementation). It is supossed to be a pretty-printer!
+- Still, you make the same mistakes with the pretty-printer and do not update indent accordingly.
+- Try is a statement that contains catch and finally sub-parts. Catch and Finally are NOT separate statements.
+- The type part of catch is not printed.
+- Throw expression need not be in parenthesis.
+- Your tests do not include separate cases when the body of a repeat/try/etc is a block or not.
+
+*************************************
+ Mikko Eley (abch638)
+
+         Or(25): 25
+RepeatUntil(25): 25
+Try-Finally(30): 0
+     Throws(10): 0
+       Test(10): 9
+     Total(100): 59
+
+Comments:
+- Incomplete but perfect execution.
+- Needed to test variations on repeat e.g. no block inside, different depths, etc.
+
+*************************************
+Hibah Qureshi (abdb579)
+
+         Or(25): 25
+RepeatUntil(25): 15
+Try-Finally(30): 5
+     Throws(10): 1
+       Test(10): 4
+     Total(100): 50
+
+Comments:  -- program does not compiler ---
+- Compilation error with Repeat visitor. Fixed.
+- Repeat print: new line missing.
+- Try/Catch: The minijava part is not working (no catch, wrong declarations), and does not match the constructor for Try. Fixed.
+- Compilation error with Try and catch visitor. Fixed.
+....can't continue fixing bad code.
+- Throw is not an expression (tha part has been removed). The throw statement should be defined as "throw" <Exp> - this does not match your syntax.
+- Throw: Wrong use of constructor inside mnijava.jj.
+- Tests incomplete. Some do not meet.
+
+*************************************
+Michael Whittet (abcx972)
+Paul Cleary (abcy840).
+
+         Or(25): 25
+RepeatUntil(25): 18
+Try-Finally(30): 29
+      Throw(10): 10 
+       Test(10): 9
+     Total(100): 91
+
+Comments:
+- Repeat pretty-print: You must update the indent variable and print the body and until parts in a separate line, following the implementation of the while pretty-print. Otherwise, mixing repeat and other complex statements will create bad otput (it's already not great).
+- Try/Catch: Good, though the statements inside the bodies should be moved a couple of spaces to the right.
+- Test repeat with complex statements inside its body. More than one catch as well.
+
+*************************************
+James Worker (ba029)
+
+         Or(25): 25
+RepeatUntil(25): 25
+Try-Finally(30): 28
+      Throw(10): 10
+       Test(10): 10
+     Total(100): 98
+
+Comments:
+- Try/Catch: The code asks if the body of the catch (throw/finally) is a block or not, and increments indent accordingly. Later indent is updated regardless of the type of body. The presence of several blocks will cause indent to reach zero and negative numbers thus producing wrong indentations and eventually and exception. 
+Besides that, it's perfect.
+
+*************************************
+Mihir Sangani (abcx451)
+Oluwaseun Ilegbusi (STUDENT ID: abcz980)
+
+         Or(25): 25
+RepeatUntil(25): 21
+Try-Finally(30): 24
+      Throw(10): 9
+       Test(10): 9
+     Total(100): 88
+
+Comments:
+- Incorrect syntax for Repeat: "until" must be followed by (<EXP>). However, since (<EXP>) is also an expression, it works when parenthesis are used. Unfortunately it also accepts things like repeat..until x, which does not follow the syntax.
+- Repeat pretty-print: Extra line break.
+- Try/Catch: Pretty-print of multiple catches is wrong. No test included.
+- Try/Catch: catch and finally should be aligned with try.
+- Try/Catch: Indentation is not set back to initial value.
+- Throw does not contain parenthesis.
+
+
+
+*************************************
+Abib Ogunbowale (abdd731)
+
+         Or(25): 25
+RepeatUntil(25): 24
+Try-Finally(30): 30
+      Throw(10): 10
+       Test(10): 9
+     Total(100): 98
+
+Comments:
+- It would've been better to create a new line before statarting the body block inside the repeat to avoid getting that extra space after "repeat". This actually becomes a problem when indent has a bigger value, causing greater gaps as a result.
+- Test more complex expressions inside repeat,try,etc, or include repeat,try, etc at different depths. 
+
+
+*************************************
+ Erwin Emmanuel (abdb278)
+
+         Or(25): 22
+RepeatUntil(25): 4
+Try-Finally(30): 0
+      Throw(10): 0 
+       Test(10): 1
+     Total(100): 27
+
+Comments:
+- Minijava.jj: TryStatement, ThrowStatement, CatchStatement undefined.
+- Compilation errors:
+* Or and RepeatUntil not included in visitor/Visitor.java
+* Repeat or RepeatUntil??
+* Or.java: v.Visit - upper-case!
+* visit(RepeatUnil) : extra quote after until.
+After fixing everything - I guess this never ran correctly:
+- Incorrect syntax for repeat/until. Should be: 
+  repeat s until(e)
+- Test: Useless, didn't include any of the new statements.
+
+
+*************************************
+Chris Roope (abcy200)
+
+         Or(25): 25
+RepeatUntil(25): 21
+Try-Finally(30): 26
+      Throw(10): 10 
+       Test(10): 9
+     Total(100): 91
+
+Comments:
+- Repeat must create a new line for the body and until. Otherwhise, printing coplex statements included inside a body of a repeat will get bad indentations - it already creates unneccessary space after repea and until. For example:
+repeat if (e) s1 else s2.
+You must test theses cases.
+- Similar problem with Try/Catch. Do you want to "{" and "}" in the syntax? Decide (jj).
+- Why print indentation after "catch"? Indentation should be used to measure the distance from the left margin to the beginning of the text.
+- Forgot semi-colon when printing throw.
+
+*************************************
+Alla Kebire (abdc692)
+
+         Or(25): 25
+RepeatUntil(25): 23
+Try-Finally(30): 30
+      Throw(10): 10
+       Test(10): 9
+     Total(100): 97
+
+Comments:
+- RepeatUntil pretty-print: Always create a new line after "repeat". Indent must be used only when starting a new line.
+- No test for throw
+
+
+*************************************
+Deepak Bains (abdv869)
+
+         Or(25):
+RepeatUntil(25):
+Try-Finally(30): 
+      Throw(10): 
+       Test(10):
+     Total(100): 1
+
+Comments:
+- Nothing.
+
+*************************************
+Junichiro Okuno (abdv443)
+
+         Or(25): 25
+RepeatUntil(25): 25
+Try-Finally(30): 30
+      Throw(10): 10
+       Test(10): 9
+     Total(100): 99
+
+Comments:
+- The pretty-printer for the statements introduced in this cw handles a special when a stm body is ablock. This cases should be tested.
+
+
+
+*************************************
+Apostolos Flessas (abcy122)
+
+         Or(25): 25
+RepeatUntil(25): 19
+Try-Finally(30): 20
+     Throws(10): 9
+       Test(10): 9
+     Total(100): 82
+
+Comment:
+- Repeat: No line-breaks used (or placed incorrectly) when printing repeat (see while statement).
+- Try/Catch correctly parsed. Pretty-Printer is a mess.
+- Throw does not need parenthesis around the expression (and should be printed "throw")
+- Test file: No tests for complex structures inside repeat.
+
+
+*************************************
+Usman Ahmed (abcy973)
+
+         Or(25): 25
+RepeatUntil(25): 0
+Try-Finally(30): 0
+      Throw(10): 0
+       Test(10): 2
+     Total(100): 27
+
+
+*************************************
+Priyank Vyas (abbd827)
+
+         Or(25): 25
+RepeatUntil(25): 23
+Try-Finally(30): 30
+      Throw(10): 10
+       Test(10): 9
+     Total(100): 97
+
+Comments:
+- Repeat: Create a new line, always, after repeat i.e. indent should only be "printed" when starting a new line.
+- Test for throw missing.
+
+
+*************************************
+Gulshan Beejan (abby870)
+
+         Or(25): 25
+RepeatUntil(25): 20
+Try-Finally(30): 10
+      Throw(10): 10
+       Test(10): 0
+     Total(100): 65
+
+Comments:
+- No test file.
+- Repeat: Incorrect syntax - no "(" after repeat.
+- Repeat pretty-print : repeat and until must be aligned. Repeat must be followed by a new line.
+- Try syntax: "finally" missing. Extra ";". Only one catch considered.
+- Try/Catch pretty-printer: Incorrect indentations and line-breaks.
+
+
+*************************************
+Mihai Oprea (abcy204)
+
+         Or(25): 25
+RepeatUntil(25): 17
+Try-Finally(30): 5 
+      Throw(10): 2
+       Test(10): 4
+     Total(100): 53
+
+Comments:
+- RepeatUntil statement not included inside Statement() - added.
+- RepeatUntil printer: Incorrect order!
+- Try/Catch: Too many errors. Extra statement used. Did not manage to build AST. Pretty-printer does not match cass definitions(removed for compilation).
+- Throw: Incorrect syntax. It tries to build a RepeatUntil AST!!
+- Test file: Only or tested.
+
+
+*************************************
+Mohammad Waheed Farooq
+
+
+         Or(25): 
+RepeatUntil(25): 
+Try-Finally(30): 
+      Throw(10): 
+       Test(10): 
+     Total(100): 0
+
+Comments:
+- I only got two files, minijava.jj and mytest.txt. There's not much I can do wih these.
+- Minijava: The minijava part is OK but it's all done by DB (model answers from a previous year), as indicated by the comments. I can't accept these files.
+
+

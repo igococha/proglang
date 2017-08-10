@@ -1,0 +1,221 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+\section*{Language Processors Lab Week 1}
+
+% Whta's he symbol of the Main menu buttin? Logout
+
+\medskip\noindent These sheets introduce you to the Linux/Unix Java programming environment to be used on the module by getting you to compile and run a program. It is also a gentle introduction to Language Processors since you will compile and execute your first interpreter: The Reverse Polish Notation (RPN) Calculator.
+
+\medskip\noindent You will be expected to be able to copy and manipulate program files and directories or web locations named in lab sheets, modify and compile program files, and execute the compiled programs.
+If you are not familiar with the Linux labs you should also get a copy of any
+\emph{Computing Services} documentation available.
+
+
+\subsection*{The Linux Environment}
+
+
+\subsubsection*{Working with the KDE windowing system under Linux}
+
+Each computer is attached by a network to several file systems. Under Linux, the fact that there are multiple file systems is something you don't normally have to think about. All the available systems just appear as different directories (folders) in a large`tree' of directories. The tree is upside-down with its root at the top. The Root Directory is called ``{\tt /}''. We will use the words `directory' and `folder' to mean the same thing.
+
+The Linux labs use Suse Linux and the KDE windowing system as its main user interface.
+You will notice that KDE has a Windows-like \negra{taskbar} (the control panel) at the bottom of the screen with a button with the Suse logo (K Menu) on the bottom-left. As on Windows, clicking on this reveals a menu that launches applications and utilities.
+
+\subsubsection*{Your CSD home directory and the KDE File Manager}
+
+When logged in as a Linux user you have a \emph{home directory}.
+This is a place in the file system which belongs to you: the place where you can create, modify and delete files and folders. When you start the file manager (the button labelled with a small house icon on the control panel is the easiest way to start it), your home directory is the one it will display. You can also get the file manager to take you to your home directory at any time simply by clicking on the home icon on the task bar at the top.
+Use the file manager to go to your home directory now.
+Does it contain any files? Does it contain any hidden files?
+
+
+% From the CSD Linux machines your SOI home directory is available as \fname{/soi/homes/}$<${\sc user}$>$,  where $<${\sc user}$>$ is your login-name. 
+
+\subsubsection*{Unix sessions, Terminals, and your directories}
+
+A Unix session is made up of a series of commands typed and executed by the user from the command line at a \emph{Unix terminal} or \emph{Unix shell} window. A Unix shell window can be fired up from the K menu or from one of the icons  on the taskbar: the one with the terminal screen on it, marked with \negra{Konsole}.
+
+Fire up a shell window. The first question you may want to ask is 'Where am I?'. You can answer this question by typing:
+\begin{verbatim}
+    pwd
+\end{verbatim}
+The {\tt pwd} command displays the name of the \emph{current directory}, that is, the name of the directory where you are currently located. By default you will always start a Unix session from your home directory. Therefore, the first {\tt pwd} command should display a directory name  starting with '{\tt /'} (the root directory) and ending with your user name. In my case, I got the following:
+\begin{quote}
+{\tt /u4.bristol/s00/sbbc287}
+\end{quote}
+Now type:
+\begin{quote}
+{\tt ls} 
+\end{quote}
+The {\tt ls} command displays the contents of the current directory -  the previos command shoul've listed the contents of your CSD home directory. You can also display the contents of any directory by passing a directory name as argument to the {\tt ls} command. For example, in order to see the contents of the {\tt KDesktop} directory simply type:
+\begin{quote}
+{\tt ls KDesktop} 
+\end{quote}
+Besides arguments, Unix commands can also accept special options listed after a the '-' (minus) symbol. For example, these are valid {\tt ls} options:
+
+\begin{tabular}{lll}
+{\tt ls -l} & $\;\;\;$ & Lists permissions, ownership and last update info \\
+{\tt ls -a} & & Lists hidden files as well \\
+{\tt ls -al KDesktop} & & Combined options
+\end{tabular}
+
+You can see a brief explanation of almost all Unix command by using the {\tt man} and {\tt info} commands/ For example, type {\tt man ls} and {\tt info ls}.
+
+\subsubsection*{Creating a directory}
+
+In this section you will learn how to create new directories and move through the directory tree. The command {\tt cd} \fname{dirname} changes the current directory to the directory name specified as argument i.e. \fname{dirname}. 
+First, make sure the current directory is your home directory. You can always move to your home directory by typing the following:
+\begin{quote}
+{\tt cd}
+\end{quote}
+The {\tt cd} command with no arguments will always get you to your home directory. Now, execute the following series of commands:\\
+
+\begin{tabular}{lll}
+{\tt ls} & $\;\;\;$ & Check {\tt KDesktop} is one of the names listed \\
+{\tt cd KDesktop} & & The current directory should be now be {\tt KDesktop} \\
+{\tt pwd} & & Check your current directory \\
+{\tt ls} & & Inspect the contents of {\tt KDesktop} \\
+{\tt cd ..} & & Move to the parent directory (one directory up) \\
+{\tt pwd} & & Check you are back to your home directory \\
+ & &
+\end{tabular}
+
+New directories can be created with the {\tt mkdir} command. We would like to create the {\tt LanguageProcessors} directory - you can pick any name you want - in order to store all our lab work. Do the following:
+
+\begin{tabular}{lll}
+{\tt mkdir LanguageProcessors} & $\;\;\;$ & Creates new directory {\tt LanguageProcessors} \\
+{\tt cd LanguageProcessors} & & You should be in {\tt LanguageProcessors now}
+\end{tabular}
+
+
+\subsection*{Java environment and programming}
+
+The Java environment we will use is Sun's JDK (Java Development Kit, now also known as the SDK), which can be considered to be the reference  Java environment, and provides (amongst other things) a compiler, interpreter and debugger. These are not integrated into a closed environment, instead you need to use the Unix file system as above, a Unix editor to be able to create and modify programs (see below), and learn how to compile and execute Java programs by invoking the correct Java SDK commands from the command line. In particular, we will use the {\tt javac} and {\tt java} commands to compile and execute Java programs.
+
+
+Before we continue, make sure your current directory is {\tt LanguageProcessors}\footnote{Or the directory you have chosen for your Language Processors work}.
+
+\subsubsection*{Compiling Java programs on Unix}
+
+%By default, the CSD labs do not have the {\tt java} environment loaded. In order to use Java in a shell window you must add module \verb+java+, which gives access to the Java JDK (also known as SDK) and some local Java libraries:
+
+%\begin{quote}
+%{\tt module add java}
+%\end{quote}
+
+%\textbf{IMPORTANT:} Always load the {\tt java} module when working with the CSD Unix labs. \\
+
+Next, we need to get the source Java files that make up the RPN Calculator. The files have been packaged into an archive file named {\tt rpn.tar} by the Unix utility program {\tt tar}. Do the following:
+\begin{itemize}
+\item Download the {\tt rpn.tar} file from the module's Moodle directory \fname{lab1} or from the following link \verb+http://www.soi.city.ac.uk/~sbbc287/rpn.tar+.
+\item Make sure {\tt rpn.tar} has been copied to your {\tt LanguageProcessors} directory. It may be that the file system unpacks the tar file automatically. If that's the case, copy the {\tt rpn} directory to the {\tt Language Processors} directory.
+\item If the file system has not unpacked the {\tt rpn.tar} file automatically, unarchive the files with the following command:
+\begin{quote}
+{\tt tar -xvf rpn.tar}
+\end{quote}
+This creates the {\tt rpn} directory and copies all related {\tt .java} files into it. 
+\item Change to the {\tt rpn} directory ({\tt cd rpn}) and list its contents ({\tt ls}). You should get the following:
+
+\begin{verbatim}
+Lexer.java              StackMachineException.java
+LexerException.java     Token.java
+RPN.java                TokenKind.java
+StackMachine.java  
+\end{verbatim}
+
+The RPN Calculator (lexical analyzer and stack machine) is made up of 7 {\tt .java} files. 
+\end{itemize}
+
+The Java compilation command is {\tt javac}, which will compile single or multiple {\tt .java} files and generate {\tt .class} (Java bytecode) files. In order to compile the RPN Calculator execute the following command:
+
+\begin{quote}
+{\tt javac RPN.java}
+\end{quote}
+
+which will compile the {\tt RPN.java} source file, and all Java source files needed by {\tt RPN.java}. We are compiling {\tt RPN.java} because we know that it contains the {\tt main} method (see next section). 
+\emph{Your first compilation will take a long time; subsequent ones take much less time.} 
+
+The {\tt javac} command generates a new {\tt class} file per compiled class.
+Succesful execution of the command above should generate 10 new {\tt .class} files. Verify this by executing the {\tt ls} command.
+
+\subsubsection*{Running Java programs on Unix}
+
+Java programs are executed with the {\tt java command}:
+
+\begin{quote}
+{\tt java } \fname{MainClass}
+\end{quote}
+
+where \fname{MainClass} is any class which contains the {\tt public static void main(String[] args*)} method. In our example, the {\tt main} method is part of the {\tt RPN} class. You can quicly check this by invoking the {\tt cat RPN.java} or {\tt more RPN.java} commands - with the latter, press the spacebar in order to see the rest of the file. Thus, the command
+
+\begin{quote}
+{\tt java RPN}
+\end{quote}
+
+will execute the RPN Calculator
+
+\subsubsection*{The Reverse Polish Notation (RPN) Calculator}
+
+Typical calculators use Infix notation, that is, they work with arithmetical expressions where operators are placed between its operands. For example, the arithmetical expression {\tt 3 + 5} has operator {\tt +} between operands 3 and 5. This notation is easier to read but has a few shortcomings:
+\begin{itemize}
+\item Complex expressions require the use of parenthesis e.g. if we want to multiply the result of {\tt 3 + 5} to the result of {\tt 11 - 4} we need to write {\tt (3 + 5) * (11 -4)}.
+\item The calculator needs to read the whole expression before it starts its computation. It may also need to store temporary results, as with the previous example.
+\end{itemize}
+
+These shortcomings are addressed by Reverse Polish Notation (RPN). RPN is a mathematical notation where operators are placed after their operands. It is also called Postfix notation. For example, the infix expression {\tt 3 + 5} is written {\tt 3 5 +}, and {\tt (3 + 5) * (11 - 4)} can be expresed by RPN expression {\tt 3 5 + 11 4 - *}.
+
+When executed, the RPN Calculator displays a couple of greeting lines, followed by the interpreter's prompt {\tt Enter Expression >} as shown below:
+
+\begin{verbatim}
+Reverse Polish Notation Calculator
+Enter RPN expression after prompt and hit Enter
+Or just hit Enter to Exit
+\end{verbatim}
+
+Try a few examples:\\
+
+\begin{verbatim}
+Enter expression > 6
+
+Enter Expression > 3 5 +
+
+Enter Expression > 3 5 + 11 4 - *
+\end{verbatim}
+
+Are the results what you expected? The calculator also reports on errors due to wrongs input. For example {\tt 4 +} should report the wrong number of arguments.
+
+\subsubsection*{Modifying the Calculator}
+
+The calculator has a small error: it performs division in the wrong order. For example, {\tt 8 2 /} gives us 0 insted of 4. 
+
+We need to modify the StackMachine.java file. Follow this steps:
+\begin{itemize}
+\item Fire up one of the text editors provided by the system (check K Menu/Utilities/Editors) and load the StackMachine.java file. 
+\item Look for the place in the program where division is performed {\tt op1 / op2} and change the order of the operators.
+\item Save the file.
+\item Re-compile the program with {\tt javac RPN.java}, and run it again ({\tt java RPN}).
+\end{itemize}
+
+Doe sit work?
+
+\subsubsection*{Logging Out}
+
+\emph{Always remember} to log out when you have finished working at a machine.
+To logout from a Linux machine, press the button (K button?) at the left of the control panel at the bottom of the screen, and select {\sf Logout} from the menu. 
+
+If you leave a machine without logging out you are putting your own work
+at risk.
+
+\end{document}
+

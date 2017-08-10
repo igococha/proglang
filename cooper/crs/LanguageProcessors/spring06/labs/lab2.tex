@@ -1,0 +1,105 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\subsection*{Language Processors Lab 2}
+
+{\bf Note:} Read this through {\em before\/} logging in.
+
+\medskip\noindent The goal for this
+lab is to see a JavaCC-generated lexical analyser working to
+simply print out some recognised tokens, and
+then to write some of your own expressions and implement them.
+
+\subsubsection*{A trivial lexical analyser}
+
+Fire up a Unix shell window. 
+To get the environment ready type the command:
+\begin{verbatim}
+   module add java soi javacc/3.2
+\end{verbatim}
+The module \verb+javacc/3.2+ gives you access to the JavaCC tool that includes
+a lexical analyser builder.
+
+I have written a simple JavaCC input file which recognises a small number of
+token types.  Move to the directory in which you want to do
+your IN2009 work and copy the example directory with the command:
+\begin{verbatim}
+   cp -R /soi/sw/courses/daveb/IN2009/lextest .
+   cd lextest
+\end{verbatim}
+You can see the JavaCC file with:
+\begin{verbatim}
+   more LexTest.jj
+\end{verbatim}
+(or you can edit it with your editor of choice, of course).
+Now run JavaCC on the script file with
+\begin{verbatim}
+   javacc LexTest.jj
+\end{verbatim}
+This produces a Java program in various files.
+This program is the lexical analyser and recognizes the
+tokens specified in the \verb+LexTest.jj+ file.
+Now compile these Java classes with:
+\begin{verbatim}
+   javac *.java
+\end{verbatim}
+And then run the program: 
+\begin{verbatim}
+   java LexTest
+\end{verbatim}
+Type in some identifier names and integers and see
+what happens.
+
+Now look at the file \verb+LexTest.jj+.
+The two forms of token (SKIP and TOKEN) are
+demonstrated, along with most of the kinds
+JavaCC regular expression, and also
+local definitions (prefixed by a `\verb+#+'
+in a TOKEN definition). See the JavaCC document
+for full details. The syntax-definitions part 
+of this file simply matches tokens and
+prints them out. Notice that it is possible
+to capture the token recognised in a Token object 
+(here \verb+Token t+) and then to access and print
+its kind (from the table \verb+tokenImage+ indexed
+by \verb+Token+ field `\verb+kind+') and
+the string that was matched (from \verb+Token+ field
+`\verb+image+'). TOKENs which are defined as simple
+strings (eg \verb+KEYTRUE+) will be printed as 
+the string rather than the name (\verb+KEYTRUE+),
+whereas for those with more complex definitions
+the names are printed (eg  \verb+<IDENTIFIER>+)
+
+Another example can be found in
+\verb+/soi/sw/courses/daveb/IN2009/appel2.9+ (see the README file in the 
+directory). 
+
+
+\subsubsection*{Modifying the analyser}
+
+(Part of the first coursework will ask a question something like this.)
+
+Replace the regular expression
+definition of the REAL token in the \verb+LexTest.jj+ file
+to instead match signed real
+numbers as written in Pascal.
+Such numbers must contain a decimal point, and at least one
+digit before and after the decimal point.
+They may optionally be followed by a signed exponent
+that begins with the letter `\verb"E"' and is followed
+by a (possibly signed) integer.
+In this notation, \verb"39.37", \verb"-6.336E4", \verb"0.894E-4" and
+\verb"0.0" are legal, while \verb".36", \verb"4."
+and \verb"+.7E6" are illegal.
+
+\end{document}
+

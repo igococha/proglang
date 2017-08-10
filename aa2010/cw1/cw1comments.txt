@@ -1,0 +1,829 @@
+***************************************
+Andrew Davies (abds987)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 24	
+PA: 25
+Total: 49
+
+***************************************
+
+ Selim Sezgin (abdt223)
+Declared Paired work with Mohammed El-Shibib
+
+The program does not pass javacc.
+I will mark the ones that have correct syntax.
+
+- INTEGER_LITERAL(5): 0  // problems with +/-
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 0 // bad syntax
+-        RATIONAL(6): 3  // value not computed
+-              Total: 12-5=7
+
+Semi-colon missing. 
+I said the programs that didn;t compile would get a 0.
+I am subtracting 5 points instead.
+
+Test: 19.5
+PA: 7
+Total: 27
+
+***************************************
+
+Sarah Tupman (abdr665)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 21
+PA: 25
+Total: 46
+
+***************************************
+
+ Kamil Kumas (abfn482)
+
+- INTEGER_LITERAL(5): 5 
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3  // rational value not computed/printed
+-              Total: 22
+
+
+Test: 17.5
+PA: 22
+Total: 40
+
+***************************************
+
+ Andrejus Koronkevic (abdv461)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4 
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3  // rational numeric value not computed
+-              Total: 22
+
+
+Test: 19.5
+PA: 22
+Total: 42
+
+***************************************
+
+check rational part from here up
+
+Jasmin Kayaliny Vinsan Thavarajah (abbz384)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 0
+-              Total: 19
+
+
+Test: 12
+PA: 19
+Total: 31
+
+***************************************
+
+Adele Young (abds691)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 24
+PA: 25
+Total: 49
+
+***************************************
+
+Kristina Mansurova (abcy574)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 24
+PA: 25
+Total: 49
+
+***************************************
+
+Mohammed El-Shibib (abfj909)
+Declared paired work with Selim Sezgin
+
+The program does not pass javacc.
+I will mark the ones that have correct syntax.
+
+- INTEGER_LITERAL(5): 0  // problems with +/-
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 0 // bad syntax
+-        RATIONAL(6): 3  // value not computed
+-              Total: 12-5=7
+
+Semi-colon missing. 
+I said the programs that didn;t compile would get a 0.
+I am subtracting 5 points instead.
+
+Test: 8
+PA: 7
+Total: 15
+
+
+***************************************
+
+Mohamed Mohamed (abdt048)
+Pair work with Faiza Iqbal, ID: abds919
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 23.5
+PA: 25
+Total: 49
+
+***************************************
+
+Fei Wang (abdt954)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 19
+PA: 25
+Total: 44
+
+***************************************
+
+Usama Inam (abcc719)
+Worked with: Shazan Miah (abbz366)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 17.5
+PA: 25
+Total: 43
+
+***************************************
+
+Socrates Katsoulacos (abdt921)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 23.5
+PA: 25
+Total:49
+
+***************************************
+
+Edivania Lucio (abfn486)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 15
+PA: 25
+Total: 40
+
+***************************************
+
+Apolinario David (abfb290)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 17.5
+PA: 25
+Total: 43
+
+***************************************
+
+Naveed Ahmed (abfp873)
+with Muddasar Hussain abdw051
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 3  
+does not accept eg abfp88873. Accepts abfp87388873 instead
+-        RATIONAL(6): 6
+-              Total: 23
+
+
+Test: 13.5
+PA: 23
+Total: 37
+
+***************************************
+
+Ketul Patel (abdv864)
+worked with Balkishan Chudasama (abds894)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3 // computing wrong value
+-              Total: 22
+
+
+Test: 23
+PA: 22
+Total: 45
+
+***************************************
+
+Shazan Miah (abbz366)
+paired submission with Usama Inam (abcc719).
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 24.5
+PA: 25
+Total: 50
+
+***************************************
+
+Srud Abdulrahman (abfn154)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 24
+PA: 25
+Total: 49
+
+***************************************
+
+Mohamed Mohamed (abdr827)
+
+File didn't pass javacc. Bad use of comments: -5
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3  // value not computed
+-              Total: 22-5=17
+
+Test: 8
+PA: 17
+Total: 25
+
+***************************************
+
+Ashley Peters (abcy928)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 2  // doesn't accept abcy928abcy928
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 22
+
+
+Test: 24.5
+PA: 22
+Total: 47
+
+***************************************
+
+cw1.jj did not pass javacc. parenthesis missing. 
+Compilation error, imcomplete: -5
+
+Rozh Surchi (abdt148)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3  // value computation wrong
+-              Total: 22-5=17
+
+
+Test: 21
+PA: 17
+Total: 38
+
+***************************************
+
+Rohan Padam (abcz963)
+worked with Jagmeed Singh abds833.
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 3 // didn't accept abczabcz963
+-           MYID3(5): 5
+-        RATIONAL(6): 3 // wrong value calculation
+-              Total: 20
+
+
+Test: 18.5
+PA: 20
+Total: 39
+
+***************************************
+
+Janet Akinte (abcy779)
+
+- INTEGER_LITERAL(5): 3 // Bad output
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3 // bad value output
+-              Total: 20
+
+
+Test: 16
+PA: 20
+Total: 36
+
+***************************************
+
+ Sundeep Kahlon (abds710)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3 // no value
+-              Total: 22
+
+
+Test: 21
+PA: 22
+Total: 43
+
+***************************************
+
+Amar Makwana (abdt068)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 2 
+// didn't accept abdt068abdt068,accepted abdt and 068 (wrong)
+-           MYID3(5): 2 // accepts abdt000666888 (wrong)
+-        RATIONAL(6): 6
+-              Total: 19
+
+
+Test: 19.5
+PA: 19
+Total: 39
+
+***************************************
+
+ Hiren Dass (abcy814)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 25
+PA: 25
+Total: 50
+
+***************************************
+
+Mohammed Akhazzan (abds145)
+
+- INTEGER_LITERAL(5): 3 // doesn't print negative sign
+-            MYID(4): 4
+-           MYID2(5): 2 // doesn't accept abds145abds145
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 20
+
+
+Test: 15.5
+PA: 20
+Total: 36
+
+***************************************
+
+Evan Rogers (abdt284)
+
+- INTEGER_LITERAL(5): 3 // Bad output
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5 // didn't recognise abdt2222284 - wrong order 84
+-        RATIONAL(6): 3 // no value
+-              Total: 20
+
+
+Test: 22
+PA: 20
+Total: 42
+
+***************************************
+
+Jagmeed Singh (abds833)
+worked with Rohan Padam abcz963.
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 3  // didn;t accept abdsabds833
+-           MYID3(5): 5
+-        RATIONAL(6): 3 // wrong value calculation
+-              Total: 20
+
+
+Test: 19.5
+PA: 20
+Total: 40
+
+***************************************
+
+ Akshay Kotecha (abds096)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 18.5
+PA: 25
+Total: 44
+
+***************************************
+
+Herve Muganda (abdt328)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3   // no value computed
+-              Total: 22
+
+
+Test: 20
+PA: 22
+Total: 42
+
+***************************************
+
+Eliezer Shindler (abdr846)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 23.5
+PA: 25
+Total: 49
+
+***************************************
+
+Kayley-Ann Culling (abdt153)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3  // no value computed
+-              Total: 22
+
+
+Test: 0
+PA: 22
+Total: 22
+
+***************************************
+
+Ricardo Doroana (abdb131)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 24.5
+PA: 25
+Total: 50
+
+***************************************
+
+ Salah Mohammed (abdt493)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 3 // doesn't accept abdt493abdt493
+-           MYID3(5): 4 // doesn't accept abdt493333
+-        RATIONAL(6): 6
+-              Total: 22
+
+
+Test: 20.5
+PA: 22
+Total: 43
+
+***************************************
+
+Michael Otolorin (abcx759)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 25
+PA: 25
+Total: 50
+
+***************************************
+
+Shamsuddin Ahmed (abfn479)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 15.5 
+PA: 25
+Total: 41 
+
+***************************************
+
+Kimberly Chosen (abds895)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 23
+PA: 25
+Total: 48
+
+***************************************
+
+Muddasar Hussain (abdw051)
+worked with Naveed Ahmed abfp873
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 21
+PA: 25
+Total: 46
+
+***************************************
+
+ Faiza Iqbal (abds919)
+Pair work with Mohamed Mohamed, ID: abdt048
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 21
+PA: 25
+Total: 46
+
+***************************************
+
+Muhammed Ahmed (abfb298)
+Partner: Ali Aktar - abdr785
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 24
+PA: 25
+Total: 49
+
+***************************************
+
+ Shahab Shaterian (abcx860)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 2 
+// doesn't accept abcx860abcx860
+// accepts abcx and 860 (wrong)
+-           MYID3(5): 3
+// accepts abcx888666000 (wrong)
+-        RATIONAL(6): 1
+// value not computed
+// only accepts single digit denominator and numerator.
+-              Total: 15
+
+
+Test: 23.5
+PA: 15
+Total: 39
+
+***************************************
+
+Shaqil Ismail (abdt293)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 17.5
+PA: 25
+Total: 43
+
+***************************************
+
+Ali Aktar (abdr785)
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 6
+-              Total: 25
+
+
+Test: 7.5
+PA: 25
+Total: 33
+
+***************************************
+
+Danny Tsui (abdv867)
+
+- INTEGER_LITERAL(5): 0
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3 // value not computed
+-              Total: 17
+
+
+Test: 11.5
+PA: 17
+Total: 29
+
+***************************************
+
+Balkishan Chudasama (abds894)
+worked with Ketul Patel (abdv864).
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 3  //computing wrong value
+-              Total: 22
+
+
+Test: 22
+PA: 22
+Total: 44
+
+
+***************************************
+
+ Andy Oteng (abdt117)
+
+
+- INTEGER_LITERAL(5): 5
+-            MYID(4): 4
+-           MYID2(5): 5
+-           MYID3(5): 5
+-        RATIONAL(6): 5  // rounding problem
+-              Total: 24
+
+
+Test: 19.5
+PA: 24
+Total: 44
+
+
+***************************************
+
+
+- INTEGER_LITERAL(5): 
+-            MYID(4): 
+-           MYID2(5): 
+-           MYID3(5): 
+-        RATIONAL(6): 
+-              Total: 
+
+
+Test: 
+PA: 
+Total:
+
+
+
+
+
+

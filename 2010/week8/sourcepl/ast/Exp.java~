@@ -1,0 +1,43 @@
+package ast;
+
+import visitor.*;
+
+/*
+abstract class Stm { 
+    void interp(Table t) throws TableLookupException { return;}
+    int maxargs() { return 0; }
+}
+
+class CompoundStm extends Stm {
+   Stm stm1, stm2;
+   CompoundStm(Stm s1, Stm s2) {stm1=s1; stm2=s2;}
+    void interp(Table t) throws TableLookupException {
+	stm1.interp(t); stm2.interp(t); }
+    int maxargs() { return 0; }
+}
+
+class AssignStm extends Stm {
+   String id; Exp exp;
+   AssignStm(String i, Exp e) {id=i; exp=e;}
+    void interp(Table t) throws TableLookupException {
+	t.update(id,exp.interp(t)); return; }
+    int maxargs() { return 0; }
+}
+
+class PrintStm extends Stm {
+   ExpList exps;
+   PrintStm(ExpList e) {exps=e;}
+    void interp(Table t) throws TableLookupException {
+	exps.interp(t);
+    }
+    int maxargs() { return 0; }
+}
+*/
+
+public abstract class Exp {
+    public abstract int accept(Visitor v);
+    //int interp(Table t) throws TableLookupException { return 0; }
+}
+
+
+

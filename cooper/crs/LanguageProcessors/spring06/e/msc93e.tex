@@ -1,0 +1,103 @@
+% Herewith two questions for Prins and Tools
+
+\question
+
+
+The following is an extract from the BNF syntax for
+a programming language:
+\begin{bnf}
+\Rule{\nt{stms}}{\nt{stm stms}\Or{\nt{stm}}} \\
+\Rule{\nt{stm}}{\nt{loop}\Or{\nt{assign}}} \\
+\Rule{\nt{assign}}{\nt{id} \verb":=" \nt{exp} \verb";"} \\
+\Rule{\nt{loop}}{\verb"for" \nt{id} \verb"=" \nt{exp$_1$} \verb"to" \nt{exp$_2$}
+ \verb"do" \nt{stms} \verb"endfor ;"} \\
+\Rule{\nt{exp}}{\nt{id}\Or{\nt{integer}}\Or{\nt{exp} \verb"+" \nt{exp}}
+        \Or{\nt{exp} \verb"-" \nt{exp}} \Or{\nt{exp} \verb"*" \nt{exp}}}
+\end{bnf}
+where \nt{id} and \nt{integer} have obvious interpretations.
+\begin{subquestions}
+\subsubquestion
+Show that this is an ambiguous grammar by constructing different
+syntax trees for the assignment:\marks{5}
+\begin{verbatim}
+       t := m + 60 * h
+\end{verbatim}
+\subquestion
+Modify the grammar so that the \verb"+" and \verb"-" operators
+have equal precedence lower than that of \verb"*".
+\marks{4}
+\subquestion
+The meaning of a \nt{loop} is as follows:
+\begin{itemize}
+\item On entry to the loop, arithmetic expressions \nt{exp$_1$} and \nt{exp$_2$}
+        are evaluated. The value of \nt{exp$_1$} is the {\em lower
+        bound}, and is assigned to the identifier \nt{id}.
+        The value of \nt{exp$_2$} is the {\em upper bound}.
+        Neither may be changed after entry to the loop by 
+        execution of \nt{stms}.
+\item If the value of \nt{exp$_2$} is less than \nt{id},
+        the loop body \nt{stms} is
+        not executed and control transfers to the statement following
+        the \verb"endfor" (leaving the loop).
+\item Otherwise, the loop body \nt{stms} is
+        executed,  
+        then the value of \nt{id} is incremented by 1,
+        and control tranfers back to the start of the loop.
+\end{itemize}
+\begin{subsubquestions}
+\subsubquestion
+	Outline and describe the structure of the
+        code that might be generated in translation of
+        a \nt{loop}.  Assume code generation for a simple
+        stack or register machine, and briefly explain the
+	instructions you use in your outline.
+\marks{6}
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{loop} which produces such code.
+        Describe, in detail, any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{exp}, but do not produce translations for
+	\nt{exp}.
+\marks{10}
+\end{subsubquestions}
+\marks{???}
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+\subquestion
+Draw a diagram of the usual run time memory
+subdivision (memory model) for execution of
+programs compiled from languages such as
+Pascal and C.  Briefly describe the function of each
+of the subdivisions (areas), and discuss
+the programming language features which influence
+the organisation and functioning of run time storage.
+\marks{8}
+
+\subquestion
+Sketch a possible structure for a stack activation
+record (stack frame) and briefly explain the purpose of
+each component. Comment on how local variables,
+parameters and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use. 
+\marks{8}
+
+\subquestion
+Outline the Sethi-Ullman numbering algorithm and 
+describe potential uses for it.  Assuming two registers
+are required for loading a variable, and one for loading a literal number, 
+draw the labelled
+tree produced by your algorithm for the expression:
+\marks{9}
+\begin{verbatim}
+       (a - 3) + ((c + 4) + (e * f))
+\end{verbatim}
+
+\end{subquestions}
+ 
+

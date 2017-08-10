@@ -1,0 +1,115 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args [ ]) throws ParseException {
+      System.out.println ("Type in tokens separated by whit spaces (nicluding newLines) ");
+       System.out.println ("type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+       LexTest parser = new LexTest(System.in);
+       parser.TokenList( );
+   }
+}
+
+
+PARSER_END(LexTest)
+
+/*
+ * Lexical items.
+ */
+
+SKIP  : /* WHITE SPACE */
+{
+   " "
+| " \t "       /*Tab*/
+| " \n"       /*NewLine*/
+| " \r"        /*Return*/
+| " \f"        /*formfeed*/
+}
+
+
+TOKEN :
+{
+ <MULTIPLE_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+}
+
+TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+}
+
+
+ TOKEN :
+ {
+  <INTEGER_LITERAL: ("+"|"-")?(["0"-"9"])+>
+
+ }
+// TOKEN :
+//  {
+//   <INTEGER_LITERAL: (<DECIMAL>)(["0"-"9"])+>
+// 
+//  }
+
+ TOKEN :
+{
+ <BINARY: ("-")? ["b","B"](["0"-"1"])*("L")? >
+}
+
+ TOKEN :
+{
+ <DECIMAL: ("-")? (("0") | (["1"-"9"]))?(["0"-"9"])("L")? >
+}
+
+
+ TOKEN :
+{
+ <HEXDECIMAL: ("-")? ("z"|"Z")(["0"-"9"])*(["a"-"f","A"-"F"])*(["0"-"9"])*(["a"-"f","A"-"F"])*(["0"-"9"])?("L")? >
+}
+
+TOKEN :
+{
+ <OCTAL: ("-")? ["o","O"](["0"-"7"])*("L")? >
+}
+
+
+TOKEN :
+{
+ < FLOATING_POINT_LITERAL:
+     ("-")? (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | ("-")?(["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+}
+
+TOKEN :
+
+
+{
+  < ERROR: (~[])>
+
+}
+
+
+
+
+TOKEN  : /* Defintions for use in other lexical defitions (signified by the `#`).*/
+{
+    <  #LETTER:   [ "a" - "z" , "A" - "Z" ] >
+|
+    <  #DIGIT:    ["0" - "9"]  >
+|
+    <  #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+}
+
+
+
+void  TokenList( )  :
+  {Token t;}
+  {
+    (  
+       (  t = <FLOATING_POINT_LITERAL> | t = <SINGLE_LINE_COMMENT> | t = <MULTIPLE_LINE_COMMENT> | t = <BINARY>|  t = <INTEGER_LITERAL> | t = <HEXDECIMAL> | t = <OCTAL> | t = <ERROR>| t = <DECIMAL>  )
+{
+         System.out.println ( "Token found:  " + tokenImage[t.kind]+ "  ("+ t.image+")"); }
+
+   )* <EOF>
+}
+                         

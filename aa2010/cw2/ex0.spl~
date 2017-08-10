@@ -1,0 +1,9 @@
+void main() {
+int x; int y;
+
+print ( 10 % 7);
+
+x := 12;
+print( (x - 2) % 5);
+
+}

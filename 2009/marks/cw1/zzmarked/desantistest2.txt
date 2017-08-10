@@ -1,0 +1,18 @@
+34 b111 o23 
+// This is a comment
+z12ab e 3.14e12 1.8f 
+/* This is
+a multiple 
+line commment */
+-12.1e54f 24.56d z2af o534 -O52435 y524  //this is another comment b100101
+Bw23- 2.f 5.28 i986 
++b10001 b1011
++B1010 -B01010L
+-o1253L +o1234
+-O12321 +O52134
++z12fa -za12e
++Z12e3 -Z592E
+ZC0B0L 0777L 12893728764827354827278346
+1e1f 2.f .6d 1e-73 -4.7e12 0f 2. 0.3 -73f
+apple tree e12.25f b100125 Omaaa1hs 2q =)
+

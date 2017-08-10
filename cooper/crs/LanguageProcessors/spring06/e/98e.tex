@@ -1,0 +1,322 @@
+\documentstyle[cityexam,11pt]{article}
+\withmodelanswers
+\begin{document}
+\examnumber{00.00}
+\begin{preamble}
+\degrees{???}
+\part{II}
+\title{Language Processors}
+\examdate{XXX, 00 XXX, 1998}
+\examtime{00 to 00}
+\rubric{???}
+\end{preamble}
+\externals{XXX \\ XXX}
+\internals{DJ Bolton}
+
+\begin{questions}
+
+% Herewith three questions for Language Processors
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+\question
+
+The following is an extract from the BNF syntax for
+an imperative programming language:
+\begin{bnf}
+\Rule{\nt{stms}}{\nt{stm}\Or{\nt{stm} \verb";" \nt{stms}}}\\
+\Rule{\nt{stm}}{\nt{\dots}\Or{\nt{repeat}}\Or{\nt{\ldots}}} \\
+\Rule{\nt{repeat}}{\verb"repeat" \nt{stms$$} \verb"until" \nt{bexp} \verb"end"}\\
+\Rule{\nt{aexp}}{\nt{var}\Or{\nt{num}}\Or{\nt{aexp} \verb"+" \nt{aexp}}
+        \Or{\nt{aexp} \verb"-" \nt{aexp}} \Or{\nt{aexp} \verb"*" \nt{aexp}}}\\
+\Rule{\nt{bexp}}{\nt{aexp} \verb"=" \nt{aexp}\Or{\nt{aexp} \verb"<=" \nt{aexp}}}
+\end{bnf}
+where \nt{stm}, \nt{num} and \nt{var} have their usual connotations.
+\begin{subquestions}
+\subquestion
+Sketch a parsing procedure for \nt{repeat}.
+\marks{10}
+\begin{modelanswer}
+\begin{verbatim}
+PROC repeat();
+BEGIN
+  match(Trepeat);
+  stms();
+  match(Tuntil);
+  bexp();
+  match(Tend)
+END
+\end{verbatim}
+\end{modelanswer}
+
+\subsubquestion
+Write down an abstract syntax for \nt{repeat}, \nt{bexp} and \nt{aexp}.
+\marks{10}
+\begin{modelanswer}
+\begin{verbatim}
+repeat -> REPEAT stm bexp
+bexp   -> BEQ aexp aexp | BLE aexp aexp
+aexp   -> AVAR name | ANUM num | AADD aexp aexp | ASUB aexp aexp | AMUL aexp aexp
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+The meaning of a \nt{repeat} is as follows:
+\begin{itemize}
+\item On entry to the \nt{repeat}, the \nt{stms} are executed.
+\item Then the \nt{bexp} is evaluated, and if the \nt{bexp} evaluates to
+	true, execution is continued at the statement
+	that follows the \verb+end+ of the \nt{repeat} (leaving
+	the \nt{repeat}).
+\item Otherwise, when the \nt{bexp} evaluates to false,
+        control transfers back to the start of the \nt{repeat}.
+\end{itemize}
+\begin{subsubquestions}
+\subsubquestion
+        Outline the structure of the
+        code that might be generated in translation of
+        a \nt{repeat} with an example \nt{bexp} (\verb"a+1 <= b*2", say). 
+        Assume code generation for a simple stack machine, 
+	and briefly explain the instructions you use in your outline.
+\marks{20}
+\begin{modelanswer}
+\begin{verbatim}
+LABEL1:
+code for stms
+code for RHS aexp, result on stack top
+code for LHS aexp, result on stack top
+LE                 top <= top - 1
+JUMPFALSE LABEL1
+\end{verbatim}
+\end{modelanswer}
+
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{repeat} and \nt{bexp} which produces such code.
+        Describe any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{aexp}, but you need not produce translations for
+        \nt{aexp}.
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+repeat -> REPEAT {
+                 top := newlabel()
+                 gen (LABEL top) }
+            stm bexp {
+                 gen (LE)
+                 gen (JUMPFALSE top) }
+bexp   -> BEQ aexp aexp { gen (EQ) }
+       |  BLE aexp aexp { gen (LE) }
+\end{verbatim}
+\end{modelanswer}
+
+
+\end{subsubquestions}
+
+\subquestion
+
+Outline the code that must be generated for procedure call and return
+in a typical procedural programming language implementation.
+\marks{25}
+\begin{modelanswer}
+\begin{verbatim}
+call:
+compute and pass actuals
+store return address
+store control link (current SP) 
+increment SP
+store regs if necessary
+ret:
+store return value
+restore regs if necessary
+restore control link (copy link to SP)
+branch to return address
+copy return value
+\end{verbatim}
+\end{modelanswer}
+
+
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+Discuss the programming language features which influence
+the organisation and functioning of run time storage,
+giving examples from programming languages you
+have encountered. 
+Comment on how local variables,
+parameters and non-local variables
+are addressed by the code generated for a
+procedure in a typical procedural programming 
+language.
+\marks{35}
+\begin{modelanswer}
+Language features: procedure call and parameter passing,
+lexical scoping, dynamic storage allocation and deallocation,
+including object creation. Name stack, heap, why different.
+More marks for example languages
+(eg Java/Eiffel object creation, Pascal `new' etc). 
+Operation of stack and heap (with mention of garbage collection).
+Locals, params: offsets from SP; non-locals: follow access links
+(more for description of access link).
+\end{modelanswer}
+
+
+\subquestion
+Explain the purpose of the {\em heap} storage structure and
+describe a simple heap allocator.  Explain what is 
+meant by {\em fragmentation}, and mention some methods
+for reducing fragmention in heaps.  
+{\em Dangling pointers}
+can occur in the implementation of programming languages which
+support explicit deallocation of heap objects. Define
+dangling pointer and explain using simple example program
+fragments how they arise.
+Define the term {\em garbage}, and 
+sketch the simple mark-sweep garbage collection algorithm
+for automatic deallocation of inaccessible heap objects.
+\marks{40}
+\begin{modelanswer}
+Dynamic storage allocation is purpose. 
+Frag: mention choose smallest, coalesce on dealloc, compact phase.
+Dangling pointer: marks for prog frags.
+Garbage: mark sweep.
+\end{modelanswer}
+
+
+\subquestion
+Explain the need for a register `spill' area
+in some stack activation records in a procedural
+programming language implementation. 
+Outline the Sethi-Ullman numbering algorithm and
+describe potential uses for it.  Assuming two registers in total
+are required to load a variable, and one register only
+is required to load a literal number, draw the labelled
+tree produced by the algorithm for the expression:
+\marks{25}
+\begin{verbatim}
+       ((a + 4) + (b * c)) + (d - 3)
+\end{verbatim}
+\begin{modelanswer}
+Spill area for exps which compiler detects can't be evald in
+avail regs. Uses for SU: compute max regs required for proc;
+decide on order of binary op;
+detect when spill code needed.
+\end{modelanswer}
+
+
+\end{subquestions}
+
+ 
+\question
+
+\begin{subquestions}
+
+\subquestion
+
+What is an ambiguous grammar? By giving suitable examples show that the
+        following grammar is ambiguous. 
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+stmt \> $\rightarrow$ \> \verb"if" {\it expr\/} \verb"then" {\it stmt} \\
+\it
+     \> $\mid$ \> \verb"if" {\it expr\/} \verb"then" {\it stmt\/} \verb"else" {\it stmt} \\
+     \> $\mid$ \> {\it other}
+\end{tabbing}
+Here {\it other\/} stands for any other statement.
+\marks{20}
+\begin{modelanswer}
+Two parse trees for \verb"if b1 then if b2 then s1 else s"
+\end{modelanswer}
+
+\subquestion Rewrite the \verb"if"-\verb"then"-\verb"else" grammar in the
+previous subquestion to remove the ambiguity, arranging your productions
+so that the grammar matches each \verb"else" with the closest previous
+unmatched \verb"then".
+For example, in a parse tree for the statement:
+\begin{verbatim}
+if b1 then if b2 then s1 else s2
+\end{verbatim}
+the \verb"else" part should be associated with the 
+second \verb"if"-\verb"then". 
+\marks{35}
+\begin{modelanswer}
+\begin{verbatim}
+stm         -> match-stm | unmatch-stm
+match-stm   -> if exp then match-stm else match-stm | other
+unmatch-stm -> if exp then stm
+            |  if exp then match-stm else unmatch-stm
+\end{verbatim}
+\end{modelanswer}
+
+
+\subquestion
+Explain what is meant by the parameter passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is the effect of
+        the following routine:
+\begin{verbatim}
+       PROCEDURE pass (p,q,r: INTEGER); 
+       BEGIN
+            q := q + 1;
+            r := r + p
+       END pass;
+\end{verbatim}   
+        when the sequence of assigments and a procedure call
+        shown below is executed, assuming that all parameters are
+        passed with the same mechanism, and that \verb"a" and
+        \verb"b" are variables of type INTEGER.
+        Write down what is printed in each case by the \verb"WriteInt"
+        call, and clearly justify your answer by reference to your
+        description of the parameter passing mechanism.
+\begin{verbatim}
+       a := 2;
+       b := 3;
+       pass (a+b,a,a);
+       InOut.WriteInt (a);
+\end{verbatim}
+Although the program is written in Modula-2 syntax, the Modula-2
+parameter-passing semantics do not apply and you must
+instead consider each of the mechanisms mentioned, and assume
+that it is legal in a routine to assign to a formal parameter.
+\marks{45}
+\begin{modelanswer}
+\begin{verbatim}
+cbv explanation -- answer is 2.
+cbr explanation -- 
+   a := a+1 = 3
+   a := a+5 = 8    answer 8
+cbvr explanation
+   5,2,2 passed
+   q := q+1 = 3
+   r := r+5 = 7    answer 7 or 3 depending on copy back order
+\end{verbatim}
+\end{modelanswer}
+
+\end{subquestions}
+
+\end{questions}
+
+\end{document}
+

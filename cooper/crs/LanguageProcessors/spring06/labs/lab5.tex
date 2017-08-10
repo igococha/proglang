@@ -1,0 +1,53 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section*{Language Processors Lab 5}
+
+{\bf Note:} Read this through {\em before\/} logging in.
+
+\medskip\noindent The goal for this
+lab is to see the MiniJava typechecker in operation.
+
+
+\subsection*{MiniJava typechecker}
+
+The MiniJava symbol table builder and typechecker is at
+ \verb+/soi/sw/courses/daveb/IN2009/minijava/chap5+.
+\verb+README+ files in each directory explain the basic structure
+and how to compile and run it.
+Move to where you want to do your work and copy it with:
+\begin{verbatim}
+cp -R /soi/sw/courses/daveb/IN2009/minijava/chap5 .
+\end{verbatim}
+Compile with:
+\begin{verbatim}
+module add java soi javacc/3.2
+javacc minijava.jj
+javac Main.java
+\end{verbatim}
+and run with:
+\begin{verbatim}
+java Main filename
+\end{verbatim}
+where \verb+filename+ is a file containing a MiniJava program (eg one of
+those from the \verb+minijava/programs+ directory).
+The output is a pretty-printed version of the program, and any error messages
+resulting from the typechecking.
+
+The programs I've supplied contain no type errors so you won't
+see any error messages from them. You should now create some of
+your own test program files that contain simple errors that
+should be detected by the symbol table builder and type checker, and try them out.
+
+Then read the slides from Session 5 and the visitor programs and try to 
+understand how the symbol table is built and how the typechecker works.
+
+
+\end{document}
+

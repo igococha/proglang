@@ -1,0 +1,287 @@
+options {
+   MULTI=true;
+}
+
+PARSER_BEGIN(TPLParser)
+
+public class TPLParser {
+}
+
+PARSER_END(TPLParser)
+
+/*
+ * Lexical items.
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYSKIP: "skip" > }
+TOKEN : { < KEYWHILE: "while" > }
+TOKEN : { < KEYFOR: "for" > }           /* keyword "for". */
+TOKEN : { < KEYIF: "if" > }
+TOKEN : { < KEYTHEN: "then" > }
+TOKEN : { < KEYELSE: "else" > }
+TOKEN : { < KEYREAD: "read" > }
+TOKEN : { < KEYWRITE: "write" > }
+TOKEN : { < KEYAND: "and" > }		/* Operator. */
+TOKEN : { < KEYOR: "or" > }		/* Operator. */
+
+TOKEN : /* Type names. */
+{
+   < KEYINT: "int" >
+ |
+   < KEYBOOL: "boolean" >
+}
+
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: (<DIGIT>)+ >
+}
+
+TOKEN : /* Literal booleans. */
+{
+  < KEYTRUE: "true" >
+ |
+  < KEYFALSE: "false" >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+}
+
+/*
+ * TPL grammar follows.
+ */
+
+void CompilationUnit() : /* By default will create ASTCompilationUnit node. */
+{}
+{
+   ( VarDeclaration() ";" )*
+   ( Statement() )*
+   <EOF>
+}
+
+void VarDeclaration() :	/* By default will create ASTVarDeclaration nodes. */
+{ Token t; }
+{
+  (		/* `type' declared in ASTVarDeclaration.java. */
+    <KEYBOOL> { jjtThis.type = TPLTypes.boolType; }
+   |
+    <KEYINT> { jjtThis.type = TPLTypes.intType; }
+  )
+  t = <IDENTIFIER>
+  { jjtThis.name = t.image; }	/* `name' declared in ASTVarDec.java. */
+				/* `image' is the text of the token. */
+}
+
+
+/*
+ * Statement syntax follows.
+ */
+
+void Statement() #void :	/* `#void' means create no default nodes. */
+{}
+{
+  SkipStatement()
+|
+  AssignStatement()
+|
+  IfStatement()
+|
+  WhileStatement()
+|
+  ForStatement()             /* Added "for" statement. */
+|
+  ReadStatement()
+|
+  WriteStatement()
+}
+
+void SkipStatement():	/* By default will create ASTSkipStatement nodes. */
+{}
+{
+  <KEYSKIP> ";"
+}
+
+void AssignStatement():	/* By default will create ASTAssignStatement nodes. */
+{}
+{
+  Id() "=" Expression() ";"
+}
+
+void IfStatement() :	/* By default will create ASTIfStatement nodes. */
+{}
+{
+  <KEYIF> "(" Expression() ")"
+      StatementBlock()
+      [ <KEYELSE> StatementBlock() ]
+}
+
+void WhileStatement() :	/* By default will create ASTWhileStatement nodes. */
+{}
+{
+  <KEYWHILE> "(" Expression() ")" StatementBlock()
+}
+
+void UpdateStatement() :   /* For use with "for" statement. */
+{}
+{
+  Id() "=" Expression()
+}
+
+
+void ForStatement() :	/* Added "for" statement. */
+{}
+{
+  <KEYFOR> "(" AssignStatement() Expression() ";" UpdateStatement() ")"
+      StatementBlock()
+}
+
+void StatementBlock() : /* By default will create ASTStatementBlock nodes. */
+{}
+{
+    "{" ( Statement() )+ "}"
+}
+
+void ReadStatement() :	/* By default will create ASTReadStatement nodes. */
+{ Token t; }
+{
+   <KEYREAD> t = <IDENTIFIER> ";"
+   { jjtThis.name = t.image; }	/* `name' declared in ASTReadStatement.java. */
+}
+
+void WriteStatement() :	/* By default will create ASTWriteStatement nodes. */
+{ Token t; }
+{
+   <KEYWRITE> t = <IDENTIFIER> ";"
+   { jjtThis.name = t.image; }	/* `name' declared in ASTWriteStatement.java. */
+}
+
+
+/*
+ * Expression syntax follows.
+ */
+
+void Expression() #void:
+{}
+{
+  OrExpression()
+}
+
+void OrExpression() #void :
+{}
+{
+  AndExpression()
+  ( "or" AndExpression() #Or(2) )*	/* create ASTOr node for each `or'. */
+}
+
+void AndExpression() #void :
+{}
+{
+  EqualityExpression()
+  ( "and" EqualityExpression() #And(2) )*
+}
+
+void EqualityExpression() #void :
+{}
+{
+  RelationalExpression()
+  (
+     "==" RelationalExpression() #EQ(2)
+   |
+     "!=" RelationalExpression() #NE(2)
+  )*
+}
+
+void RelationalExpression() #void :
+{}
+{
+  AdditiveExpression()
+  [ (
+    "<" AdditiveExpression() #LT(2)
+   |
+    ">" AdditiveExpression() #GT(2)
+   |
+    "<=" AdditiveExpression() #LE(2)
+   |
+    ">=" AdditiveExpression() #GE(2)
+  ) ]
+}
+
+void AdditiveExpression() #void :
+{}
+{
+  MultiplicativeExpression()
+  (
+    "+" MultiplicativeExpression() #Add(2)
+   |
+    "-" MultiplicativeExpression() #Subtract(2)
+  )*
+}
+
+void MultiplicativeExpression() #void :
+{}
+{
+  PrimaryExpression()
+  (
+    "*" PrimaryExpression() #Mul(2)
+   |
+    "/" PrimaryExpression() #Div(2)
+  )*
+}
+
+void PrimaryExpression() #void :
+{}
+{
+  Literal()
+|
+  Id()
+|
+  "(" Expression() ")"
+}
+
+void Id() :	/* By default will create ASTId leaves (no children). */
+{
+   Token t;
+}
+{
+   t = <IDENTIFIER>
+        { jjtThis.name = t.image; }	/* `name' declared in ASTId.java. */
+}
+
+void Literal() #void :
+{
+   Token t;
+}
+{
+ (
+  t=<INTEGER_LITERAL> { jjtThis.val = Integer.parseInt(t.image);}
+				/* `val' declared in ASTIntConst.java. */
+ ) #IntConst		/* Create an ASTIntConst leaf (note no children). */
+|
+  BooleanLiteral()
+}
+
+void BooleanLiteral() #void :
+{}
+{
+  "true" #True		/* Create an ASTTrue leaf (note no children). */
+|
+  "false" #False	/* Create an ASTTrue leaf (note no children). */
+}

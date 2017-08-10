@@ -1,0 +1,14 @@
+0 1996 0372 ZDadaCafe O777L ZC0B0L b0110 426355690003133711121133114641 1e1f 
+ 2.f  .3f  0f  3.14f  6.022137E23f  1e1  2.  0.3 0.0  3.14  1e-9d  1e137 -5.56e4263 -42f
+
+R22323
+
+23R
+ERROR
+// PALMIRA
+
+/* Is Tired of Programming
+Managed to figure this out 
+so how
+
+*/

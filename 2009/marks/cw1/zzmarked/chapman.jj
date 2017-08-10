@@ -1,0 +1,53 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+SKIP : 
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+
+TOKEN :
+{
+  <INT: ("+"|"-"|"") ((("b"|"B") ("1"|"0")+) | (("0") | ((["1"-"9"]) (["0"-"9"])*)) | (("z"|"Z") (["0"-"9"]|["a"-"f"]|["A"-"F"])+) | (("o"|"O") (["0"-"7"])+)) ("L"|"")>
+}
+
+TOKEN :
+{
+  <FLOAT: ("+"|"-"|"") ((["0"-"9"])+ | (["0"-"9"])* (".")) (["0"-"9"])* ((("E"|"e") ("+"|"-"|"") (["0"-"9"])+)|"") ("f"|"d"|"")>
+}
+
+TOKEN :
+{
+  <COMMENT: (("/*") ([" "-"~"])* ("*/")) | (("//") ([" "-"~"])*) >
+}
+
+TOKEN :
+{
+  <ERROR: ([" "-"~"])+ >
+}
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <INT> | t = <FLOAT> | t = <COMMENT> | t = <ERROR>)
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}
+

@@ -1,0 +1,25 @@
+MiniJava parser and abstract syntax tree builder
+
+The file minijava.jj contains the lexical and syntactic definition
+of MiniJava along with action code that builds abstract syntax trees.
+
+Directory syntaxtree contains the syntax tree classes.
+Directory visitor contains the visitor class and a pretty-print visitor.
+
+The class Main in file Main.java drives it all.
+
+Compile with:
+
+module add java soi javacc/3.2
+javacc minijava.jj
+javac Main.java
+
+and run with:
+
+java Main filename
+
+where filename is a file containing a MiniJava program
+(eg one of those examples from the minijava/programs directory)
+
+The output is a pretty-printed version of the input program.
+

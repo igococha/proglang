@@ -1,0 +1,293 @@
+\documentstyle[/homes/daveb/doc/exam_style/cityexam,11pt]{article}
+\withmodelanswers               % Comment this out to produce bare paper
+\begin{document}
+\examnumber{00.00}
+\begin{preamble}
+\degrees{EC2 retread}
+\part{II}
+\title{Programming Systems and Principles of Programming Languages}
+\examdate{XXX, 00 XXX, 1994}
+\examtime{00 to 00}
+\rubric{Two from section A, two from B}
+\end{preamble}
+\externals{XXX \\ XXX}
+\internals{S Hunt \\ DJ Bolton}
+
+\begin{questions}
+
+% Herewith two questions for Principles and Tools
+
+\question
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+\begin{subquestions}
+\subquestion
+If $A$ is a set of characters selected from an
+alphabet of characters $V$, the shorthand notation {\it Not$(A)$} denotes 
+$(V - A)$; that is all characters in $V$ not included in $A$.
+Specify the following patterns using regular expressions; 
+the {\it Not\/} shorthand may be useful for some of the patterns:
+\begin{subsubquestions}
+\subsubquestion
+A comment that begins with \verb"--" and ends with the \verb"Eol" 
+(end of line) character (use \verb"Eol" to denote the end of line 
+character).
+\marks{5}
+
+\begin{modelanswer}
+\begin{verbatim}
+--(Not(Eol))*Eol
+\end{verbatim}
+\end{modelanswer}
+\subsubquestion
+An identifier, composed of letters, digits, and underscores, that
+begins with a letter, ends with a letter or digit, and contains
+no consecutive underscores.
+\marks{10}
+\begin{modelanswer}
+\begin{verbatim}
+L((L|D)*(_(L|D)+)*      L=[a-zA-Z] D=[0-9]
+\end{verbatim}
+\end{modelanswer}
+\subsubquestion
+A comment delimited by \verb"##" markers, which allows {\em single\/}
+\verb"#"'s within the comment body.
+\marks{15}
+\begin{modelanswer}
+\begin{verbatim}
+##((#|e)Not(#))*##    e=empty
+\end{verbatim}
+\end{modelanswer}
+\end{subsubquestions}
+
+\subquestion
+The following is an extract from a possible BNF syntax for
+a subset of an Eiffel-like programming language: 
+\begin{bnf}
+\Rule{\nt{Compound\ }}{\nt{Instruction} \verb";" \nt{Compound}\Or{\nt{Instruction}}} \\
+\Rule{\nt{Instruction\ }}{\nt{Conditional}\Or{\ldots}} \\
+\Rule{\nt{Conditional}}{\verb"if" \nt{BoolExp} \verb"then" \nt{Compound$_1$} \verb"else" \nt{Compound$_2$} \verb"end"}\\
+\Rule{\nt{IntExp}}{\nt{IntVar}\Or{\nt{IntConstant}}\Or{\nt{IntExp} \verb"+" \nt{IntExp}}
+        \Or{\nt{IntExp} \verb"*" \nt{IntExp}}}\\
+\Rule{\nt{BoolExp}}{\nt{IntExp} \verb"=" \nt{IntExp}\Or{\nt{IntExp} \verb"<=" \nt{IntExp}}}
+\end{bnf}
+where \nt{IntVar} is a variable attribute of type INTEGER, \nt{IntConstant}
+is an INTEGER type constant (eg 3).
+
+The meaning of a \nt{Conditional} is as follows:
+\begin{itemize}
+\item On entry to the instruction, the \nt{BoolExp} is 
+	evaluated. 
+\item If the value of the \nt{BoolExp} is true, the effect of
+	the \nt{Conditional} is the effect of \nt{Compound$_1$}.
+\item Otherwise, when the \nt{BoolExp} evaluates to false,
+	the effect of the \nt{Conditional} is the effect of
+	of \nt{Compound$_2$}.
+\end{itemize}
+\begin{subsubquestions}
+%\subquestion
+%Show that the grammar rules for \nt{IntExp} are ambiguous.
+%\marks{20}
+\subsubquestion
+Write down an abstract syntax for \nt{Conditional}, 
+\nt{BoolExp} and \nt{IntExp}.
+\marks{10}
+\begin{modelanswer}
+\begin{verbatim}
+Conditional -> COND BoolExp Compound Compound
+BoolExp     -> BEQ IntExp IntExp | BLE IntExp IntExp
+IntExp      -> INTVAR name | INTCONST int | INTPLUS IntExp IntExp |
+                 INTMULT IntExp IntExp
+\end{verbatim}
+\end{modelanswer}
+\subsubquestion
+	Outline the structure of the
+        code that might be generated in translation of
+        a \nt{Conditional} with an example 
+	\nt{BoolExp} (\verb"a+1 <= b*2", say). 
+	Assume code generation for a simple
+        stack machine, and briefly explain the
+	instructions you use in your outline.
+\marks{20}
+\begin{modelanswer}
+\begin{verbatim}
+code for RHS IntExp, result on stack top
+code for LHS IntExp, result on stack top
+LE                   top <= top-1
+JUMPFALSE LABEL1
+code for Compound1
+JUMP LABEL2
+LABEL1:
+code for Compound2
+LABEL2:
+\end{verbatim}
+Plus explanation.
+\end{modelanswer}
+
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{Conditional} and \nt{BoolExp} which produces such code.
+        Describe any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{IntExp}, but you need not produce translations for
+	\nt{IntExp}.
+\marks{35}
+\begin{modelanswer}
+\begin{verbatim}
+Conditional -> COND BoolExp { 
+                         elsepart := newlabel()
+                         gen (JUMPFALSE elsepart) }
+               Compound {
+                         end := newlabel()
+                         gen (JUMP end)
+                         gen (LABEL elsepart) }
+               Compound {
+                         gen (LABEL end) }
+BoolExp     -> BEQ IntExp IntExp { gen (EQ) }
+            |  BLE IntExp IntExp { gen (LE) }
+\end{verbatim}
+Plus explanation for attrs, results of IntExp translation.
+\end{modelanswer}
+\end{subsubquestions}
+
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+\subquestion
+%Draw a diagram of the usual run time memory
+%subdivision (memory model) for execution of
+%programs compiled from languages such as
+%Pascal and C.  
+%Briefly describe the function of each
+%of the subdivisions (areas), 
+%and 
+Discuss the programming language features which influence
+the organisation and functioning of run time storage,
+giving examples from programming languages you
+have encountered.  Briefly describe the run time operation of
+each storage structure you identify.
+\marks{30}
+\begin{modelanswer}
+Language features: procedure call and parameter passing, 
+lexical scoping, dynamic storage allocation and deallocation, 
+including object creation. More marks for example languages
+(eg Eiffel object creation, Pascal `new' etc). Operation of 
+stack and heap (with mention of garbage collection).
+\end{modelanswer}
+
+\subquestion
+%Explain what is meant by {\em fragmentation} in heaps, 
+%and mention some methods for reducing fragmention. 
+Define the terms {\em garbage\/} and {\em dangling pointer} 
+and explain using simple example program fragments 
+how each arises.
+%Sketch the simple mark-sweep garbage collection algorithm
+%for automatic deallocation of inaccessible heap objects.
+\marks{20}
+\begin{modelanswer}
+Half marks for each.
+\end{modelanswer}
+
+\subquestion
+Explain what is meant by the argument passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+%                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is the effect of
+        the following routine:
+\begin{verbatim}
+       pass (p,q,r: INTEGER) is do
+            q := q + 1;
+            r := r + p
+       end
+\end{verbatim}   
+        when the sequence of assigments and a feature call
+        shown below is executed, assuming that all arguments are
+        passed with the same mechanism, and that \verb"a" and
+        \verb"b" are variable attributes of type INTEGER.
+        Write down what is printed in each case by the \verb"putint"
+        call, and clearly justify your answer by reference to your
+        description of the argument passing mechanism.
+\begin{verbatim}
+       a := 2;
+       b := 3;
+       pass (a+b,a,a);
+       io.putint (a)
+\end{verbatim}
+Although the program is written in Eiffel syntax, the Eiffel
+argument-passing semantics do not apply and you must
+instead consider each of the mechanisms mentioned, and assume
+that it is legal in a routine to assign to a formal argument.
+\marks{30}
+\begin{modelanswer}
+\begin{verbatim}
+cbv explanation -- answer is 2.
+cbr explanation -- 
+   a := a+1 = 3
+   a := a+5 = 8    answer 8
+cbvr explanation
+   5,2,2 passed
+   q := q+1 = 3
+   r := r+5 = 7    answer 7 or 3 depending on copy back order
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Explain why the following program does not provide a fair spin lock
+for exclusive access to a shared resource:
+\begin{verbatim}
+acquire:
+  claimed[self] := true;
+  while claimed[other] do
+    begin
+      claimed[self] := false;
+      while claimed[other] do skip;
+      claimed[self] := true
+    end
+
+relinquish:
+  claimed[self] := false
+\end{verbatim}
+Correct the fault by introducing the use of a turn variable
+(Dekker's algorithm).
+\marks{20}
+\begin{modelanswer}
+Because an instruction by instruction interleaving means neither
+ever acquires.
+\begin{verbatim}
+acquire:
+  claimed[self] := true;
+  while claimed[other] do
+    if turn = other then
+      begin
+        claimed[self] := false;
+        while turn = other do skip;
+        claimed[self] := true
+    end
+
+relinquish:
+  turn := other;
+  claimed[self] := false
+\end{verbatim}
+\end{modelanswer}
+\end{subquestions}
+\end{questions}
+
+\end{document}
+

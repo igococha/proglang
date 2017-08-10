@@ -1,0 +1,261 @@
+PARSER_BEGIN(Literal)
+
+public class Literal {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    Literal parser = new Literal(System.in);
+    parser.TokenList();
+  }
+
+   public static String parseLiteral(String s){
+	    int exp, valchar=0, val=0, l;
+	    short base=0;
+	    char ch; 
+	    char chh; 
+	    StringBuffer buf = new StringBuffer(s);
+	    l = buf.length();
+
+
+
+	if(buf.charAt(0) == '+' || buf.charAt(0) == '-'){
+
+
+				
+		if(buf.charAt(1) == 'b' || buf.charAt(1) == 'B'){
+			base = 2;
+		}else if (buf.charAt(1) == 'z' || buf.charAt(1) == 'Z'){
+			base = 16;
+		}else if (buf.charAt(1) == 'o' || buf.charAt(1) == 'O'){
+			base = 8;
+		}
+
+	exp = 1;
+
+	if(buf.charAt(1) == 'b' || buf.charAt(1) == 'B' || buf.charAt(1) == 'z' || buf.charAt(1) == 'Z' || buf.charAt(1) == 'o' || buf.charAt(1) == 'O'){
+
+	    for(int i=l-1; i >= 2; i--) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9'){
+		    valchar = ch-'0';
+		}else if (ch >= 'a' && ch <= 'f'){
+		    valchar = 10 + (ch-'a');
+		}else if (ch >= 'A' && ch <= 'F'){
+		    valchar = 10 + (ch-'A');
+		}
+		if (ch == 'L'){
+		}else{
+		val = val + valchar*exp;
+		//System.out.println(exp);
+		exp = exp*base;
+		}
+	    }
+		
+
+	}else{
+
+	base = 10;
+
+	    for(int i=l-1; i >= 1; i--) {
+	
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9'){
+		    valchar = ch-'0';
+		}else if (ch >= 'a' && ch <= 'f'){
+		    valchar = 10 + (ch-'a');
+		}else if (ch >= 'A' && ch <= 'F'){
+		    valchar = 10 + (ch-'A');
+		}
+		if (ch == 'L'){
+		}else{
+		val = val + valchar*exp;
+		//System.out.println(valchar);
+		//System.out.println(exp);
+		exp = exp*base;
+		}
+	    }
+
+	
+	}
+
+
+
+
+
+	}else{
+
+
+	 	if(buf.charAt(0) == 'b' || buf.charAt(0) == 'B'){
+			base = 2;
+		}else if (buf.charAt(0) == 'z' || buf.charAt(0) == 'Z'){
+			base = 16;
+		}else if (buf.charAt(0) == 'o' || buf.charAt(0) == 'O'){
+			base = 8;
+		}
+
+
+	exp = 1;
+		
+	if(buf.charAt(0) == 'b' || buf.charAt(0) == 'B' || buf.charAt(0) == 'z' || buf.charAt(0) == 'Z' || buf.charAt(0) == 'o' || buf.charAt(0) == 'O'){
+
+	    for(int i=l-1; i >= 1; i--) {
+	
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9'){
+		    valchar = ch-'0';
+		}else if (ch >= 'a' && ch <= 'f'){
+		    valchar = 10 + (ch-'a');
+		}else if (ch >= 'A' && ch <= 'F'){
+		    valchar = 10 + (ch-'A');
+		}
+		if (ch == 'L'){
+		}else{
+		val = val + valchar*exp;
+		//System.out.println(valchar);
+		//System.out.println(exp);
+		exp = exp*base;
+		}
+	    }
+
+
+	}else{
+
+	base = 10;
+
+	    for(int i=l-1; i >= 0; i--) {
+	
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9'){
+		    valchar = ch-'0';
+		}else if (ch >= 'a' && ch <= 'f'){
+		    valchar = 10 + (ch-'a');
+		}else if (ch >= 'A' && ch <= 'F'){
+		    valchar = 10 + (ch-'A');
+		}
+		if (ch == 'L'){
+		}else{
+		val = val + valchar*exp;
+		//System.out.println(valchar);
+		//System.out.println(exp);
+		exp = exp*base;
+		}
+	    }
+
+	
+	}
+
+
+
+
+
+
+	}
+	
+	if(buf.charAt(0) == '+' || buf.charAt(0) == '-'){
+		
+		System.out.println("INT " + buf.charAt(0) + "(" + val + ")");
+	}else{
+
+	 System.out.println("INT " + "(" + val + ")"); 
+	}
+	return "";
+
+	}
+	
+
+
+
+}
+
+PARSER_END(Literal)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+ < COMMENT: 
+
+	"/" "*" (<COMMENTS>)* "*" "/"
+ >
+
+|
+ < #COMMENTS: ~["\r", "\n", "/"]  >
+|
+
+  < INTEGER_LITERAL:
+        (<SIGN>)?
+        (<DECIMAL_LITERAL> ("L")?
+      | <HEX_LITERAL> ("L")?
+      | <OCTAL_LITERAL> ("L")?
+      | <BINARY_LITERAL> ("L")?)
+  >
+|
+  < #SIGN: ("+" | "-") >
+|
+  < #DECIMAL_LITERAL: ("0" | (["1"-"9"] (["0"-"9"])*)) >
+|
+  < #HEX_LITERAL: ["z","Z"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < #OCTAL_LITERAL: ["o","O"] (["0"-"7"])+ >
+|
+  < #BINARY_LITERAL: ["b", "B"](["0", "1"])+ >
+|
+  < FLOATING_POINT_LITERAL:
+      (<SIGNN>)*  <DIGITS> "." (<DIGITS>)? (<EXPONENT>)? (<TYPESUFFIX>)?
+      | "." <DIGITS> (<EXPONENT>)? (<TYPESUFFIX>)?
+      | (<SIGNN>)* <DIGITS> <EXPONENT> (<TYPESUFFIX>)?
+      | (<SIGNN>)* <DIGITS> (<EXPONENT>)? <TYPESUFFIX>
+  >
+|
+  < #SIGNN: ("+" | "-") >
+|
+  < #DIGITS: (["0"-"9"])+ >
+|
+  < #TYPESUFFIX: (["f","d"]) >
+|
+  < #EXPONENT: "e" (["+","-"])? (["0"-"9"])+ >
+|
+  < ERROR: (~[" ", "\n"])* ~[" ", "\n"] >
+}
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <FLOATING_POINT_LITERAL> | t = <INTEGER_LITERAL> | t = <COMMENT> | t = <ERROR>)
+           { 
+
+             if (t.kind==INTEGER_LITERAL) {
+		System.out.print(parseLiteral(t.image));
+             }else if(t.kind==FLOATING_POINT_LITERAL){
+		           System.out.println ("FLOAT " + "(" + t.image + ")");
+                   
+		}else if (t.kind==COMMENT){
+			           System.out.println ("COMMENT");
+		}
+
+		else if (t.kind==ERROR){
+			           System.out.println ("ERROR");
+		}
+
+	}
+   )* <EOF>
+}

@@ -1,0 +1,123 @@
+// Lexical Analysis Coursework by Karl Newman-Smart (abcy859)
+PARSER_BEGIN(Coursework1)
+
+import java.lang.StringBuffer;
+import java.lang.Integer;
+
+public class Coursework1 {
+  public static void main(String args[]) throws ParseException {
+    // The following code prints the information given to the user at the when the program is run
+    System.out.println ("Coverts Hexadecimal, Octal and Binary Numbers into Decimal Numbers");
+    System.out.println ("Use 'b' or 'B' followed by a binary number to signify a binary number, 'o' or 'O' for octal and 'z' or 'Z' for Hexadecimal");
+    System.out.println ("e.g. b10101, o1237, z123ABC");
+    System.out.println ("Numbers can be seperated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    Coursework1 parser = new Coursework1(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(Coursework1)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+
+TOKEN : /* Long Integer, Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{ 
+  < #LONG: (["L"])? >
+}
+
+TOKEN : /* Integer Literals */
+{
+  < BINARY: ["B", "b"] (["0", "1"])+ <LONG> > // Binary Numbers
+  |
+  < HEXADECIMAL: ["Z", "z"] (["0"-"9", "A"-"F", "a"-"f"])+ <LONG> > // Hexadecimal numbers
+  |
+  < OCTAL: ["O", "o"] (["0"-"7"])+ <LONG> > // Octal Numbers
+  |
+  < INTEGER: (["0"-"9"])+ <LONG> > // Integer numbers, numbers without a decimal number 
+  |
+  < DECIMAL: (["0"-"9"])+ "."(["0"-"9"])+ <LONG> > // Decimal Numbers
+  |
+  < FLOATING: (["+","-"])? (["0"-"9"])+ (["E", "e"])? (["0"-"9"])*  ([".", "-"])? (["0"-"9"])* (["E", "e"])? (["0"-"9"])* (["f", "d"])?  > // Floating Number
+  |
+  < ERROR: (~[" ",  "\n", "\r", "\f", "\t"])+ > // Error token
+ }
+
+/*
+ * A grammer to match tokens, and depending on the match, either print the result or calculate the number in decimal format and then print it
+ */
+
+void TokenList() :
+{Token t; int count;}
+{
+   (
+     ( t = <INTEGER> | t = <DECIMAL> | t = <BINARY> | t = <HEXADECIMAL> | t = <OCTAL> | t = <FLOATING> | t = <ERROR> )
+        {   // if statement to determine what type of token the input is
+            if (tokenImage[t.kind] == "<INTEGER>" || tokenImage[t.kind] == "<DECIMAL>" || tokenImage[t.kind] == "<FLOATING>") {			
+                        System.out.println ("int token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); // prints the image of the decimal or floating number
+		} else if ( tokenImage[t.kind] == "<BINARY>" ) {
+                        count = IntegerCount ( t.image , 2 ); // calls the IntegerCount method with a base of two
+			System.out.println ("bin token found: "+ tokenImage[t.kind]+
+                                    " (`"+count+"')");
+		} else if ( tokenImage[t.kind] == "<OCTAL>" ){
+                        count = IntegerCount ( t.image , 8); // calls the IntegerCount method with a base of eight
+			System.out.println ("oct token found: "+ tokenImage[t.kind]+
+                                    " (`"+count+"')");
+		} else if ( tokenImage[t.kind] == "<HEXADECIMAL>" ) {
+                        count = IntegerCount ( t.image , 16 ); // calls the IntegerCount method with a base of 16
+			System.out.println ("hex token found: "+ tokenImage[t.kind]+
+                                    " (`"+count+"')"); 
+		} else if ( tokenImage[t.kind] == "<ERROR>" ) {
+			System.out.println ("Error: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); // prints the image of the error
+		}
+	}
+
+   )* <EOF>
+}
+/* Method to count the inputted numbers based on thier token */
+
+int IntegerCount (String token, int base) :
+{}
+{
+       {
+            int exp, valchar=0, val=0, l;
+	    int base2 = base;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(token);
+	    l = buf.length();
+	    exp = 1;
+	    for(int i=l-1; i >= 1; i--) { // stops 1 number before the end
+		ch=buf.charAt(i);
+		base2 = base;
+                if (ch >= '0' && ch <= '9') {
+		    valchar = ch-'0';
+                    }
+		else if (ch >= 'a' && ch <= 'f'){
+		    valchar = 10 + (ch-'a');
+                    }
+		else if (ch >= 'A' && ch <= 'F'){
+		    valchar = 10 + (ch-'A');
+                    }
+		val = val + valchar*exp;
+		//System.out.println(val);
+		exp = exp*base2;  
+	    }
+	    return val;            
+            }
+        	   
+}

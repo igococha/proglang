@@ -1,0 +1,28 @@
+b101 b01 B111 B01 -b11 -B111 +B011L +b11L b000 +B000 -b0 //binary: should pass
+
+b002 -B01211 -B11L11 b011l b+0111 B-11101 b11A //binary: should fail
+
+o1546 O777 O1345 o12345670 O12345670 -o1232 +o1232 -o1232L +o1232L o0 +O0L -0 //Octal: should pass
+
+o123845 O123942 o01 O03 O-12421 o+142 o124l O242A //Octal: should fail
+
+100 1 131 1928 1234567890 +124 -21421 +241L -1341L 0 -0 +0 -0L //Int: should pass
+
+011 0131 024+131 131l 2142F //Int: should fail
+
+z1243 Z242Af24 Zabcdef zABCDEF -Z241FC +z1234567890abcdefABCDEFL z0 Z0 -z0L //Hex: should pass
+
+Z0131 -Z13ACG +z0145A +z024fl z+131 z-AC ZZ142 //Hex: should fail
+
+1e1f 2.f .3f 0f 3.14f 6.022137E23f 1e1 2. 0.3 0.0 3.14 1e-9d 1e137 -5.56e4263 -42f //float: should pass
+
+e13 E13 -.3eL e23f -. . +E23d 
+
+/** test
+242 
+542 
+          //should return a single comment
+535 *
+/ */
+
+// 141 err 242 //should return a single comment 

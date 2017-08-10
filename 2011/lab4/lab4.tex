@@ -1,0 +1,215 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+\section*{Language Processors Lab Week 4\\
+          Parsing Expressions - A Simple Calculator }
+
+\medskip\noindent In this lab you will learn how to work with grammars in JavaCC and how to introduce semantic actions to a .jj file. You will start with a JavaCC file that partially implements a grammar for arithmetical expressions. You will complete the grammar and add Java code (semantic actions) that implements a simple calculator of expressions. We will then find out that the grammar, though correct, is not useful for the standard evaluation of arithmetical expressions. A second grammar will solve the problem.
+
+\subsection*{The Files}
+
+Start a Unix shell window and move to your {\tt LanguageProcessors} directory. Create a new directory {\tt lab4} and move inside it. Download the files {\tt Exp1.jj}, {\tt Exp2.jj}, {\tt Calculator1.java} and {\tt Calculator2.java} from Moodle (Lab4), and save them into  your {\tt lab4} directory. Make sure you load java and javacc by executing the command:
+
+\begin{quote}
+{\tt module add java javacc}.
+\end{quote}
+
+Start the text editor and load {\tt Exp1.jj} and {\tt Calculator1.java}. Inspect their contents: you will see that the JavaCC specification defines an incomplete grammar for arithmetical expressions and a parser for that grammar defined by class {\tt Exp1}, and that the {\tt Calculator1} class instantiates an {\tt Exp1} object (the parser), which is used to execute the method {\tt S()}, the entry point to the grammar.
+
+Execute JavaCC, compile the generated java files and execute the program by typing the usual commands:
+
+\begin{verbatim}
+    javacc Exp1.jj
+    javac Calculator1.java
+    java Calculator1
+\end{verbatim}
+
+Test the program with a few examples. This time you have to type {\tt java Calculator1} in order to execute the program because the {\tt Calculator1} class defined in {\tt Calculator1.java} is the one carrying the {\tt static main} method.
+
+What kind of expressions does it accept? Does it accept parenthesis? Does it accept operators? Check the grammar against your test results.
+For example, enter: {5}, {\tt((5))}, {5 + 6}
+What happens? Why?
+
+\subsection*{A grammar for arithmetical expressions: {\tt Exp1.jj}}
+
+\subsubsection*{Modifying the grammar}
+
+The grammar specified by {\tt Exp1.jj} implements part of the general grammar for arithmetical expressions indicated below:
+
+\begin{tabular}{lclllcl}
+E & $\rightarrow$ & E \verb-+- E & $\;\;\;\;$ & E & $\rightarrow$ & E \verb+/+ E \\
+E & $\rightarrow$ & E \verb+-+ E & & E & $\rightarrow$ & F\\
+E & $\rightarrow$ & E \verb+*+ E & & F & $\rightarrow$ & number $|$ \verb+(+ E \verb+)+\\
+\end{tabular}
+
+In particular, it specifies the last two rules. Check {\tt Exp1.jj}. The entry point of the grammar is {\tt S()}, which says that a program is made of non-terminal {\tt E} followed by the end-of-line token. The incomplete specification of {\tt E()} indicates that an expression is made of non-terminal {\tt F}: a number or another expression in parenthesis.
+
+In this section we will try to specify the rules of the grammar above. We will find out the we have to adapt them in  order to avoid left-recursion and conflicts. Let's start by adding the addition operator. Add the first rule of the grammar by modifying {\tt E()} to:
+\begin{verbatim}
+void E() :
+{}
+{
+  E() "+" E()
+  |
+  F() 
+}
+\end{verbatim} 
+Run JavaCC. What happens? JavaCC has detected the presence of left-recursion. You should get a message like:
+\begin{verbatim}
+Reading from file Exp1.jj . . .
+Error: Line 28, Column 1: Left recursion detected: "E... --> E..."
+\end{verbatim}
+We have to remove the first {\tt E()} (the one that generates left-recursion) without modifying the meaning of the initial grammar (we are only considering the plus operator first). Change the specification of {\tt E()} to:
+\begin{verbatim}
+void E() :
+{}
+{
+  F() "+" E()
+  |
+  F() 
+}
+\end{verbatim}
+Run JavaCC again. What happens? It still doesn't like it, the message error should contain:
+\begin{verbatim}
+A common prefix is: "(" <NUM>
+         Consider using a lookahead of 3 or more for earlier expansion.
+\end{verbatim}
+JavaCC complains that is has no way to decide (with just a single token lookahead) between the first and second rule since both start with {\tt F()}. Let's try the following:
+\begin{verbatim}
+void E() :
+{}
+{
+  F() ( "+" E() )?
+}
+\end{verbatim}
+Run JavaCC. Does it work? It should! The grammar says that an expression is made of a factor {\tt F} followed - optionally - by the plus operator and another expression (the recursion is on the right). Now complete the grammar to include all four operators:
+\begin{verbatim}
+void E() :
+{}
+{
+  F() ( "+" E() | "-" E() | "*" E() | "/" E() )?
+}
+\end{verbatim}
+Run JavaCC, compile with {\tt javac Calculator1.java} and execute with {\tt java Calculator1}. The program should accept any combination of correctly formed arithmetical expressions e.g. {\tt 5, (4+3)*7, 7 - 8/2}, etc.
+
+
+
+\subsubsection*{Implementing the Calculator - Adding Semantic actions}
+
+The goal of this section is to implement a simple calculator for the expressions defined by the grammar by introducing Java code to different parts of the specification.
+
+The JavaCC specification currently defines (at least) three Java methods, one per non-terminal, with the following signatures:
+
+\begin{verbatim}
+        void S()        void E()         void F()
+\end{verbatim}
+
+All of them are methods that take no arguments and return nothing. However, our calculator must return an integer. This means that we need to change the signature of the non-terminal methods so they return {\tt int} instead. In particular, we need to:
+
+\begin{itemize}
+\item Change {\tt S()} to return the value generated by {\tt E()}:
+
+\begin{verbatim}
+int S() :
+{ int s; }
+{
+    s=E() <EOL> { return s; }
+  | <EOL>  | <EOF>
+}
+\end{verbatim}
+
+Note how we have introduced the variable {\tt s} in order to store the value returned by \verb+E()+.
+
+\item Change {\tt F()} so it calculates the numeric value of the token \verb+<NUM>+ and returns it, or evaluates the expression between parenthesis and returns the result. Don't forget to change the return type.
+
+\begin{verbatim}
+int F() :
+{ Token t; int result; }
+{
+    t=<NUM> { return Integer.parseInt(t.image); }
+  | "(" result=E() ")" { return result; }
+}
+\end{verbatim}
+
+In this case we need two intermediate variables, of types {\tt Token} and {\tt int}, in order to capture the token returned by \verb+<NUM>+ and the numeric value returned by \verb+E()+, respectively.
+
+\item Add Java code to the rule that specifies \verb+E()+ so that it computes the correct value of the expression.
+
+\begin{verbatim}
+int E() :
+{ int e, result;}
+{
+  result=F() 
+  ("+" e=E() { result += e; }
+  | "-" e=E() { result -=e;}
+  | "*" e=E() { result *=e;} 
+  | "/" e=E() { result /= e; }
+  )?
+  { return result; }
+}
+\end{verbatim}
+We have introduced two integer variables, \verb+result+ and \verb+e+, in order to store the value of the left-hand side of the expression matched by \verb+F()+ and the right-hand side (if any) matched by \verb+E()+, respectively. The variable \verb+result+ is updated with the correct result of the operation only if the right-hand side exists. Note that the latter is included inside the optional part of the grammar.
+
+\item And finally, the driver method {\tt main} in {\tt Calculator1.java} must print the result of the evaluation. In {\tt Calculator1.java}, replace {\tt parser.S()} with:
+\begin{verbatim}
+int result = parser.S();
+System.out.println("Answer is "+result);
+\end{verbatim}
+The new code stores the result of {\tt S()} and prints it out.
+
+\end{itemize}
+
+Run javacc, recompile and execute. Try a few examples e.g.
+
+\begin{verbatim}
+          5    (5+2)*7     23+7+4    23+7-5   10-7+3    10*7-2 
+\end{verbatim}
+
+Are the results what you expected? They should, except for the last two. The expression {\tt 10-7+3} is parsed as {\tt 10-(7+3)}, and {\tt 10*7-2} as {\tt 10*(7-2)}, instead of the standard rules for grouping and operator priority. However, the parser is doing exactly what we asked for (check the grammar). Thus, we need to change the grammar.
+
+
+\subsection*{A modified grammar for arithmetical expressions: {\tt Exp2.jj}}
+
+We need to re-write the grammar in order to force the parser to group expressions using the standard priority of arithmetical operators. The new grammar should look like:
+
+\begin{tabular}{lcl}
+E & $\rightarrow$ & T ( \verb-+- T $|$ \verb+-+ T)$^*$ \\
+T & $\rightarrow$ & F ( \verb+*+ F $|$ \verb+/+ F)$^*$ \\
+F & $\rightarrow$ & number $|$ \verb+(+ E \verb+)+\\
+\end{tabular}
+
+The grammar above is implemented by {\tt Exp2.jj}, as well as most of the functionality needed for the Calculator. For example, check the new specification for {\tt E()}:
+
+\begin{verbatim}
+int E() :
+{ int e; int t; }
+{
+  e=T() (  "+" t=T() { e=e+t; }
+         | "-" t=T() { e=e-t; } )*
+    { return e; }
+}
+\end{verbatim}
+
+Note the presence of the star (Kleene closure) and the Java code that implements addition and substraction. Variable {\tt e} works as an accumulator which is updated everytime there's a match inside the Kleene closure. Run JavaCC, compile and execute the program:
+\begin{verbatim}
+     javacc Exp2.jj         javac Calculator2.java          java Calculator2
+\end{verbatim}
+
+Test the program. Does {\tt 10-7+3} work? Yes. What about {\tt 10*7-2}? It returns 8! Why? 
+Check the definition for {\tt T()}. The grammar is correct but the semantic actions (Java code) are missing. In our example, instead of computing {\tt 10*7} it ignores the 7 (and the multiplication) and returns 10 instead.
+
+Fix it!
+
+
+\end{document}
+

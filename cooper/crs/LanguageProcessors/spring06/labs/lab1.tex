@@ -1,0 +1,73 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+
+\begin{document}
+
+\subsection*{Language Processors Lab 1}
+
+{\bf Note:} Read this through {\em before\/} logging in.
+
+\medskip\noindent The goal for this weeks 
+lab is to see the Straightline programming language interpreter working
+and to add the {\tt maxargs(Stm s)} function to it. 
+
+\subsubsection*{Running the Straightline interpreter}
+
+Fire up a Unix shell window. 
+To get the environment ready type the command:
+\begin{verbatim}
+   module add java soi 
+\end{verbatim}
+Move to the directory in which you want to do
+your IN2009 work and copy the Straightline program directory
+with the command:
+\begin{verbatim}
+   cp -R /soi/sw/courses/daveb/IN2009/straightline .
+\end{verbatim}
+This makes a complete copy of my straightline interpreter program. 
+You can see it with:
+\begin{verbatim}
+   cd straightline
+   ls
+\end{verbatim}
+{\em Note: \/}All the directories in \verb+/soi/sw/courses/daveb/IN2009+ are
+available through CitySpace/WebCT, as single files,
+or as zipped folder (directory) hierarchies, so you can download them from 
+there instead of copying them if you wish.
+
+Now compile the program with:
+\begin{verbatim}
+   javac *.java
+\end{verbatim}
+And then run the program with:
+\begin{verbatim}
+   java interp
+\end{verbatim}
+The interpreter output for the program given
+in Appel will be printed.
+There are other programs in file \verb+prog.java+;
+modify \verb+interp.java+ to run some of these
+instead of \verb+prog+ (eg \verb+prog2+).
+
+\subsubsection*{Modifying the interpreter}
+
+Work out how to write the \verb+maxargs(Stm s)+
+function (the \verb+length()+ function already
+defined in \verb+interp.java+ will be useful).
+You will need several functions to do the count for
+each abstract syntax type (see the implementation
+of \verb+interp()+).
+
+Edit the file \verb+interp.java+ to include your 
+implementation of \verb+maxargs()+, and then
+test your implementation by recompilation and
+running.
+
+\end{document}
+

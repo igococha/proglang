@@ -1,0 +1,135 @@
+PARSER_BEGIN(Parser)
+
+public class Parser
+{
+	public static void main(String args[]) throws ParseException
+	{
+		Parser parser = new Parser(System.in);
+    		parser.TokenList();
+		System.out.println();
+	}
+}
+
+PARSER_END(Parser)
+
+// Ignore the following characters
+SKIP : {  " " | "\t" | "\n" | "\r" }
+
+// Token declarations
+TOKEN :
+{
+	<INTEGER_LITERAL:
+		(<SIGN_PREFIX>)?
+		(<DECIMAL_NUMERAL>
+		|<HEXIDECIMAL_NUMERAL>
+		|<BINARY_NUMERAL>
+		|<OCTAL_NUMERAL>)
+		(<LONG_SUFFIX>)?
+	>			
+	|	< #SIGN_PREFIX: ("+"|"-") >
+	|	< #NUMBERS: ["0"-"9"] >
+	|	< #DECIMAL_NUMERAL: ("0"| (["1"-"9"] (<NUMBERS>)*)) >
+	|	< #HEXIDECIMAL_NUMERAL: ["z","Z"] (["0"-"9", "a"-"f", "A"-"F"])+ > 
+	|	< #OCTAL_NUMERAL: ["o","O"] (["0"-"7"])+ >
+	|	< #BINARY_NUMERAL: ["b","B"] (["0","1"])+ > 
+	|	< #LONG_SUFFIX: "L" >
+	|	< #TYPE_SUFFIX: ["d","f"]>
+	|	< #EXPONENT: ["e", "E"] (<SIGN_PREFIX>)? (<NUMBERS>)+ >
+
+
+	|<FLOAT_LITERAL:
+		(<SIGN_PREFIX>)?
+		(((<NUMBERS>)* ["."] (<NUMBERS>)+ (<EXPONENT>)?
+		|(<NUMBERS>)+ ["."] (<NUMBERS>)* (<EXPONENT>)?
+		|(<NUMBERS>)+ (<EXPONENT>))
+		(<TYPE_SUFFIX>)?)
+		|((<SIGN_PREFIX>)?)((<NUMBERS>)+(<TYPE_SUFFIX>))
+		
+
+	>
+	|<COMMENT_LITERAL:
+		"//" (~["\n"])* "\n"
+		|"/*" (~["*"])* (~["/"])* "*/" 
+	>
+	|<ERROR_LITERAL:
+		((~[" ", "\n"])+)
+
+	>
+	
+}
+
+
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ * Taken from the LexTest example
+ */
+
+void TokenList() :
+{Token t;}
+{
+	(
+		(t = <INTEGER_LITERAL> | t = <FLOAT_LITERAL> | t = <COMMENT_LITERAL> | t = <ERROR_LITERAL>)
+		{
+			// No request for FLOAT to be broken down further, just integer!
+			// breaking down float numerals will likely get me penalised and
+			// would be redundant
+			if(tokenImage[t.kind].equals("<INTEGER_LITERAL>"))
+			{
+
+				String realNum = t.image;
+				String sign = "";
+				if(realNum.charAt(0) == '-' )
+				{
+					sign = "-";
+					realNum = realNum.substring(1,realNum.length());			
+				}
+				else if(realNum.charAt(0) == '+' )
+				{
+					sign = "+";
+					realNum = realNum.substring(1,realNum.length());
+				}
+				if(realNum.charAt(realNum.length()-1) == 'L' )
+				{
+					realNum = realNum.substring(0,realNum.length()-1);			
+				}
+				switch( realNum.charAt(0) )
+				{
+					case 'o':
+					case 'O':
+						realNum = realNum.substring(1,realNum.length());
+						realNum = Long.toString(Long.valueOf(realNum, 8).longValue());
+						break;
+					case 'b':
+					case 'B':
+						realNum = realNum.substring(1,realNum.length());
+						realNum = Long.toString(Long.valueOf(realNum, 2).longValue());
+						break;
+					case 'z':
+					case 'Z':
+						realNum = realNum.substring(1,realNum.length());
+						realNum = Long.toString(Long.valueOf(realNum, 16).longValue());
+						break;
+					default:
+						break;
+
+				};
+				System.out.print("INT("+ sign + realNum +") ");
+			}
+			else if(tokenImage[t.kind].equals("<FLOAT_LITERAL>"))
+			{
+				System.out.print ("FLOAT("+t.image+") ");
+			}
+			else if(tokenImage[t.kind].equals("<COMMENT_LITERAL>"))
+			{
+				System.out.print ("COMMENT ");
+			}	
+			else if(tokenImage[t.kind].equals("<ERROR_LITERAL>"))
+			{
+				System.out.print ("ERROR ");
+			}
+
+		}
+	)* <EOF>
+}

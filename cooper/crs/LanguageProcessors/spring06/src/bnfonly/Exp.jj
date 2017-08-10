@@ -1,0 +1,60 @@
+PARSER_BEGIN(Exp)
+
+public class Exp {
+}
+
+PARSER_END(Exp)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+void S() :
+{}
+{
+    E() <EOL> 
+  | <EOL>
+  | <EOF>
+}
+
+void E() :
+{}
+{
+  T() Eprime()
+}
+
+void Eprime() :
+{}
+{
+    ( "+" T() Eprime() )
+  | ( "-" T() Eprime() )
+  | {} /* empty */ 
+}
+
+void T() :
+{}
+{
+  F() Tprime()
+}
+
+void Tprime() :
+{}
+{
+    ( "*" F() Tprime() ) 
+  | ( "/" F() Tprime() )
+  | {} /* empty */ 
+} 
+
+void F() :
+{}
+{
+    <NUM> 
+  | "(" E() ")"
+}
+

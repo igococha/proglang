@@ -1,0 +1,95 @@
+This is pdfTeX, Version 3.14159-13d (Web2C 7.3.1) (format=pdflatex 2000.10.16)  13 MAR 2006 10:00
+**cw2
+(cw2.tex[/a/vega/export/TSG-D/teTeX/share/texmf/pdftex/config/pdftex.cfg]
+LaTeX2e <1999/12/01> patch level 1
+Babel <v3.6Z> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/base/article.cls
+Document Class: article 1999/09/10 v1.4a Standard LaTeX document class
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/base/size11.clo
+File: size11.clo 1999/09/10 v1.4a Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/misc/a4wide.sty
+Package: a4wide 1994/08/30
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/ntgclass/a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+))
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/tools/verbatim.sty
+Package: verbatim 2000/01/07 v1.5m LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks14
+\verbatim@line=\toks15
+\verbatim@in@stream=\read1
+)
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/graphics/color.sty
+Package: color 1999/02/16 v1.0i Standard LaTeX Color (DPC)
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/config/color.cfg)
+Package color Info: Driver file: pdftex.def on input line 125.
+
+(/a/vega/export/TSG-D/teTeX/share/texmf/tex/latex/graphics/pdftex.def
+File: pdftex.def 1999/10/13 v0.02r graphics/color for pdftex
+\Gread@gobject=\count87
+))
+(cw2.aux)
+\openout1 = `cw2.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+ (/a/vega/export/TSG-D/teTeX/share/texmf/tex/context/base/supp-pdf.tex (/a/vega
+/export/TSG-D/teTeX/share/texmf/tex/context/base/supp-mis.tex
+loading : Context Support Macros / Missing
+\protectiondepth=\count88
+\scratchcounter=\count89
+\scratchdimen=\dimen103
+\scratchskip=\skip43
+\scratchmuskip=\muskip10
+\scratchbox=\box26
+\scratchread=\read2
+\scratchwrite=\write3
+\nextbox=\box27
+\nextdepth=\dimen104
+\everyline=\toks16
+\!!counta=\count90
+\!!countb=\count91
+\recursecounter=\count92
+)
+loading : Context Support Macros / PDF
+\nofMPsegments=\count93
+\nofMParguments=\count94
+) [1
+
+[/a/vega/export/TSG-D/teTeX/share/texmf/dvips/config/pdftex.map]] (cw2.aux) ) 
+Here is how much of TeX's memory you used:
+ 640 strings out of 10631
+ 7840 string characters out of 68374
+ 52343 words of memory out of 263001
+ 3655 multiletter control sequences out of 10000+0
+ 5367 words of font info for 20 fonts, out of 400000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 22i,5n,19p,194b,181s stack positions out of 300i,100n,500p,50000b,4000s
+<c
+mtt10.pfb><cmti10.pfb><cmr10.pfb><cmbx10.pfb><cmbx12.pfb>
+Output written on cw2.pdf (1 page, 44630 bytes).

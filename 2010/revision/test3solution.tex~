@@ -1,0 +1,54 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+\newcommand{\regla}[1]{$\;\mathbf{\stackrel{{}_{#1}}{\longrightarrow}}\;$}
+%\newcommand{\regla}[1]{$\mathbf{\rightarrow^{#1}}$}
+
+\newcommand{\comment}{\textbf{comment}}
+\newcommand{\cuatro}{$\;\;\;\;$}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This document contains the solution for Test 3. I have added additional comments, useally preceded by the keyword \comment.
+
+
+\section*{Test 3 - Solution}
+
+\begin{enumerate}
+
+\item The annotated SPL code given in question 1 gives us enough information the deduce the typechecking rules of the modulus operator.
+\begin{itemize}
+\item We are told that \verb?x := (y+2) % 5? is correctly typed. A quick inspection to the right-hand side of the assignment (an expression that uses the modulus operator) tells us that both operands, \verb?(y+2)? and \verb?5?, are of type integer. 
+\item Also, the modulus operator must return an integer since an assignment requires that the types of the assigned variable and the expression (right-hand) are the same.
+\item The next two lines suggest that the modulus operator does not accept float operands.
+\item The final line can be used to verify that the modulus operator returns an int. Typechecking fails because the assigned variable is a float.
+\end{itemize}
+
+Answer:\\
+\begin{tabular}{l}
+typecheck(Modulus(e1,e2),f,stable) = \\
+\cuatro t1 = typecheck(e1,f,stable) \\
+\cuatro ReportError if (t1 != int) \\
+\cuatro t2 = typecheck(e2,f,stable) \\
+\cuatro ReportError if (t2 != int) \\
+\cuatro return int
+\end{tabular}
+
+that is, e1 and e2 must be correctly typed, and their type must be int. The modulus operator (as defined in this example) returns an integer. Could we have a version that accepts floats?
+
+
+
+\end{enumerate}
+%%%%%% end of test 3
+
+\end{document}
+

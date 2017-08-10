@@ -1,0 +1,18 @@
+This is the first JavaCC lab example (for reg exps).
+The reg exps and the driver class LexTest (which contains the main() method) are
+all in LexTest.jj.
+
+Run JavaCC on it with
+
+    module add java soi javacc/3.2
+    javacc LexTest.jj
+
+Compile the resulting lexical analyser classes with
+    
+    javac *.java
+
+Run the lexical analyser with
+
+    java LexTest
+
+

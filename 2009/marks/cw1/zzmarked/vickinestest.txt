@@ -1,0 +1,36 @@
+b1100 +B1100 -b1100 b1100L +b1101 -b1101 +b1101L -b110L
+
+0 10L +10 -15 +0 -17L +14L 1200000000
+
+Z50 Z50L +Z50 -z50 ZF0A +zF0AL
+
+O77 O77L O372 -O372
+
+1e1f 2.f .3f 0f 1e1 2.1 0.3 0.0 3.12 1e137 -5.56e4263 -42f
+
+
+34 3.14e12 /* Multiple comment */ b3b b111
+
+error565 +225L /*multimple comment 2*/ +zABCL 
+
+/*multimple comment 3*/ errorzzz b110110L o335
+
+0.3f 2.4e45 /*multimple comment 4*/ yerror343 zAA
+
+ZDadaCafe b110011 b39847error b110110011
+
++4656L -76663L /*comment */ -6.545
+
+6error zerror b3434error Oerror 0error
+
++b10101L -1100L +23L -400L /*comment */
+
+Z67AbAcccL +za2d32L b00000000110L
+
++0L O1536 b1100 o101 O1100  
+
+
+
+
+
+

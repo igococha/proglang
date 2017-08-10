@@ -1,0 +1,164 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+
+public static long parseOct(String octal) throws NumberFormatException {
+      // Initialize result to 0
+      long res = 0;
+	// delete first character in the string to take the "o" out
+         StringBuffer buf = new StringBuffer(octal);
+	    buf.deleteCharAt(0);
+
+      // Do not continue on an empty string
+     // if (octal.isEmpty()) {
+    // throw new NumberFormatException("Empty string is not an octal number");
+      //}
+
+      // Consider each digit that is in the buffer
+      for (int i = 0; i < buf.length(); i++) {
+        // Get the nth char from the right (first = 0)
+        char n = buf.charAt(buf.length() - (i+1));
+        int f = (int) n - 48;
+        // Check if the bit is valid
+        if (f < 0 || f > 7) {
+          // if not output error
+          throw new NumberFormatException("Not a Valid Octal");
+        } else {
+          // Only add the value if it's a 1
+          res += f*Math.round(Math.pow(2.0, (3*i)));
+        }
+      }
+
+      return res;
+    }
+
+ public static long parseBin(String binary) throws NumberFormatException {
+      // Initialize result to 0
+      long res = 0;
+	    
+          // delete first character in the string to take the "b" out
+         StringBuffer buf = new StringBuffer(binary);
+	    buf.deleteCharAt(0);
+
+	  // Do not continue on an empty string
+	  //if (binary.isEmpty())  
+//throw new NumberFormatException("Empty string is not a binary number");
+	//  }
+
+	  // Consider each digit that is in the buffer
+	  for (int i = 0; i < buf.length(); i++) {
+		  // Get the nth char from the right (first = 0)
+		  char n = buf.charAt(buf.length() - (i+1));
+   
+		  // Check if it's a valid bit
+		  if ((n != '0') && (n != '1')) {
+		  // if not output error
+		  throw new NumberFormatException("Not a binary number");
+		  } else if (n == '1') {
+		  // Only add the value if it's a 1
+		  res += Math.round(Math.pow(2.0, i));
+		  }
+	    } 
+
+	  return res;
+	}
+
+public static long parseHex(String hex) throws NumberFormatException {
+	    int exp, valchar=0, val=0, l;
+	    short base=16;
+	    char ch;
+	    StringBuffer buf = new StringBuffer(hex);
+	    buf.deleteCharAt(0);
+	    l = buf.length();
+
+	    exp = 1;
+	    for(int i=l-1; i >= 0; i--) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9')
+		    valchar = ch-'0';
+		else if (ch >= 'a' && ch <= 'f')
+		    valchar = 10 + (ch-'a');
+		else if (ch >= 'A' && ch <= 'F')
+		    valchar = 10 + (ch-'A');
+		else
+		    throw new NumberFormatException("Not A Hex");
+		val = val + valchar*exp;
+		// System.out.println(val);
+		exp = exp*base;
+	    }
+	    return val;
+	}
+}
+
+PARSER_END(LexTest)
+
+	
+
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+< INTEGER_LITERAL: (<SIGN>)? (<DIGIT>)+ ("L")? >
+|
+  < #SIGN: ("+"|"-") >
+|
+  < DEC_LITERAL: ("0" | (["1"-"9"] (["0"-"9"])*)) >
+|
+  < FLOATING_LITERAL: <DIGIT> "." (<DIGIT>)? (<EXPONENT>)? 
+      | "." <DIGIT> (<EXPONENT>)? | <DIGIT> <EXPONENT>
+      | <DIGIT> (<EXPONENT>)?>
+|
+  < HEXA_LITERAL: (<SIGN>)? ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < OCT_LITERAL: (<SIGN>)? ("o"|"O") (["0"-"7"])+ >
+|
+  < BIN_LITERAL: (<SIGN>)? ["b", "B"](["0", "1"])+ >
+|
+  < #FLOAT1: ("-")?(<DIGIT>)*("e"|"E")?("-")?(<DIGIT>)+(".")(<DIGIT>)*     ("d"|"f")? | ("-")?(<DIGIT>)*(".")(<DIGIT>)+("e"|"E")?("-")?(<DIGIT>)*("d"|"f")? >
+|
+  < #FLOAT2: ("-")?(<DIGIT>)*("e"|"E")?("-")?(<DIGIT>)*(".")?(<DIGIT>)+("d"|"f") | ("-")?(<DIGIT>)*(".")?(<DIGIT>)*("e"|"E")?("-")?(<DIGIT>)+("d"|"f") >
+|
+  < #FLOAT3: ("-")?(<DIGIT>)*("e"|"E")("-")?(<DIGIT>)+(".")?(<DIGIT>)*("d"|"f")? | ("-")?(<DIGIT>)*(".")?(<DIGIT>)*("e"|"E")("-")?(<DIGIT>)+("d"|"f")?>
+|
+  < #DIGIT: (["0"-"9"])+ >
+|
+  < #EXPONENT: "e" (["+","-"])? (["0"-"9"])+ >
+}
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <FLOATING_LITERAL> { System.out.println ("token found: "+ tokenImage[t.kind]+ " ('"+t.image+"')"); }
+
+| t = <INTEGER_LITERAL> { System.out.println ("token found: "+ tokenImage[t.kind]+ " ('"+Integer.parseInt(t.image)+"')"); }
+| t = <OCT_LITERAL> { System.out.println ("bin: "+ tokenImage[t.kind]+
+                                    " ('"+parseOct(t.image)+"')"); }
+| t = <BIN_LITERAL> { System.out.println ("bin: "+ tokenImage[t.kind]+
+                                    " ('"+parseBin(t.image)+"')"); }
+| t = <HEXA_LITERAL> { System.out.println ("hex: "+ tokenImage[t.kind]+
+                                    " ('"+parseHex(t.image)+"')"); }
+)
+   )* <EOF>
+}
+

@@ -1,0 +1,386 @@
+#LyX 1.4.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 245
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\widowpenalty=10000 
+\clubpenalty=10000 
+\date{}
+\end_preamble
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\leftmargin 2.5cm
+\topmargin 2cm
+\rightmargin 2.5cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\end_header
+
+\begin_body
+
+\begin_layout Section*
+Regular Expression Practice Exercises
+\end_layout
+
+\begin_layout Subsection*
+Instructions
+\end_layout
+
+\begin_layout Standard
+These three tasks are supplementary exercises allowing you to practice regular
+ expressions in real-life cases.
+ Attempt to construct JavaCC RegExps to meet the following three tasks,
+ and discuss the solutions on Cityspace.
+ I will be monitoring and providing input from time to time, but I expect
+ you to support and discuss with each other using the boards.
+ Group work is permitted, and in fact encouraged!
+\end_layout
+
+\begin_layout Standard
+As an entirely extra-curricular task,(Read: this will not be on the exam!)
+ you might wish to investigate perl-compatible regular expressions (useful
+ if you are developing websites using Java, JSP or PHP) - 
+\family typewriter
+\series bold
+\bar under
+\color blue
+http://en.wikipedia.org/wiki/PCRE
+\end_layout
+
+\begin_layout Subsection*
+Task 1: UK Postcodes
+\end_layout
+
+\begin_layout Standard
+UK postcodes have an extremely predictable syntax.
+ All postcodes are in upper case only.
+\end_layout
+
+\begin_layout Enumerate
+London Postcodes (excluding EC- and WC-), consist of the prefix 
+\family sans
+\series bold
+\emph on
+\noun on
+N
+\family default
+\series default
+\emph default
+\noun default
+, 
+\family sans
+\series bold
+\noun on
+NW
+\family default
+\series default
+\noun default
+, 
+\family sans
+\series bold
+W
+\family default
+\series default
+, 
+\family sans
+\series bold
+SW
+\family default
+\series default
+, 
+\family sans
+\series bold
+SE
+\family default
+\series default
+, 
+\family sans
+\series bold
+E
+\family default
+\series default
+ followed by one or two numbers, a space, a number and a letter: 
+\family sans
+\series bold
+N1 3LS
+\family default
+\series default
+, 
+\family sans
+\series bold
+NW1 8TQ
+\family default
+\series default
+, 
+\family sans
+\series bold
+E17 2DF
+\family default
+\series default
+, 
+\family sans
+\series bold
+SE24 5TH
+\family default
+\series default
+, 
+\family sans
+\series bold
+SW7 2SE
+\end_layout
+
+\begin_layout Enumerate
+National Postcodes: One or two letters, followed by one or two numbers,
+ followed by a space, a number and two letters.
+ e.g.
+ 
+\family sans
+\series bold
+SL6 9EF
+\family default
+\series default
+, 
+\family sans
+\series bold
+AB10 3ER
+\family default
+\series default
+, 
+\family sans
+\series bold
+B11 6TH
+\end_layout
+
+\begin_layout Enumerate
+Inner London postcodes - find out the format of the inner London (
+\family sans
+\series bold
+EC
+\family default
+\series default
+- and 
+\family sans
+\series bold
+WC
+\family default
+\series default
+-) postcodes: e.g.
+ 
+\family sans
+\series bold
+EC1V 0HB
+\end_layout
+
+\begin_layout Standard
+Construct regular expressions to match each of these three categories of
+ postcode.
+\end_layout
+
+\begin_layout Subsection*
+Task 2: UK Phone Numbers
+\end_layout
+
+\begin_layout Standard
+Each expression for a phone number should be viewed as an addition to the
+ previous expressions constructed.
+\end_layout
+
+\begin_layout Enumerate
+National phone numbers (with no spaces or bracketing): 11 digits in length,
+ always starting with a 
+\family sans
+\series bold
+0
+\family default
+\series default
+.
+ e.g.
+ 
+\family sans
+\series bold
+02082319999
+\family default
+\series default
+, 
+\family sans
+\series bold
+01628629999
+\family default
+\series default
+, 
+\family sans
+\series bold
+01184349999
+\family default
+\series default
+.
+\end_layout
+
+\begin_layout Enumerate
+National phone numbers (with spacing): 11 digits in length, area code 3-5
+ numbers in length, digits optionally grouped in 3s or 4s (not 5s).
+ e.g.
+ 
+\family sans
+\series bold
+020 82319999
+\family default
+\series default
+, 
+\family sans
+\series bold
+020 8231 9999
+\family default
+\series default
+, 
+\family sans
+\series bold
+0118 4349999
+\family default
+\series default
+, 
+\family sans
+\series bold
+0118 434 9999
+\family default
+\series default
+, 
+\family sans
+\series bold
+01628 629999
+\family default
+\series default
+, 
+\family sans
+\series bold
+01628 629 999
+\family default
+\series default
+.
+\end_layout
+
+\begin_layout Enumerate
+Any of number 2, with the area code surrounded with parenthesis.
+ e.g.
+ 
+\family sans
+\series bold
+(020) 82319999
+\family default
+\series default
+, 
+\family sans
+\series bold
+(0118) 434 9999
+\family default
+\series default
+, 
+\family sans
+\series bold
+(01628) 629999
+\family default
+\series default
+.
+ Optinally, there can be no space between the parenthesised area code and
+ the number.
+ e.g.
+ 
+\family sans
+\series bold
+(020) 82319999
+\family default
+\series default
+.
+\end_layout
+
+\begin_layout Enumerate
+International dialling to the UK.
+ Numbers are 10 digits in length (leading 0 is stripped out), and begins
+ with the string 
+\family sans
+\series bold
++44
+\family default
+\series default
+.
+\end_layout
+
+\begin_layout Subsection*
+Task 3: Email addresses
+\end_layout
+
+\begin_layout Standard
+Email addresses are Complicated.
+ They are defined in RFC 2822 (
+\family typewriter
+\series bold
+\bar under
+\color blue
+http://tools.ietf.org/html/rfc2822#section-3.4
+\family default
+\series default
+\bar default
+\color none
+).
+ Some simplified patterns will match the vast majority of addresses, and
+ are worth considering as an exercise.
+ Implement each of these seperately, and think about the limitations of
+ each.
+\end_layout
+
+\begin_layout Enumerate
+Very simple address matching; 
+\family typewriter
+\series bold
+a@b
+\family default
+\series default
+.
+ Any string of letters or numbers, followed by an @ symbol, followed by
+ any string of letters/numbers.
+\end_layout
+
+\begin_layout Enumerate
+Matching 
+\family typewriter
+\series bold
+user@host.domain
+\family default
+\series default
+ style addresses.
+ Same as number 1, except that the right hand side must contain a dot.
+\end_layout
+
+\begin_layout Enumerate
+Matching allowable top level domains only (e.g.
+ com, net, org, biz, info, coop, uk, gov).
+ Choose a couple of indicative country top level domains only, rather than
+ listing them all!
+\end_layout
+
+\begin_layout Enumerate
+Full RFC2822 compliance, or a close approximation.
+\end_layout
+
+\end_body
+\end_document

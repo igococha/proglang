@@ -1,0 +1,15 @@
+
+public Table {
+    TableNode first;
+    class TableNode {
+	String id; 
+	int value;
+	TableNode next;
+	TableNode(String i, int v, TableNode n) 
+	                 { id=i;  value=v; next=n }
+    }
+    TableNode() { tail=null; }
+    void update(String i, int v) { 
+	first = new TableNode(i,v,first)
+
+}

@@ -1,0 +1,106 @@
+/* Chirag Jamnadas abdf020 & Himesh Patel abcy927 */
+
+PARSER_BEGIN(Literal)
+
+public class Literal {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    Literal parser = new Literal(System.in);
+    parser.TokenList();
+  }
+
+
+public static double toDecimal (String s)
+  {
+    int l = s.length();
+    double result = 0;
+    System.out.println("s=" + s);
+    System.out.println("l=" + l);
+    for (int i = 0; i < l; i++)
+    { 
+      System.out.println("result before iteration=" + result);
+      System.out.println("s.charAt(i)=" + (double)s.charAt(i));
+      System.out.println("s.length() - i - 1=" + (s.length() - i - 1));
+      System.out.println("Math.pow(2, (s.length() - i - 1))=" + Math.pow(2, (s.length() - i - 1)));
+      System.out.println("adding " + (s.charAt(i) * Math.pow(2, (s.length() - i - 1))) + " to result");
+      result = result + s.charAt(i) * Math.pow(2, (s.length() - i - 1));
+      System.out.println("result after iteration=" + result);
+    }
+    System.out.println("final result=" + result);
+    return result;
+
+  }
+}
+
+PARSER_END(Literal)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+  < INTEGER_LITERAL:
+        (<SIGN>)?
+        (<DECIMAL_LITERAL> ("L")?
+      | <HEX_LITERAL> ("L")?
+      | <OCTAL_LITERAL> ("L")?
+      | <BINARY_LITERAL> ("L")?) >
+|
+
+/* Token for sign. */
+  < #SIGN: ("+" | "-") >
+|
+/* Token for decimal. */
+  < #DECIMAL_LITERAL: ("0" | (["1"-"9"] (["0"-"9"])*)) >
+|
+/* Token for hexadecimal. */
+  < #HEX_LITERAL:  ["Z","z"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+/* Token for octal. */
+  < #OCTAL_LITERAL: "0" (["0"-"7"])+ >
+|
+/* Token for binary. */
+  < #BINARY_LITERAL:  ["b", "B"](["0", "1"])+ >
+|
+  < FLOATING_POINT_LITERAL:
+        (<SIGN>)? <DIGITS> "." (<DIGITS>)? (<EXPONENT>)? (<TYPESUFFIX>)?
+      | (<SIGN>)? "." <DIGITS> (<EXPONENT>)? (<TYPESUFFIX>)?
+      | (<SIGN>)? <DIGITS> <EXPONENT> (<TYPESUFFIX>)?
+      | (<SIGN>)? <DIGITS> (<EXPONENT>)? <TYPESUFFIX>
+
+  >
+|
+  < #DIGITS: (["0"-"9"])+ >
+|
+  < #TYPESUFFIX: (["f","d"]) >
+|
+  < #EXPONENT: ["e", "E"] (["+","-"])? (["0"-"9"])+ >
+}
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <FLOATING_POINT_LITERAL> | t = <INTEGER_LITERAL>)
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}

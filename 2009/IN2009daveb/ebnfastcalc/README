@@ -1,0 +1,11 @@
+Expression evaluator, abstract syntax trees with eval() version
+
+Compile with:
+
+module add java soi javacc/3.2
+javacc Exp.jj
+javac Main.java
+
+Run with:
+
+java Main

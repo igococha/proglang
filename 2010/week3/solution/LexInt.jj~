@@ -1,0 +1,113 @@
+
+PARSER_BEGIN(LexInt)
+/* Lab 3 - Solution */
+/* Java declarations to be inserted by JavaCC  */
+
+/* Class declaration for LexInt used instead of default */
+public class LexInt {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexInt parser = new LexInt(System.in);
+    parser.TokenList(); /* TokenList declared below */
+  }
+
+  public static int parseLiteral(String hex, int base)  {
+       int valchar=0, val=0, l;
+       char ch; 
+       StringBuffer buf = new StringBuffer(hex);
+       l = buf.length();	    
+       for(int i=0; i < l; i++) {
+	ch=buf.charAt(i);		
+	if (ch >= '0' && ch <= '9')		    
+	   valchar = ch-'0';
+	else if (ch >= 'a' && ch <= 'f')		    
+	     valchar = 10 + (ch-'a');		
+	else if (ch >= 'A' && ch <= 'F')		    
+	     valchar = 10 + (ch-'A');
+	else {
+	     System.out.println("Bad Char "+ch); // better trow an exception
+	     return -1;
+	}		
+	if (valchar >= base) {		   
+	     System.out.println("Bad Char "+ch+" greater or equal than base "+base);
+	     return -1;
+        }	
+	val = val*base + valchar;	    
+       }	    
+      return val;	
+  }
+
+}
+
+
+PARSER_END(LexInt)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : /* Integers literals */
+{
+  < INTEGER_LITERAL: "0" | (["1"-"9"] (<DIGIT>)*) >
+|
+  < BINARY_LITERAL: ("b" | "B")? (["0"-"1"])+  >
+}
+
+TOKEN : /* Real numbers. */
+{
+  < REAL: ("-")? ("0" | (["1"-"9"] (<DIGIT>)*)) "." (<DIGIT>)+
+          <EXPONENT> >           
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN :
+{
+ < COMMENT: "//" (~["\n","\r"])* ["\n","\r"] >
+}
+
+
+
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+|
+  < #EXPONENT: (("e" | "E") ("-")? ("0" | (["1"-"9"] (<DIGIT>)*)))? >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t; int val;}
+{
+   ( { val = 0;}
+     (t = <INTEGER_LITERAL> { val = LexInt.parseLiteral(t.image,10); }
+      |  t = <IDENTIFIER> | t=<REAL> |
+      t = <BINARY_LITERAL>  { val = LexInt.parseLiteral(t.image.substring(1),2); }
+      | t = <COMMENT>)
+           { System.out.print("token found: "+ tokenImage[t.kind]);
+             System.out.print(" (`"+t.image+"')"); 
+             System.out.println(" value = "+val); 
+	   }
+   )* <EOF>
+}
+

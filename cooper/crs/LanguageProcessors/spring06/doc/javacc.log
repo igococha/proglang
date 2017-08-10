@@ -1,0 +1,58 @@
+This is pdfTeX, Version 3.14159-13d (Web2C 7.3.1) (format=pdflatex 2000.10.16)  19 JAN 2005 11:34
+**javacc
+(javacc.tex[/export/SOI-5/TSG-D/teTeX/share/texmf/pdftex/config/pdftex.cfg]
+LaTeX2e <1999/12/01> patch level 1
+Babel <v3.6Z> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/base/article.cls
+Document Class: article 1999/09/10 v1.4a Standard LaTeX document class
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/base/size10.clo
+File: size10.clo 1999/09/10 v1.4a Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/misc/a4wide.sty
+Package: a4wide 1994/08/30
+
+(/export/SOI-5/TSG-D/teTeX/share/texmf/tex/latex/ntgclass/a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+)) (javacc.aux)
+\openout1 = `javacc.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+[1
+
+[/export/SOI-5/TSG-D/teTeX/share/texmf/dvips/config/pdftex.map]] [2] [3]
+[4] [5] (javacc.aux) ) 
+Here is how much of TeX's memory you used:
+ 228 strings out of 10631
+ 2525 string characters out of 68374
+ 50152 words of memory out of 263001
+ 3257 multiletter control sequences out of 10000+0
+ 5672 words of font info for 21 fonts, out of 400000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 23i,4n,17p,114b,301s stack positions out of 300i,100n,500p,50000b,4000s
+<cmbx10.pfb><cmti10.pfb><cmtt10.pfb><cmr10.pfb><cmbx12.pf
+b>
+Output written on javacc.pdf (5 pages, 63485 bytes).

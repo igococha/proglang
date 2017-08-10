@@ -1,0 +1,372 @@
+%\documentstyle[cityexam,11pt]{article}
+\documentclass[11pt]{cityexam}
+\usepackage{semantic}
+%\withmodelanswers
+\begin{document}
+%\examnumber{xxx}
+\begin{preamble}
+\degrees{B.Eng. Degree in Computing \\ B.Eng. Degree in Software Engineering}
+\part{II}
+\title{Language Processors}
+\examdate{18th May 2001}
+\examtime{1.00--2.30pm}
+\rubric{Answer {\sl TWO} questions \\ All questions carry equal marks}
+\end{preamble}
+\externals{P. Hall \\ M. Moulding}
+\internals{D. Bolton}
+
+\reservestyle{\nonterm}{\textit}
+\nonterm{dec,decs,vardec,fundec,id,exp,tyfields,type-id,fundecs,expseq,op}
+\reservestyle{\keyword}{\textbf}
+\keyword{var,function,let,in,end,if,then,else,while,do,for,break,to,switch,of,case,default}
+
+
+\begin{questions}
+
+% Herewith three questions for Language Processors
+% Modified after the following comments from Pat Hall:
+%P211: Language Processors I
+%1.  The questions seem very mechanical without graded parts for weaker and
+%stronger students.
+%% IS THIS REALLY TRUE?
+%2.  Question 1 (a) seems very odd and unclear, and really should be
+%replaced.  The claimed difference between the editor pattern and a regular
+%expression seems to hinge on what a "character" is.  This really is not the
+%basis for a question.  Why not just ask about regular expressions for an
+%easy first part for all students to score on.
+%% DONE.
+%3. Q1  (c) - I assume that "Tiger" is a programming language with which the
+%students are familiar.
+%% IT IS.
+%4.  Question 2 (a) answer does not adequately distinguish between terminals
+%and non-terminals - would you accept this sort of confusion from a student?
+%% DONE.
+%5.  Some of the sample answers are just too vague for me to make any
+%reasonable assessment - for example Question 3.
+%% THEY'RE MOSTLY BOOKWORK - SHOULD I BE DOING MORE THAN THIS UNDER OUR 
+%% GUIDELINES?
+
+\question
+
+\begin{subquestions}
+
+%\subquestion
+%        In some editors and shells, pattern matching expression
+%	notation is provided as detailed in the table below.
+%        For example, the expression \verb"{.*}" 
+%        matches any sequence of characters with enclosing
+%        curly brackets.
+%        Show how the patterns in the table can be represented by regular
+%        expressions. Show also that regular expression notation is
+%        more powerful than the editor pattern notation by
+%        finding examples of patterns that can be expressed in the
+%        regular expression notation but not in the editor pattern
+%        notation.
+%
+%%\vspace{0.2in}
+%
+%\begin{center}
+%\begin{tabular}{|c|c|c|}        \hline
+%Expression & Matches & Examples \\ \hline
+%\verb"c"                & single character \verb"c"      & \verb"c", \verb"x", \verb"!"\\                     
+%\verb"*"                & zero or more characters        & \verb"lo*p" matches \verb"lp", \verb"lop", \verb"loop", \verb"looop"\ldots\\
+%\verb"."                & any character                  & \verb"c.t" matches \verb"cat", \verb"cct", \verb"c%t"\ldots\\
+%\verb"["{\it s\/}\verb"]" & any character in {\it s}     & \verb"c[aou]t"  matches \verb"cat", \verb"cot", \verb"cut"\\
+% \hline
+%\end{tabular}
+%\end{center}
+%\marks{30}
+%
+%\begin{modelanswer}
+%\begin{verbatim}
+%c -- c   3\\
+%* -- a*, a in alphabet    5\\
+%. -- a1 or a2 \ldots for all a in alphabet    5 \\
+%\[s\] -- a1 or a2 \ldots for all a in s    7
+%
+%* in editor constrained to work on characters; alternates in
+%\[..\] may only be characters (10).
+%%\end{verbatim}
+%\end{modelanswer}  
+
+\subquestion
+Give a definition for regular expressions which shows how
+arbitrary regular expressions can be constructed for a
+given alphabet (set) of symbols. Do not include shorthand
+notations you may know.
+\marks{10}
+
+\subquestion
+Write down regular expressions that define a pattern to recognise
+identifiers that are composed of letters, digits, and underscores, that begin
+begins with a letter, end with a letter or digit, and contain
+no consecutive underscores.
+\marks{20}
+\begin{modelanswer}
+\begin{verbatim}
+L((L|D)*(_(L|D)+)*      L=[a-zA-Z] D=[0-9]
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+What is an ambiguous grammar? By giving suitable examples show that the
+        following grammar is ambiguous. 
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+stmt \> $\rightarrow$ \> \textbf{if} {\it expr\/} \textbf{then} {\it stmt} \\
+\it
+     \> $\mid$ \> \textbf{if} {\it expr\/} \textbf{then} {\it stmt\/} \textbf{else} {\it stmt} \\
+     \> $\mid$ \> {\it other}
+\end{tabbing}
+Here {\it other\/} stands for any other statement.
+Explain the term {\em shift-reduce conflict\/} using as
+an example the program fragment \verb+if a then if b then s1 else s2+.
+\marks{35}
+
+\begin{modelanswer}
+Two parse trees for \verb"if a then if b then s1 else s2" (15).
+
+Point at which a parser can either shift, or reduce by a rule. 
+Here, reach the else, can shift, or reduce using first production (15).
+\end{modelanswer}
+
+
+\subquestion
+Consider the following Tiger function:
+\begin{verbatim}
+1 function f(a:string, b:int, c:int)=
+2       (print_int(b+c); print(a);
+3        let var j := c
+4            var b := "hello"
+5        in print(b); print_int(j);
+6        end;
+7        print_int(b);
+8       )
+\end{verbatim}
+Given an initial environment $\sigma_0 = \{\textrm{a} \rightarrow \textrm{int}, \textrm{b} \rightarrow \textrm{string}\}$, derive the type binding environments for the function at each
+use of an identifier and indicate where type lookups will occur.
+\marks{35}
+
+\begin{modelanswer}
+0 $\sigma_0$ is starting environment\\
+1 $\sigma_1 = \sigma_0 + \{a\rightarrow string,b\rightarrow int,c\rightarrow int\}$\\
+2 lookup ids b, c  and then a, in $\sigma_1$\\
+3 lookup id c, then $\sigma_2 = \sigma_1 + \{j\rightarrow int\}$\\
+4 $\sigma_3 = \sigma_2 + \{b\rightarrow string\}$ (overrides arg b)\\
+5 lookup id b, then j  in $\sigma_3$\\
+6 discard $\sigma_3$, $\sigma_2$ revert to $\sigma_1$\\
+7 lookup b in $\sigma_1$\\
+8 discard $\sigma_1$ revert to $\sigma_0$
+\end{modelanswer}
+
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+The reference manual for a Tiger'01-like programming language contains
+the following definition for a kind of expression: 
+
+The switch-expression
+\[
+\<switch> \; ( \; \<exp> \; ) \; \<of> \; ( \; \<case> \; \<exp>_{c1} \; : \; \<exp>_1 \; \<case> \; \<exp>_{c2} \; : \; \<exp>_2 \;  \ldots \; \<default> \; : \; \<exp>_{\it default} \; ) \;
+\]
+first evaluates the integer expression $\<exp>$.
+This value is then compared in sequence 
+with $\<exp>_{c1}, \<exp>_{c2}, \ldots $.
+If there is a match for an $\<exp>_{cn}$, 
+the switch-expression yields
+the result of evaluating the corresponding $\<exp>_{\it n}$.
+If there is no match, the switch-expression yields the
+result of evaluating $\<exp>_{\it default}$.
+The $\<default> \; : \; \<exp>_{\it default}$ part may be omitted, 
+and then if there is no match the switch-expression produces no
+value.
+
+\begin{subquestions}
+\subquestion
+Write down a BNF concrete syntax for the switch-expression. 
+\marks{15}
+
+\begin{modelanswer}
+Terminals in CAPS.
+\begin{verbatim}
+switch-exp -> SWITCH ( exp ) OF ( cases default ) 
+           |  SWITCH ( exp ) OF ( cases )
+
+default    -> DEFAULT : exp
+
+cases      -> CASE exp : exp
+           |  CASE exp : exp cases
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Sketch a possible abstract syntax for the switch-expression.
+\marks{15}
+
+\begin{modelanswer}
+\begin{verbatim}
+SwitchExp (Exp intexp default) (CaseList cases)
+CaseList (Case head CaseList tail)
+Case (Exp case resultexp) 
+(be flexible about how this is expressed - it might be Java)
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Show how semantic actions in a grammar for a parser-generator such as CUP
+can be used to produce abstract syntax trees for the switch-expression.
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+public class SwitchExp extends Exp {
+   public Exp intexp, cdefault;
+   public CaseList cases;
+   public SwitchExp(int p, Exp e, CaseList l, Exp d) 
+     {pos=p; intexp=e; cases=l; cdefault=d; }
+}
+public class CaseList {
+   public Case head;
+   public CaseList tail;
+   public CaseList(Case h, CaseList t) {head=h; tail=t;}
+}
+public class Case extends Absyn {
+   public Exp switchcase, exp;
+   public Case (int p, Exp c, Exp e) 
+      {pos=p; switchcase=c; exp=e;}
+}
+...
+exp  ::= ....
+
+     |   SWITCH:s LPAREN exp:e RPAREN OF 
+           LPAREN cases:c default:d RPAREN
+         {: RESULT = new Absyn.SwitchExp(sleft,e,c,d); :}
+
+     |   SWITCH:s LPAREN exp:e RPAREN OF 
+           LPAREN cases:c RPAREN
+         {: RESULT = new Absyn.SwitchExp(sleft,e,c,null); :}
+
+     ;
+
+default ::= DEFAULT COLON exp:e {: RESULT = e ; :}
+     ;
+
+cases ::= CASE:p exp:ec COLON exp:e
+          {: RESULT = new Absyn.CaseList(
+                       new Absyn.Case(pleft,ec,e),null); :}
+      |   CASE:p exp:ec COLON exp:e cases:m
+          {: RESULT = new Absyn.CaseList(
+                       new Absyn.Case(pleft,ec,e),m); :}
+\end{verbatim}
+\end{modelanswer}
+ 
+\subquestion
+        Outline the intermediate representation
+        that might be generated from your
+	asbtract syntax trees in translation of
+        a switch-expression.
+	You may wish to use a simple example to explain your 
+	translation, eg:
+\begin{verbatim}
+a := switch ( x ) of 
+      ( case y: x+1  case y+1: x+3  
+           case y+3: x+5  default: x+10 )
+\end{verbatim}
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+eval exp (here, x) into R1 (some TEMP loc ie a virtual reg)
+eval first label exp (here, y) into R2 (some TEMP ie a reg)
+CJUMP(=,R1,R2,L1,L2)
+LABEL(L1)
+eval first result exp (here x+1) into R3 (some TEMP)
+JUMP(Lend)
+LABEL(L2)
+evaluate second ... (here y+1)...
+...
+LABEL(Ln)
+eval default result exp (here x+10) into R3 (some TEMP)
+JUMP(Send)
+LABEL(Lend)
+store result in R3 as appropriate (here into a)
+LABEL(Send)
+\end{verbatim}
+\end{modelanswer}
+
+\end{subquestions}
+
+\question
+
+
+\begin{subquestions}
+
+\subquestion
+%Briefly describe the function of each
+%of the subdivisions (areas), and
+Discuss the programming language features which influence
+the organisation and functioning of run time storage,
+clearly associating any storage structures you
+mention with the implementation of particular language features.
+Choose a language you know well and briefly describe
+its run time storage requirements and functioning.
+\marks{35}
+
+\begin{modelanswer}
+Language features: procedure/method call and parameter passing,
+lexical scoping, dynamic storage allocation and deallocation,
+including object creation. Name stack, heap, why different.
+More marks for example languages
+(eg Java object creation, method call). Operation of
+stack and heap (with mention of garbage collection).
+\end{modelanswer}
+
+
+\subquestion
+Outline a typical layout for a stack frame and describe 
+each element of a frame and how it is pushed to the stack during
+program execution. 
+Comment on how local variables, arguments and non-local variables
+are addressed by the code generated for a procedure or method. 
+\marks{35}
+
+\begin{modelanswer}
+Args, static link, locals, return address, regs/temp space.
+Locals, args: offsets from SP or FP; non-locals: follow access links
+(more for description of access link).
+\end{modelanswer}
+
+\subquestion
+Explain why registers might be used for parameter passing and
+suggest situations where passing in registers is particularly
+appropriate. 
+Describe cases where it is necessary for a code generator
+for a procedure or method to produce code that writes 
+register values to the stack. 
+\marks{30}
+
+\begin{modelanswer}
+Efficiency; particularly appropriate when leaf procs, interproc
+reg alloc, dead variables, reg windows (but\ldots).
+Reg saves: when address is taken,
+when call-by-ref,
+when accessed by inner nesting,
+value too big,
+an array,
+convention of save for partic reg prior to call,
+spilling in exp evaluation,
+saving a reg window.
+\end{modelanswer}
+
+\end{subquestions}
+
+
+\end{questions}
+
+\end{document}
+

@@ -1,0 +1,48 @@
+PARSER_BEGIN(Exp2)
+
+public class Exp2 {
+}
+
+PARSER_END(Exp2)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+int S() :
+{ int s; }
+{
+    s=E() <EOL> { return s; }
+  | <EOL>
+  | <EOF>
+}
+
+int E() :
+{ int e; int t; }
+{
+  e=T() (  "+" t=T() { e=e+t; }
+         | "-" t=T() { e=e-t; } )*
+    { return e; }
+}
+
+int T() :
+{ int t; int f; }
+{
+  t=F() (  "*" f=F() { t=t*f; }
+         | "/" f=F() { t=t/f; } )*
+    { return t; }
+}
+
+int F() :
+{ Token t; int result; }
+{
+    t=<NUM> { return Integer.parseInt(t.image); }
+  | "(" result=E() ")" { return result; }
+}
+

@@ -1,0 +1,78 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #BDIGIT:["B","b"] [ "0"-"1"] >
+}
+
+TOKEN :
+{
+  < #DDIGIT:["D","d"] [ "0"-"9"]["1"-"9"] >
+}
+
+TOKEN :
+{
+  < #ODIGIT:["O","o"] [ "0"-"7"] >
+}
+
+TOKEN :
+{
+  < #HDIGIT:["a"-"f","A"-"F"] [ "0"-"9"] >
+}
+
+TOKEN :
+{
+
+<FLOATING_POINT_LITERAL:
+    ("-")? (<DIGIT>)+ "." (<DIGIT>)* (<EXPONENT>)?
+  | ("-")? "." (<DIGIT>)+ (<EXPONENT>)?
+  | ("-")? (<DIGIT>)+ <EXPONENT>
+
+<#EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+
+}
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> )
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}
+
+

@@ -1,0 +1,35 @@
+Return-Path: <ross@soi.city.ac.uk>
+Received: from rod.soi.city.ac.uk (rod.soi.city.ac.uk [138.40.91.11])
+	by altair.soi.city.ac.uk (8.12.9/8.12.9) with ESMTP id i2VHZ6Mx016288
+	for <daveb@altair.soi.city.ac.uk>; Wed, 31 Mar 2004 18:35:06 +0100 (BST)
+Received: from liberty.soi.city.ac.uk (mail@liberty.soi.city.ac.uk [138.40.92.97])
+	by rod.soi.city.ac.uk (8.12.10/8.12.10) with ESMTP id i2VHZ5Wb028317
+	for <daveb@soi.city.ac.uk>; Wed, 31 Mar 2004 18:35:05 +0100 (BST)
+Received: from ross by liberty.soi.city.ac.uk with local (Exim 3.36 #1 (Debian))
+	for daveb@soi.city.ac.uk
+	id 1B8jbl-00014X-00
+	for <daveb@soi.city.ac.uk>; Wed, 31 Mar 2004 18:34:33 +0100
+Date: Wed, 31 Mar 2004 18:34:33 +0100
+From: Ross Paterson <ross@soi.city.ac.uk>
+To: David Bolton <daveb@soi.city.ac.uk>
+Subject: Re: Paper
+Message-ID: <20040331173432.GA4057@soi.city.ac.uk>
+References: <117b01c41651$aa310d80$4a5c288a@Garfield>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <117b01c41651$aa310d80$4a5c288a@Garfield>
+User-Agent: Mutt/1.5.5.1+cvs20040105i
+X-Scanned-By: MIMEDefang 2.39
+
+David,
+
+Not much to say:
+
+* in the answer to 1(c), should i1 have the same type as e1, and i2 as e3?
+
+* in 1(d)ii, "You need not" -> "Do not"?
+
+* the usual about detailed marking schemes, except for 2(a) and 2(b)
+
+Ross

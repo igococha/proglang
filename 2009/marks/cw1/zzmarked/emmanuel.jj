@@ -1,0 +1,165 @@
+PARSER_BEGIN(Literal)
+
+public class Literal {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    Literal parser = new Literal(System.in);
+    parser.TokenList();
+  }
+
+/* convert binary */
+
+	public static int parseBin(String bin) throws Exception {
+	    int exp, valchar=0, val=0, l;
+	    short base=2;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(bin);
+	    l = buf.length();
+
+	    exp = 1;
+	    for(int i=l-1; i >= 0; i--) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '1')
+		    valchar = ch-'0';
+		val = val + valchar*exp;
+		// System.out.println(val);
+		exp = exp*base;
+	    }
+	    return val;
+	}
+/* convert decimal */
+
+	public static int parseDec(String dec) throws Exception {
+	    int exp, valchar=0, val=0, l;
+	    short base=16;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(dec);
+	    l = buf.length();
+
+	    exp = 1;
+	    for(int i=l-1; i >= 0; i--) {
+		ch=buf.charAt(i);
+		if (ch >= '1' && ch <= '9')
+		    valchar = ch-'0';
+		else if (ch >= '0' && ch <= '9')
+		    valchar = 10 + (ch-'9');
+		val = val + valchar*exp;
+		// System.out.println(val);
+		exp = exp*base;
+	    }
+	    return val;
+	}
+/* convert octal */
+
+	public static int parseOct(String oct) throws Exception {
+	    int exp, valchar=0, val=0, l;
+	    short base=8;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(oct);
+	    l = buf.length();
+
+	    exp = 1;
+	    for(int i=l-1; i >= 0; i--) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '7')
+		    valchar = ch-'0';
+		val = val + valchar*exp;
+		// System.out.println(val);
+		exp = exp*base;
+	    }
+	    return val;
+	}
+/* convert hexadecimal */
+
+	public static int parseHex(String hex) throws Exception {
+	    int exp, valchar=0, val=0, l;
+	    short base=16;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(hex);
+	    l = buf.length();
+
+	    exp = 1;
+	    for(int i=l-1; i >= 0; i--) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9')
+		    valchar = ch-'0';
+		else if (ch >= 'a' && ch <= 'f')
+		    valchar = 10 + (ch-'a');
+		else if (ch >= 'A' && ch <= 'F')
+		    valchar = 10 + (ch-'A');
+			val = val + valchar*exp;
+		// System.out.println(val);
+		exp = exp*base;
+	    }
+	    return val;
+	}
+}
+
+PARSER_END(Literal)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+  < INTEGER_LITERAL:
+        (<SIGN>)?
+      | <BINARY_LITERAL> ("L")?
+      | <DECIMAL_LITERAL> ("L")?
+      | <HEX_LITERAL> ("L")?
+      | <OCTAL_LITERAL> ("L")?
+
+  >
+|
+/*Token: sign */
+< #SIGN: ("+" | "-") >
+/*Token: binary */
+|< #BINARY_LITERAL: ["b", "B"](["0", "1"])+ >
+/*Token: decimal */
+|< #DECIMAL_LITERAL: ("0" | (["1"-"9"] (["0"-"9"])*)) >
+/*Token: hexal */
+|< #HEX_LITERAL:  ["z","Z"] (["0"-"9","a"-"f","A"-"F"])+ >
+/*Token: octal */
+|< #OCTAL_LITERAL: ["o","O"] (["0"-"7"])+ >
+|
+  < FLOATING_POINT_LITERAL:
+        <DIGITS> "." (<DIGITS>)? (<EXPONENT>)? (<TYPESUFFIX>)?
+      | "." <DIGITS> (<EXPONENT>)? (<TYPESUFFIX>)?
+      | <DIGITS> <EXPONENT> (<TYPESUFFIX>)?
+      | <DIGITS> (<EXPONENT>)? <TYPESUFFIX>
+  >
+|
+  < #DIGITS: (["0"-"9"])+ >
+|
+  < #TYPESUFFIX: (["f","d"]) >
+|
+  < #EXPONENT: "e" (["+","-"])? (["0"-"9"])+ >
+}
+
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <FLOATING_POINT_LITERAL> | t = <INTEGER_LITERAL>)
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}

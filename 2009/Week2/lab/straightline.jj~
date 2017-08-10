@@ -1,0 +1,119 @@
+/*
+ * Grammar for the Straightline Programming Language
+ *
+ * 29/1/2009 Igor Siveroni
+ */
+
+options {
+LOOKAHEAD=1;
+}
+
+PARSER_BEGIN(Parser)
+
+import java.io.*;
+
+public class Parser {
+    static int total;
+    static java.util.Stack argStack = new java.util.Stack();
+
+ }
+PARSER_END(Parser)
+
+SKIP :
+{
+ 	" "
+  |	"\r"
+  |	"\t"
+}
+
+
+
+TOKEN :
+{
+	< EOL: "\n" >
+}
+
+TOKEN : /* OPERATORS */
+{
+	< PLUS: "+" >
+  |	< MINUS: "-" >
+  |	< MULTIPLY: "*" >
+  |	< DIVIDE: "/" >
+}
+
+TOKEN :
+{
+    < CONSTANT: ( <DIGIT> )+ >
+|   < ID: ( <LETTER> )+ >
+|   < #DIGIT: ["0" - "9"] >
+|   < #LETTER: ["a"-"z","A"-"Z"] >
+}
+
+int one_line() :
+{}
+{
+    sum() <EOF>
+	{ return 1; }
+  |  <EOL>
+	{ return 0; }
+  |  <EOF>
+	{ return -1; }
+}
+
+void sum() :
+{Token x;}
+{
+    term() ( 
+	( x = <PLUS> | x = <MINUS> ) term()
+	{
+	    int a = ((Integer) argStack.pop()).intValue();
+	    int b = ((Integer) argStack.pop()).intValue();
+	    if ( x.kind == PLUS )
+		argStack.push(new Integer(b + a));
+	    else
+		argStack.push(new Integer(b - a));
+	}
+    )*
+}
+
+void term() :
+{Token x;}
+{
+    unary() ( 
+	( x = <MULTIPLY> | x = <DIVIDE> ) unary()
+	{
+	    int a = ((Integer) argStack.pop()).intValue();
+	    int b = ((Integer) argStack.pop()).intValue();
+	    if ( x.kind == MULTIPLY )
+	        argStack.push(new Integer(b * a));
+	    else
+		argStack.push(new Integer(b / a));
+	}
+    )*
+}
+
+void unary() :
+{ }
+{
+    <MINUS> element()
+	{
+	    int a = ((Integer) argStack.pop()).intValue();
+	    argStack.push(new Integer(- a));
+	}
+|
+    element()
+}
+
+void element() :
+{}
+{
+      <CONSTANT>
+	{   try {
+	    	int x = Integer.parseInt(token.image);
+	    	argStack.push(new Integer(x));
+	    } catch (NumberFormatException ee) {
+		argStack.push(new Integer(0));
+	    }
+	}
+    |  "(" sum() ")"
+}

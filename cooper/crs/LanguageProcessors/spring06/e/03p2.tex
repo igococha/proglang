@@ -1,0 +1,298 @@
+%\documentstyle[cityexam,11pt]{article}
+\documentclass[11pt]{cityexam}
+\usepackage{semantic}
+%\withmodelanswers
+\begin{document}
+\examnumber{509.xxx}
+\begin{preamble}
+\degrees{B.Eng. Computing \\ Professional Pathway  3 - Computing \\ Professional Pathway  3 - Computing (DISC)}
+
+\part{II}
+\title{Language Processors}
+\examdate{May 9th 2003}
+\examtime{9.00-10.30}
+\rubric{Answer {\sl TWO} questions \\ All questions carry equal marks}
+\end{preamble}
+\externals{Professor M.E.C\@. Hull\\ Professor M\@. Moulding}
+\internals{D. Bolton}
+
+\reservestyle{\nonterm}{\textit}
+\nonterm{dec,decs,vardec,fundec,id,exp,tyfields,type-id,fundecs,expseq,op}
+\reservestyle{\keyword}{\textbf}
+\keyword{var,function,let,in,end,if,then,else,while,do,for,break,to,switch,of,case,default}
+
+
+\begin{questions}
+
+
+\question
+
+\begin{subquestions}
+
+
+\subquestion
+The following regular expression recognises certain strings consisting of the
+letters $a$, $b$ and $c$:
+\[
+a((ab)|(ac))*c
+\]
+Indicate which of these five strings are recognised by the above regular expression:
+\begin{quote}
+$aacc$, $abac$, $ac$, $ababababacac$, $aabacc$
+\end{quote}
+Also, show three more strings that are recognised by the above expression.
+Finally, show two more strings consisting of 
+the letters $a$, $b$ and $c$ that are \emph{not} 
+recognised by the above regular expression.
+\marks{30}
+
+\begin{modelanswer}
+Yes, No, Yes, No, Yes. 3 marks each. 
+Five further strings, 3 marks each.
+\end{modelanswer}
+
+
+\subquestion
+Most programming languages allow the same symbol to denote both the 
+subtraction operator (in $x-y$) and the unary negation operator (in $-x$).
+Make clear the difficulty this causes for a parser-generator (for example, CUP)
+and explain how it may be overcome.
+\marks{20}
+
+\begin{modelanswer}
+Usually the precedence of the operator needs to be different in the two different
+contexts, eg highest for unary minus, and equal to plus etc for binary minus.
+Can be overcome by assigning a specific precedence to the rule for the unary case.
+So a 'pseudo-terminal' is introduced of appropriate precedence and the
+appropriate rule is annotated with it: 
+\begin{verbatim}
+%left + - 
+%left * /
+%left UM
+
+...
+exp : exp + exp
+    | ...
+    | - exp %prec UM
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Explain what it means for a context-free grammar to be ambiguous. 
+Write down an ambiguous grammar and show why it is ambiguous.
+\marks{20}
+
+\begin{modelanswer}
+Two parse trees, two derivations, for same sentence. 5 marks.
+5 marks for a grammar. 10 for the two trees/derivations.
+\end{modelanswer}
+
+\subquestion
+Consider the following Tiger function:
+\begin{verbatim}
+1 function f(a:string, b:int, c:int)=
+2       (print_int(b+c);
+3        let var c := "hi"
+4            var a := b
+5            var b := "hello"
+6        in print(b); print_int(a) 
+7        end;
+8        print_int(c); print_int(b);
+9       )
+\end{verbatim}
+Given an initial environment $\sigma_0 = \{\textrm{a} \rightarrow \textrm{int}, \textrm{b} \rightarrow \textrm{string}\}$, 
+derive the type binding environments for the function at each
+use of an identifier and indicate where type lookups will occur.
+\marks{30}
+
+\begin{modelanswer}
+0 $\sigma_0$ is starting environment\\
+1 $\sigma_1 = \sigma_0 + \{a\rightarrow string,b\rightarrow int,c\rightarrow int\}$\\
+2 lookup ids b, c  in $\sigma_1$\\
+3 $\sigma_2 = \sigma_1 + \{c\rightarrow string\}$ (overrides arg c)\\
+4 lookup id b, then $\sigma_3 = \sigma_2 + \{a\rightarrow int\}$ (overrides arg a)\\
+5 $\sigma_4 = \sigma_3 + \{b\rightarrow string\}$ (overrides arg b\\
+6 lookup id b, then a  in $\sigma_4$\\
+6 discard $\sigma_4$, $\sigma_3$, $\sigma_2$ revert to $\sigma_1$\\
+7 lookup c, b in $\sigma_1$\\
+8 discard $\sigma_1$ revert to $\sigma_0$
+\end{modelanswer}
+
+
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+The reference manual for a Tiger-like programming language contains
+the following definition for a kind of expression: 
+
+The if-expression
+\[
+\<if> \; \<exp>_1 \; \<then> \; \<exp>_2 \; \<else> \; \<exp>_3
+\] 
+evaluates the expression $\<exp>_1$. If the result is non-zero the if-expression
+yields the result of evaluating $\<exp>_2$; otherwise it yields the
+result of evaluating $\<exp>_3$.
+
+\begin{subquestions}
+\subquestion
+Write down a BNF concrete syntax for the if-expression. 
+\marks{10}
+
+\begin{modelanswer}
+Terminals in CAPS (trivial).
+\begin{verbatim}
+if-exp -> IF exp THEN exp ELSE exp
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Sketch a possible abstract syntax for the if-expression.
+\marks{10}
+
+\begin{modelanswer}
+\begin{verbatim}
+IfExp Exp Exp Exp
+(be flexible about how this is expressed - it might be Java)
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Show how semantic actions in a grammar for a parser-generator such as CUP
+can be used to produce abstract syntax trees for the if-expression. 
+\marks{20}
+
+\begin{modelanswer}
+\begin{verbatim}
+        |   IF:i exp:e1 THEN exp:e2 ELSE exp:e3
+            {: RESULT = new Absyn.IfExp(ileft,e1,e2,e3); :}
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Informally describe an appropriate typecheck for the if-expression.
+\marks{20}
+
+\begin{modelanswer}
+Exp e1 must be an integer, and e2 and e3 must be the same type 
+(which is the type of the whole expression), or both must produce no value,
+and then  the whole expression produces no value.
+\end{modelanswer}
+
+\subquestion
+
+Suppose a Tiger compiler translates all expressions and subexpressions
+into intermediate code (eg expression trees).
+Outline the intermediate code that might be generated
+in translation of the if-expression:
+\begin{verbatim}
+if a < b then c := a else c := b
+\end{verbatim}
+You can assume that the expression tree for any variable \verb"v" is
+simply \verb"TEMP v".
+\marks{40}
+
+\begin{modelanswer}
+\begin{verbatim}
+SEQ(SEQ(CJUMP(LT, TEMP a, TEMP b, L0, L1),
+        SEQ(SEQ(SEQ(LABEL L0,
+                  MOVE(TEMP c, TEMP a)),
+                JUMP(NAME L2)),
+            SEQ(SEQ(LABEL L1,
+                  MOVE(TEMP c, TEMP b)),
+                JUMP(NAME L2)))),
+     LABEL L2)
+
+(might be a longer translation where a < b is evaluated to 
+the 0 or 1 and then checked)
+\end{verbatim}
+\end{modelanswer}
+
+\end{subquestions}
+
+\question
+
+
+\begin{subquestions}
+
+\subquestion
+Choose a programming language you know well and describe
+how run-time storage is organised and managed during program 
+execution.
+Clearly associate any storage structures you
+mention with the implementation of particular 
+language features.
+\marks{25}
+
+\begin{modelanswer}
+Language features: procedure/method call and parameter passing,
+lexical scoping, dynamic storage allocation and deallocation,
+including object creation. Name stack, heap, why different.
+More marks for good exposition of example language
+(eg Java object creation, method call). Operation of
+stack and heap (with mention of garbage collection).
+\end{modelanswer}
+
+
+\subquestion
+What is a stack frame?
+Outline a typical layout for a stack frame and describe 
+each element of a frame. 
+%and how it is pushed to the stack during
+%program execution. 
+%Explain the term {\em static link\/} and explain why a C or Java
+%implementation does not include static links in its stack frames.
+Comment on how local variables, arguments and non-local variables
+are addressed by the code generated for a procedure or method. 
+\marks{25}
+
+\begin{modelanswer}
+A structure to store info local to a proc invocation.
+Args, static link, locals, return address, regs/temp space.
+More marks for mentioning code genned for a proc/func doing the
+pushing.
+Locals, args: offsets from SP or FP; non-locals: follow static links
+(more for description of static link).
+\end{modelanswer}
+
+\subquestion
+Explain why registers might be used for parameter passing and
+suggest situations where passing in registers is particularly
+appropriate. 
+Outline situations where it is necessary for the code generated for a 
+procedure or method to write registers to the stack.
+\marks{30}
+
+\begin{modelanswer}
+Efficiency; particularly appropriate when leaf procs, interproc
+reg alloc, dead variables, reg windows (but\ldots).
+Reg saves: when address is taken,
+when call-by-ref,
+when accessed by inner nesting,
+value too big,
+an array,
+convention of save for partic reg prior to call,
+spilling in exp evaluation,
+saving a reg window.
+\end{modelanswer}
+
+\subquestion
+Explain the difference between \emph{caller-save\/} and \emph{callee-save\/}
+registers. Why might caller-save registers sometimes not be saved?
+\end{subquestions}
+\marks{20}
+
+\begin{modelanswer}
+Caller-save if code for caller of a func saves and restores the reg value
+around a func call. Callee save if code for a func does it. Might not be
+saved when analysis shows that a value of some var will not be needed following
+the call - put in caller-save reg but NOT save it ahead of call.
+\end{modelanswer}
+
+\end{questions}
+
+\end{document}
+

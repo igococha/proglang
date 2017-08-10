@@ -1,0 +1,37 @@
+PARSER_BEGIN(cwk1)
+
+public class cwk1 {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newl
+ines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    cwk1 parser = new cwk1(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(cwk1)
+
+/*
+ * Lexical items.
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"          /* Tab */
+| "\n"          /* Newline */
+| "\r"          /* Return */
+| "\f"          /* Formfeed */
+}
+
+TOKEN : {<POSITIVE:''+''>}
+TOKEN : {<NEGATIVE:''-''>}
+TOKEN : {<DECIMAL NUMERAL:([''0'' – ''9'']) + >}
+TOKEN : {<BINARY NUMERAL :[ ''b'',''B'' ]  + ([''0'' – ''1'']+)	
+TOKEN : {<HEXADECIMAL NUM :''Z'',''z'' | ([''0''-''9'']+/[''a''-''f'']+/[''A''-''F''])	
+TOKEN : {<OCTAL NUMERAL : ''O'',''o'' | ([''0''-''7'']+)		
+
+
+TOKEN : {<DECIMAL POINT: ''.''>}
+

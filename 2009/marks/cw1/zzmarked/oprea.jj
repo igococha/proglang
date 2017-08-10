@@ -1,0 +1,82 @@
+/**
+ * JavaCC regular expressions to define precisely integer literals, floating
+point literals
+ * and comments.
+ *
+ * @author (Mihai Oprea abcy204)
+ * @version (27/02/2009)
+ */
+
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (includingnewlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+/*
+ * Lexical items.
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"          /* Tab */
+| "\n"          /* Newline */
+| "\r"          /* Return */
+| "\f"          /* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+
+/* JAVA LITERALS */
+
+TOKEN : 
+{
+
+      <DECIMAL_LITERAL: "-" ["1"-"9"](["0"-"9"])* >
+}
+TOKEN :
+{
+
+     <BINARY_LITERAL:   "0" ["b","B"](["0","1"]) * >
+}
+TOKEN :
+{
+     <OCTAL_LITERAL: "0" (["0"-"7"])*>
+}
+TOKEN :
+{
+
+    <HEX_LITERAL: "0" ("z"|"Z")* (["0"-"9","a"-"f","A"-"F"])+>
+}
+/* COMMENTS */
+TOKEN :
+{
+
+    <SINGLELINE:  "//" (~["\n"])* "\n" >
+}
+
+TOKEN : 
+{
+
+    <MULTIPLELINE:  "/*" ~[] >
+}
+
+
+void TokenList() :
+{Token t;}
+{
+   (
+	(t = <SINGLELINE>|t = <MULTIPLELINE>|t = <BINARY_LITERAL> | t = <OCTAL_LITERAL> | t = <HEX_LITERAL>)
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}

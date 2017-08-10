@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+\usepackage{a4wide}
+\usepackage{verbatim}
+
+\newcommand{\rul}{\rightarrow}
+\newcommand{\rulnum}[1]{\stackrel{#1}{\rightarrow}}
+\newcommand{\syntax}[1]{\texttt{#1}}
+
+\begin{document}
+
+\section*{Model Answers}
+
+This document contains an an explnation on how to address question 1 from the Sample Questions document (example1.pdf).
+
+More will follow soon.
+
+\subsection*{Question 1.a}
+
+We are given the following grammar:
+
+$$
+\begin{array}{llcl}
+(1)\;\;\;\;\; & S & \rul & S \; S \\
+(2) & S & \rul & \syntax{(} \;S\; \syntax{)}  \\
+(3) & S & \rul & \syntax{a}
+\end{array}
+$$
+
+The first thing you need to do is to figure out the language described by the grammar. In our case, the grammar above describes strings made of \syntax{a}'s and balanced parentheses e.g. \syntax{a}, \syntax{a(a)}, \syntax{((aa))}, etc. String \syntax{((aa))} can be derived as follows:
+$$
+S \rulnum{2} \syntax{(} S \syntax{)} \rulnum{2} \syntax{((} S \syntax{))} \rulnum{1}  \syntax{((} \underline{S}\;S \syntax{))}
+\rulnum{3} \syntax{((} a\;S \syntax{))} \rulnum{3} \syntax{((} a\;a \syntax{))}
+$$
+where non-terminal expansions (arrows) are labelled with the production's number. We sometimes underline the non-terminal being expanded in order to improve readability.
+
+The derivation shown above generates the following parse tree:
+\begin{verbatim}
+             S
+             |
+          ---|---
+          |  |  |
+          (  S  )
+             |
+          ---|---
+          |  |  |
+          (  S  )
+             |
+          ---|--- 
+          |     | 
+          S     S
+          |     | 
+          a     a
+\end{verbatim}
+
+Going back to the question. A grammar is ambiguous if it can generate strings that can be represented by more than one parse tree. Therefore, it will be enough to show one string (from the language defined by the grammar) that can be represented  by two different parse trees. Furthermore, the question asks for the shortest. We can clearly see that \syntax{a}, \syntax{aa} (lengths one and two) can only be represented by a single parse tree. What about strings of length 3? \syntax{(a)} is not ambiguos. What about \syntax{aaa}? we have at leats the following derivations:
+$$
+\begin{array}{ll}
+\mbox{Derivation 1} &
+S \rulnum{1} \underline{S}\;S \rulnum{1} S\;S\;S \rulnum{3} \syntax{a}\;S\;S \rulnum{3} \syntax{a}\;\syntax{a}\;S  \rulnum{3} \syntax{a}\;\syntax{a}\;\syntax{a}  \\
+\mbox{Derivation 2} &
+S \rulnum{1} S\;\underline{S} \rulnum{1} S\;S\;S \rulnum{3} \syntax{a}\;S\;S \rulnum{3} \syntax{a}\;\syntax{a}\;S  \rulnum{3} \syntax{a}\;\syntax{a}\;\syntax{a}
+\end{array}
+$$
+Note that even though the sema sequence of productions/rules was used, there were applied to different non-terminals i.e. left- and right-hand side of $S\;S$ in derivation1 and 2, respectively. The resulting parse trees are:
+\begin{verbatim}
+              S                    S
+              |                    |
+       --------------        -------------
+       |            |        |           |
+       S            S        S           S
+       |            |        |           |
+    -------         a        a        -------
+    |     |                           |     |
+    a     a                           a     a
+\end{verbatim}
+They are different and, therefore, the grammar is ambiguous.
+
+\subsection*{Question 1b}
+
+You are asked to introduce the repeat-until statement to MiniJava. The syntax of the new statement is:
+$$
+\mbox{Statement} \;\rul\; \syntax{repeat} \;\;\mbox{Statement}\;\; \syntax{until(} \mbox{Exp} \syntax{)}
+$$
+
+\begin{enumerate}
+\item Abstract syntax removes all the information that is only used for parsing e.g. terminals, and keeps the parts that have semantic value. Examples of abstract syntax of the repeat-until statement follow:
+$$\mbox{RepeatUntil}(s,e)  \;\;\;\;\;\;\;\;\;\;
+\mbox{RepeatStm}(\mbox{Stm}\; body, \mbox{Exp}\; cond)
+$$
+where $s$ and $e$ represent an statement and expression, respectively.
+
+\item The JavaCC code used to parse and create an AST for repeat-until is:
+\begin{verbatim}
+Statement RepeatUntil() :
+{
+  Statement s;
+  Expression e;
+}
+{
+  ''repeat'' s=Statement() ''until'' ''('' e=Expression() '')''
+  { return new RepeatUntilStm(s,e); }
+}
+\end{verbatim}
+Assumming that the classes \verb+Statement+ and \verb+Expression+ exist, as well as the respective non-terminals.
+
+\item A RepeatUntil(s,e) statement is correctly types if:
+\begin{itemize}
+\item Statement s is correctly typed.
+\item Expression e is correctly typed.
+\item The type of e is bool.
+\end{itemize}
+Or, given function \syntax{TypeCheckStm}(s) that typechecks s,  and \syntax{TypeCheckExp}(e) that type checks e and returns the resulting type:
+\begin{itemize}
+\item \syntax{TypeCheckStm}(s)  ok
+\item \syntax{TypeCheckExp}(e) = bool
+\end{itemize}
+
+You can use a similar approach to express typechecking of the ShortIf expression introduced in the last coursework:
+
+\begin{tabular}{ll}
+\syntax{TypeCheckExp}(e1?e2:e3) = t & where \\
+& \syntax{TypeCheckExp}(e1) = bool \\
+& \syntax{TypeCheckExp}(e2) = \syntax{TypeCheckExp}(e3) = t
+\end{tabular}
+
+\item Finally, you are asked to translate repeat-until into IR. In order to do this you need to have a clear understanding of repeat-until, which is straightforward: \textbf{execute statement s until expression e is true}.
+
+It can be expressed by the following control-flow graph:
+\begin{verbatim}
+              false
+   .________________.
+   |                ^
+   |                |
+Lstart ---> s ---> <e> ---> Lend
+                       true
+\end{verbatim}
+where Lstart and Lend are fresh labels (you can use the name you want) used to mark the beginning and end of the statement, and as targets of possible jumps. The IR translation of \syntax{repeat s until (x < 20)}, for example, where s stands for any statement, is as follows:
+\begin{verbatim}
+SEQ(LABEL(Lstart),
+  SEQ(code(s),
+    SEQ(CJUMP(LT,TEMP(x),CONST(20),Lend,Lbody),
+      SEQ(LABEL(Lend)))))
+\end{verbatim}
+where \verb+code(s)+ represents the code generated for s. As mentioned in the question, you do not need to generate specific code for the body - code(s) will be enough - but in order to write the CJUMP you need an example e.g. \verb+(x < 20)+.
+
+
+
+\end{enumerate}
+
+
+
+\end{document}

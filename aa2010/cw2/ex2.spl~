@@ -1,0 +1,10 @@
+void main() {
+int x; int y;
+
+print ( 10 % 10);
+
+x := 3;
+y := 5;
+repeat { print(x); y := y+1; x := x+1; } until (x >= 3)
+
+}

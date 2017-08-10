@@ -1,0 +1,171 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+\large{\bf Language Processors Lab Week 3 - Solution comments}
+
+\medskip\noindent The solution of Lab3 has been uploaded to CitySpace. This documents clarifies some of the trickiest points.
+
+\section{Parsing Integer Literals}
+
+Lab 3 introduces a method that translates integer literals (decimal, binary, octal and hexadecimal) from a string representation into its corresponding decimal value.  In other words, it translates a string that represents numbers written in a particular base (10,2,8 and 16, respectively) into their integer value.
+
+For example, binary number b101 (base 2) has value 5 = 1+0*2+1*4 and decimal literal  375 (base 10) has value 375=5+7*10+3*100.  More examples are shown in the table below:
+
+begin{tabular}{lll}
+String	& Base	& Value
+1100 & 2 & 10 = $0+0*2+1*(2^2)+1*(2^3)$ \\
+1100 & 8 & $576  = 0+0*8+1*(8^2)+1*(8^3)$ \\
+101 & 8	& 65 = $1+1*(8^2) $ \\
+101 & 16 & $257 = 1+1*(16^2)$ \\
+50 & 16 & $80 = 0 + 5*(16)$ \\
+F0A & 16 & $3850 = 10 + 15*(16^2)$ \\
+\end{tabular}
+
+Recall that hexadecinal numbers use characters ‘'0'-'9', 'a'-'f' and 'A'-'F' where 'A'/'a' denote 10, and 'f'/'F' denote 15. Thus, given string  $x = \bar{x}_(n-1),…,\bar{x}_i,…\bar{x}1_,\bar{x}_0$ and base b, the value of x is defined as follows:
+
+$$
+\mathit{val}(x) = x_0 + x_1*b + … + x_i*(b^i) + …. X_(n-1)*(b^(n-1))
+$$
+
+where $x$ is the numerical value of character $\bar{x}$ e.g. if $\bar{x}$ is '5' then $x$ is 5. This can be easily implemented in Java. For example, the method {\tt parseLiteral2} below transforms a integer literal {\tt lit} wtiteen in base {\tt base} into an integer:
+
+\begin{verbatim}
+  public static int parseLiteral2(String lit, int base) throws Exception {
+        int exp, valchar=0, val=0, l;
+	char ch; 
+	StringBuffer buf = new StringBuffer(lit);
+	l = buf.length();
+        exp = 1;
+	for(int i=l-1; i >= 0; i--) {
+	   ch=buf.charAt(i);
+	   if (ch >= '0' && ch <= '9')
+	      valchar = ch-'0';
+           else if (ch >= 'a' && ch <= 'f')
+              valchar = 10 + (ch-'a');
+	   else if (ch >= 'A' && ch <= 'F')
+	      valchar = 10 + (ch-'A');
+	   else
+	      throw new ParseIntException("Bad Char "+ch);
+	   val = val + valchar*exp;
+	   exp = exp*base;
+        }
+	return val;
+  }	
+\end{verbatim}
+
+
+Note that we can obtain the value of each character by substracting the character from '0'. Hexadecimals greater than 9 need a special case e.g.  10 + (ch-'a') or 10 + (ch - 'A'). Another implementation follows:
+
+
+\begin{verbatim}
+  public static int parseLiteral(String lit, int base)  {
+       int valchar=0, val=0, l;
+       char ch; 
+       StringBuffer buf = new StringBuffer(lit);
+       l = buf.length();	    
+       for(int i=0; i < l; i++) {
+	ch=buf.charAt(i);		
+	if (ch >= '0' && ch <= '9')		    
+	   valchar = ch-'0';
+	else if (ch >= 'a' && ch <= 'f')		    
+	     valchar = 10 + (ch-'a');		
+	else if (ch >= 'A' && ch <= 'F')		    
+	     valchar = 10 + (ch-'A');
+	else {
+	     System.out.println("Bad Char "+ch); // better trow an exception
+	     return -1;
+	}		
+	if (valchar >= base) {		   
+	     System.out.println("Bad Char "+ch+" greater or equal than base "+base);
+	     return -1;
+        }	
+	val = val*base + valchar;	    
+       }	    
+       return val;	
+  }
+\end{verbatim}
+
+which exploits the fact that $\mathit{val}(x) = x_0+b*(x_1+b*(x_2+……))$. The above implementation is the one included in the Lab3 code.
+
+\textbf{Note:} The current implementation of parseLiteral is limited by size of the Java type {\tt int}. This means that we will start getting wrong results with big numbers. The code can be improved by using {\tt long} instead. 
+
+\section{Adding new Tokens}
+
+\begin{itemize}
+\item A binary literal consists of the leading characters b or B followed by one or more digits 0 or 1 e.g. {\tt b101, B0001, b111101}. Add the token \verb+BINARY_LITERAL+ that implements binary literals.
+
+\noindent \textbf{Solution:} Add a new token to the lexical spefication:
+\begin{verbatim}
+TOKEN : /* Integers literals */
+{
+  < INTEGER_LITERAL: "0" | (["1"-"9"] (<DIGIT>)*) >
+|
+  < BINARY_LITERAL: ("b" | "B") (["0"-"1"])+  >
+}
+\end{verbatim}
+
+and update the grammar:
+
+\begin{verbatim}
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <INTEGER_LITERAL> |  t = <IDENTIFIER> | t=<REAL> |
+      t = <BINARY_LITERAL>)
+           { System.out.print("token found: "+ tokenImage[t.kind]);
+             System.out.println(" (`"+t.image+"')"); 
+	   }
+   )* <EOF>
+}
+\end{verbatim}
+
+\item Introduce a new token that implements single line comments. \\
+Hint: Use the \verb+~+ operator.
+
+\end{itemize}
+
+
+\subsubsection*{Manipulating {\tt Token}}
+
+Each token generated by the lexical analyser has a {\tt Token} object associated with it. We can assign this object to a variable e.g. {\tt Token t} and use its contents in the Java code attached to the JavaCC specification. We are currently doing that inside {\tt TokenList}:
+\begin{itemize}
+\item \verb+tokenImage[t.kind])+ extracts the token's type.
+\item \verb+t.image+ extracts the token's content - it returns a string.
+\end{itemize}
+
+In particular, the value associated to our \verb+INTEGER_LITERAL+ token is a string. In order to get the integer value we need to evaluate the string  e.g. the value of string '12' must be converted to 12. The {\tt parseLiteral} method does the job. 
+
+Check the implementation of {\tt parseLiteral} and update {\tt TokenList}:
+
+\begin{verbatim}
+void TokenList() :
+{Token t; int val;}
+{
+   ( { val = 0;}
+     (t = <INTEGER_LITERAL> { val = LexInt.parseLiteral(t.image,10); }
+      |  t = <IDENTIFIER> | t=<REAL> |
+      t = <BINARY_LITERAL> | t = <COMMENT>)
+           { System.out.print("token found: "+ tokenImage[t.kind]);
+             System.out.print(" (`"+t.image+"')"); 
+             System.out.println(" value = "+val); 
+	   }
+   )* <EOF>
+}
+\end{verbatim}
+
+Inspect the new code. How can we do the same for the binary literals?
+
+
+\end{document}
+

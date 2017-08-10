@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>lab1</TITLE>
+<META NAME="Template" CONTENT="C:\Program Files\Microsoft Office\Office\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<H3>MSc Principles of Programming Language - Lab 1 - Spring 2003</H3>
+<B><P>Note:</B> Read this through <EM>before </EM>logging in. </P>
+<P>The goal for this week's lab is simply to introduce you to the Unix Java programming environment to be used on the module by getting you to compile and run one of your programs. After this lab, you will be expected to be able to copy and manipulate program files and directories named in lab sheets, and compile and run them, and then to modify them and compile and run them. </P>
+<H4>The environment</H4>
+<P>The Unix labs are configured with the KDE Desktop. KDE is probably the desktop used by most Linux users, and is also very common on other Unix platforms. </P>
+<P>You will notice that KDE has a Windows-like 'Taskbar' (we'll call this the K-bar) and a 'Start menu' labelled 'K' (we'll call this the K-menu) on the bottom-left (although neither bar nor menu is quite like the Windows ones). </P>
+<P>One of the things you will need to be able to do is fire up a Unix shell window. This is on the K-menu, and is also one of the icons on the K-bar (the one with a terminal screen and computer on it, marked 'Terminal Emulation (kvt)' when you hover the mouse over it). </P>
+<P>The Java environment we will use is Sun's JDK (Java Development Kit, also called the SDK), which is considered to be the reference Java environment, and provides (amongst other things) a compiler, interpreter and debugger. These are not integrated into a closed environment, so you need to use at least the Unix file system and a Unix editor to be able to create and modify programs (see below). </P>
+<H4>Getting some Java files to work with</H4>
+<P>Your CSD (<EM>not SOI</EM>) Unix home directory is the one visible at the top level when you login. Click the icon on the K-bar with the folder with the house on it to see your CSD home directory folders, or type 'l<TT>s</TT>' in a Unix shell window. </P>
+<P>Now fire up a Unix shell window and type the command: </P>
+<PRE>
+   cp -R /soi/sw/courses/daveb/javatest ./Shapes</PRE>
+<P>This makes a complete copy of a simple Java program and associated files in your CSD Unix home directory in a new directory called <TT>Shapes</TT>. Now do: </P>
+<PRE>
+   cd Shapes
+   ls</PRE>
+<P>and you will see the Java files. </P>
+<H4>Compiling and running Java programs on Unix</H4>
+<P>To use Java, you must add module '<TT>java</TT>' (this gives access to the JDK and some local Java libraries): </P>
+<PRE>
+   module add java</PRE>
+<P>From a Unix shell window, to use our School of Informatics software you need to add the module '<TT>soi</TT>': </P>
+<PRE>
+   module add soi</PRE>
+<P>These can be combined into one command: </P>
+<PRE>
+   module add java soi</PRE>
+<P>The compilation command is '<TT>javac</TT>', which will compile single or multiple '<TT>.java</TT>' files: </P>
+<PRE>
+   javac Scene.java</PRE>
+<P>or, to compile all Java source files in the current directory, </P>
+<PRE>
+   javac *.java</PRE>
+<P>(remember, you must be in the directory containing these files and the '<TT>cd</TT>' command is used to change directories). </P>
+<EM><P>Note that the compilation and other Java commands will be slow the first time you run them and faster thereafter.</EM><I> </P>
+</I><P>The command '<TT>java</TT>' executes a Java program; you give it a class name as an argument (so typically you use the name of the class containing your <TT>main()</TT>): </P>
+<PRE>
+   java ScalableScene</PRE>
+<P>When you run a program like this, any error or other messages will appear in the window from which you issued the <TT>java</TT> command. </P>
+<B><P>Exercise:</B> Compile and run a Java program (e.g. the one copied above). </P>
+<H4>Editing programs</H4>
+<P>Unix has a variety of program and text editors available. I understand you have used Pico, and this is fine if you're happy with it. Those who are experienced Unix users will wish to use what they're familiar with, probably <TT>emacs</TT> or <TT>vi</TT>. I suggest others use <TT>nedit</TT>, which does syntax colouring and is set up for Java and other program editing. This is available as command <TT>nedit</TT> from a Unix shell window (do <TT>nedit &amp;</TT>), or from the K-menu under the Editors submenu if you're using KDE. To get syntax-colouring working in <TT>nedit</TT>, in the Preferences menu, select 'Syntax Highlighting' (on in the 'Default Settings' submenu), followed by 'Save Defaults'. This will then take effect from the next time you start <TT>nedit</TT>. To change this setting while editing, select 'Syntax Highlighting' directly from the Preferences menu. </P>
+<P>I suggest you now simply modify some trivial aspects of one of your programs and make sure you can save and recompile and run it. </P>
+<H4>Where is my SOI home directory then?</H4>
+<P>If you have any files in your SOI home directory, you can get at them in directory <TT>/soi/homes/your-user-name</TT>. You can use the visual file explorer to go to this folder and copy/move files and folders, or you can use the <TT>cd</TT> command to move to it in a Unix shell window. You can, if you wish, work in this directory instead of the CSD home directory, and hence keep all your files and directories in one place in your SOI directory. You will certainly need to submit coursework from your SOI home directory (instructions later). </P>
+<H4>And where is my <TT>U:</TT> drive stuff?</H4>
+<P>Unfortunately you cannot access your CSD PC <TT>U:</TT> drive from the Unix systems. You can, however, sit at a CSD PC and use the FTP system to transfer files to the Unix systems (either to your CSD Unix home directory or to your SOI home directory). </P>
+<P><HR></P></BODY>
+</HTML>

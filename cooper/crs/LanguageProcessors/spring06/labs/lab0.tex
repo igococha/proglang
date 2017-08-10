@@ -1,0 +1,276 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+
+\begin{document}
+
+\subsection*{Language Processors -- Induction}
+
+{\bf Note:} Read this through {\em before\/} logging in.
+
+\medskip\noindent These sheets
+introduce you to the Linux/Unix Java programming environment to 
+be used on the module by getting you to compile and run a program.
+You will be expected to be able to copy and 
+manipulate program files and directories or web locations
+named in lab sheets, and compile and run the programs, 
+and then to modify them and compile and run them.
+If you are not familiar with the Linux labs you should also get a copy of any
+\emph{Computing Services} documentation available.
+
+
+\subsection*{The Linux environment}
+
+\subsubsection*{Logging in}
+
+Linux/Unix labs contain PCs running Linux.
+If you see a screensaver or a blank screen,
+you can jiggle the mouse or hit
+a key to get the machine's attention.
+
+\subsubsection*{Logging Out}
+
+\emph{Always remember}
+to log out when you have finished working at a machine.
+To logout from a Linux machine, press the K button
+at the left of the control panel at the bottom of the screen, and
+select {\sf Logout} from the menu. 
+
+If you leave a machine without logging out you are putting your own work
+at risk.
+
+\subsubsection*{Working with the KDE windowing system under Linux}
+
+Each computer is attached by a network to several file systems. Under
+Linux, the fact that there are multiple file systems is something
+you don't normally have to think about. All the available systems
+just appear as different directories (folders) in a large
+`tree' of directories.
+(The tree is upside-down with its root at the top. The Root
+Directory is called ``{\tt /}''.)
+
+You need to become proficient at examining the contents of
+directories (folders), and in copying and moving
+directories and files around the file systems.
+We will use the words `directory' and `folder'
+to mean the same thing.
+
+\begin{quote}
+{\bf Please note}: click \emph{once}, not twice. If you are a Windows
+user you will be used to double-clicking to make things happen. In KDE
+you only click once. If you double click you may find you have done something
+(like launching an application) twice. Don't worry, it's not usually fatal.
+\end{quote}
+You will notice that KDE has a Windows-like `taskbar' (the control panel)
+at the bottom
+of the screen with a K button 
+on the bottom-left -- as on Windows, clicking on this
+reveals a menu that launches applications etc.
+
+
+\subsubsection*{Your CSD and SOI home directories}
+
+When logged in as a Linux user you have a \emph{home directory}.
+This is a place in the file system which belongs to you: the place where
+you can create, modify and delete files and folders. When you start
+the file manager (the button labelled with a small house icon on the control
+panel is the easiest way to start it), your home directory is the one it will
+display. You can also get the file manager to take you to your
+home directory at any time simply by clicking on the home icon
+on the task bar at the top.
+Use the file manager to go to your home directory now.
+Does it contain any files? Does it contain any hidden files?
+(Hint: look on the {\sf View} menu.)
+
+A slight complication (and a big advantage!)
+for you as a student in the School of Informatics,
+is that you have \emph{two} computing accounts: one provided by the
+Computing Services Department (CSD) and one provided by
+the School of Informatics (SOI). These two accounts give you access to
+two distinct home directories on two distinct file systems. When you
+are logged in to CSD machines as in the Unix labs
+you are using your CSD account
+and your home directory is (naturally) your CSD home directory.
+
+Although the two home directories are distinct, they are not
+completely isolated from each other.
+From the CSD Linux machines your SOI home directory
+is available as \fname{/soi/homes/}$<${\sc user}$>$, 
+where $<${\sc user}$>$ is your login-name. 
+This gives you access to a substantial
+amount of file space in addition to your CSD quota.
+Of course you can choose to do all your work there if you wish.
+Use the file manager to go to your SOI home directory now.
+Does it contain any files? Does it contain any hidden files?
+
+
+\subsubsection*{Shells, and your directories}
+
+You will need to be able to fire up and use a Unix shell 
+window -- this is on the K menu, 
+and is also one of the icons on the taskbar (the one with a 
+terminal screen on it, marked with a shell). 
+
+Fire one up now and then type
+the command `\verb+ls+' inside the window. 
+You will see listed the contents of your CSD home directory. 
+You can change to your SOI home directory with the 
+command:
+\begin{quote}
+{\tt cd} \fname{/soi/homes/}$<${\sc user}$>$
+\end{quote}
+You will find it very useful to learn about how to
+move around and see the directory hierarchy using
+the commands \verb+cd+ and \verb+ls+.
+
+
+\subsubsection*{Browsers and Web pages}
+
+On the Linux machines there are two main ways to browse web pages:
+(1) using the file manager, (2) using Mozilla or one of the other 
+Web browsers.
+Here we will focus on using the file manager but if you would prefer to
+use Mozilla you can. 
+
+To view a web page in the file manager you can type the url into
+the box along the top (you can usually leave off the {\tt http://}
+part: the file manager will put that bit in for you). Since urls are
+often very long and typing them is very boring, you will want to
+bookmark any page that you frequently visit. Then you can visit the
+page next time by simply clicking on the bookmark. To add and use
+bookmarks in the file manager, use the {\sf Bookmarks} menu at the top.
+
+%\subsubsection*{Disabling CleanStart}
+%
+%Your KDE configuration includes a feature which causes it to reset
+%%itself to the default settings each time you log in. This is designed to
+%help beginners who may accidentally mess up their configuration.
+%%Unfortunately, it also causes you to lose your file manager bookmarks
+%and other things which you need to keep, so you must disable this
+%feature before going any further.
+%\begin{quote}
+    %Use the file manager to go to your home directory.
+    %Open the folder called \fname{Desktop}.
+    %In the \fname{Desktop} folder, open the folder
+    %called \fname{Autostart}.
+    %You will see a file called \fname{CleanStart.kdelnk}.
+    %Delete this file by right-clicking on it and selecting {\sf Delete}.
+%\end{quote}
+%You have now disabled the CleanStart feature. If you want to re-enable
+%the CleanStart feature, click on the {\bf K} button
+%and use the {\sf System} sub-menu.
+%
+
+\subsection*{Java environment and programming}
+
+The Java environment we will use is Suns JDK (Java Development
+Kit, now also known as the SDK), which can be considered to be the reference 
+Java environment, and provides (amongst other things)
+a compiler, interpreter and debugger. These
+are not integrated into a closed environment, so
+you need to use at least the Unix file system as above, and 
+a Unix editor to be able to create and modify programs (see below),
+and learn the compiler and other commands. 
+
+
+\subsubsection*{Getting some Java files to work with}
+
+Fire up a Unix shell window,
+move using the `\verb+cd+' command
+to where you want to work in 
+the filesystem, and type the command:
+\begin{verbatim}
+   cp -R /soi/sw/courses/daveb/javatest ./Shapes
+\end{verbatim}
+This makes a complete copy
+of a simple Java program and associated files in 
+current working directory in a new directory called \verb+Shapes+.
+Now do:
+\begin{verbatim}
+   cd Shapes
+   ls
+\end{verbatim}
+and you will see the Java files.
+
+
+\subsubsection*{Compiling and running Java programs on Unix}
+
+To use Java, in a shell window
+you must add module `\verb+java+' (this 
+gives access to the Java JDK (also known as 
+SDK) and some local Java libraries):
+\begin{verbatim}
+   module add java
+\end{verbatim}
+To use School of Informatics specific software you 
+need to add the module `\verb+soi+':
+\begin{verbatim}
+   module add soi
+\end{verbatim}
+These can be combined into one command:
+\begin{verbatim}
+   module add java soi
+\end{verbatim}
+The Java compilation command is `\verb+javac+', which will compile 
+single or multiple `\verb+.java+' files: 
+\begin{verbatim}
+   javac Scene.java
+\end{verbatim}
+or, to compile all Java source files in the current directory,
+\begin{verbatim}
+   javac *.java
+\end{verbatim}
+(remember you must be in the directory containing these
+files and the `\verb+cd+' command is used to change directories).
+\emph{Your first compilation will take a long time; subsequent ones
+take much less time.}
+
+The command `\verb+java+' executes a Java program;
+you give it a class name as an argument (so typically
+you use the name of the class containing your \verb+main()+):
+\begin{verbatim}
+   java ScalableScene
+\end{verbatim}
+When you run a program like this, any error or other messages will 
+appear in the window from which you issued the \verb+java+ command.
+
+Remember that the \verb+Ctrl-C+ command typed in a shell window
+will kill off any program that you have started from that 
+shell window (often written \verb+^C+ -- 
+press the \verb+Ctrl+ and \verb+C+ keys at the same time). 
+
+Now compile and run a Java program
+(eg the one copied above, or one of your own). 
+
+\subsubsection*{Editing programs}
+
+Linux/Unix has a variety of program and text editors available.
+Those who are experienced Linux/Unix
+users will wish to use what they're familiar with, probably
+\verb+emacs+ or \verb+vi+. I suggest others use \verb+kate+,
+which does syntax colouring and is set up for Java and other
+program editing. This is available as command \verb+kate+ from
+a Unix shell window (do \verb+kate &+ or \verb+kate [filename]+), 
+or from the K menu as Editor.
+
+I suggest you now simply modify some trivial aspects of
+one of your programs and make sure you can save and recompile and
+run it. 
+
+\subsubsection*{And, finally, where is my {\tt U:} drive stuff?}
+
+Your CSD XP PC (CADDI) \verb+U:+ drive is accessible as the folder
+\verb+My Documents+ from your home directory on the CSD Unix systems. 
+You can also, however, use the FTP system
+to transfer files {\em\/} between the CSD XP PC (CADDI) and the 
+Unix systems (either to your CSD Unix home directory or to your 
+SOI home directory).
+
+
+\end{document}
+

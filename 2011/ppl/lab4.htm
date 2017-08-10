@@ -1,0 +1,41 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>lab4</TITLE>
+<META NAME="Template" CONTENT="C:\Program Files\Microsoft Office\Office\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<H3>MSc Principles of Programming Language - Lab 4 - Spring 2003<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"></H3>
+<B><FONT FACE="Arial"><P>Language Processing Wrap Up</P>
+</B></FONT><P>In Labs 2 and 3, we have learned how to perform: </P>
+<PRE>   1. Lexical Analysis (using JavaCC), 
+   2. Parsing (using JJTree/JavaCC),
+   3. Identification and Typechecking, and
+   4. Interpretation</PRE>
+<P>Given a program P written in a programming language L1, steps 1 to 4 above allow us to actually run P by translating the high-level commands in P into low-level commands that the machine can understand.</P>
+<P>In our lab exercises, we use TPL as our programming language L1.</P>
+<P>Steps 1 to 4 above are themselves written in a programming language (let us call it language L2). </P>
+<P>In our lab exercises, we use Java as such language (L2). Remember: the compiler for a program is just another program! So, in the lab, we are developing a compiler for TPL written in Java.</P>
+<B><P>Step 1</B> is about identifying tokens (Lab 2), and for that we use regular expressions. In this process, we use the Java Compiler Compiler (JavaCC) to compile .jj files (e.g., file LexTest.jj that contains a number of regular expressions for TPL) into a lexical analyser/parser. </P>
+<P>When we do "javacc LexTest.jj", we produce a number of .java files. The "javac *.java" command can then be used to compile such files, while command "java LexTest" actually runs the lexical analyser/parser. As an exercise, one may extend .jj files to define and recognise new tokens like for example floating point numbers.</P>
+<B><P>Step 2</B> is about building parse trees (Lab 3), and for that we use context-free grammars. In this process, we use the JJTree pre-processor for JavaCC to create trees for a given TPL program (e.g., program fact.tpl, which calculates the factorial of a number n). </P>
+<P>Note that the same .jj file that contains the token definitions may contain the (recursive) rules of the grammar.</P>
+<P>The only modification needed to a JavaCC file to prepare it to produce trees is a change to the suffix from .jj to .jjt, and the inclusion at the start of the lines: </P>
+<PRE>options {
+   MULTI=true;
+}</PRE>
+<P>to switch on multi mode.</P>
+<P>When one runs "jjtree TPL.jjt", an annotated grammar is created in file TPL.jj. The difference between the original TPL.jj file and the one created by jjtree is that the former may contain only the token and grammar definitions created by you, while the latter will also contain commands added by jjtree to allow the building of an abstract syntax tree (AST). Once TPL.jj is created, one may use javaCC, as before, to generate a lexical analyser and parser.</P>
+<P>In our exercise to introduce a remainder operator, when we add the definition of % to TPL.jjt (similarly to the definition of *) and run "jjtree TPL.jjt", we create the new (annotated for tree building) TPL.jj file and the new tree node (not previously defined) ASTRem in file ASTRem.java. The command "javacc TPL.jj" then generates the TPL parser (remember: the TPL parser is written in Java). One may now run the new java TPL parser (file TPL) to parse any TPL program (e.g., fact.tpl) by doing "java TPL fact.tpl" (this produces a parse tree for program fact.tpl). </P>
+<P>What if one adds a command that uses % to file fact.tpl (e.g.: n = n % 10; after read n;) and run "java TPL fact.tpl"? A Rem node with two children (id n and IntConst 10) should appear in the tree!</P>
+<B><P>Step 3</B>: In order to actually run fact.tpl, we still need to type-check the new % node and interpret the Abstract Syntax Tree (AST). This can be done by implementing Java methods Identification, Typecheck and Interpret in the new ASTRem.java file. </P>
+<P>Identification and Typechecking for % is the same as Identification and Typechecking for *. % takes two integers and is expected to return an integer. As a result, one may simply copy the implementation for * provided in file ASTMul.java (in directory tpl-types) to ASTRem.java and recompile ASTRem.java.</P>
+<B><P>Step 4</B>: Finally, in order to be able to run TPL programs, you need to interpret the new % node, i.e., you need to provide a meaning to it. As before, this can be done by implementing a Java method called Interpret in the ASTRem.java file. In the same way that "2*2" means "multiply 2 by 2", 5%2 should mean "divide 5 by 2 and take the remainder". </P>
+<P>The easiest way to implement method interpret is to use concepts already defined in the language such as * and /. As before, you may copy the implementation for * provided in the ASTMul.java file (in directory tpl-interpret) to ASTRem.java and modify it to do %. </P>
+<P>Method interpret in ASTMul.java tells the compiler that whenever it finds symbol * in the tree, it must take its children and multiply them. Since java already has % defined, it is sufficient to simply change * by % in the method interpret() that goes in ASTRem.java. What if we did not have % already defined in Java? </P>
+<P>Finally, if you now recompile and run "java TPL fact.tpl" it should compute the factorial of n%10. You have just extended the functionality of your TPL compiler!</P>
+<B><P>Suggestion: use any spare time to get on with the coursework!</P>
+</B><P><HR></P></BODY>
+</HTML>

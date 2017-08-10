@@ -1,0 +1,14 @@
+MiniJava parser
+
+Compile with:
+
+module add java soi javacc/3.2
+javacc minijava.jj
+javac Main.java
+
+Run the parser on file file-name with:
+
+java Main file-name
+
+
+If nothing is printed, the parser was successful!

@@ -1,0 +1,17 @@
+class Test {
+  public static void main(String[] args)
+    { System.out.println((new A()).m()); }}
+
+class A {
+   public int m() {
+      int x; 
+      x = (4 || 5);
+      return x;
+}}
+
+class B {
+   public int n() {
+      int y; 
+      repeatuntil y = y + 5; until (y < 9)
+      return y;
+}}

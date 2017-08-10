@@ -1,0 +1,263 @@
+\documentstyle[/homes/daveb/doc/exam_style/cityexam,11pt]{article}
+\begin{document}
+\examnumber{00.00}
+\begin{preamble}
+\degrees{???}
+\part{II}
+\title{Language Processors}
+\examdate{XXX, 00 XXX, 1994}
+\examtime{00 to 00}
+\rubric{???}
+\end{preamble}
+\externals{XXX \\ XXX}
+\internals{DJ Bolton}
+
+\begin{questions}
+
+% Herewith four questions for Language Processors
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+
+Give a definition for regular expressions which shows how
+arbitrary regular expressions can be constructed for a
+given alphabet (set) of symbols. Do not include shorthand
+notations you may know.
+\marks{15}
+
+\subquestion
+If $A$ is a set of characters selected from an
+alphabet of characters $V$, the shorthand notation {\it Not$(A)$} denotes 
+$(V - A)$; that is all characters in $V$ not included in $A$.
+Specify the following patterns using regular definition; 
+the {\it Not\/} shorthand may be useful for some of the patterns:
+\begin{subsubquestions}
+\subsubquestion
+A comment that begins with \verb"--" and ends with the \verb"Eol" 
+(end of line) character (use \verb"Eol" to denote the end of line 
+character).
+\marks{10}
+\subsubquestion
+An identifier, composed of letters, digits, and underscores, that
+begins with a letter, ends with a letter or digit, and contains
+no consecutive underscores.
+\marks{15}
+\subsubquestion
+A comment delimited by \verb"##" markers, which allows {\em single\/}
+\verb"#"'s within the comment body.
+\marks{20}
+\end{subsubquestions}
+
+\vspace{0.1in}
+
+\subquestion
+Study the following production from the BNF syntax for 
+arithmetic expressions in an imperative programming language:
+\begin{bnf}
+\Rule{\nt{aexp}}{\nt{var}\Or{\nt{num}}\Or{\nt{aexp} \verb"+" \nt{aexp}}
+        \Or{\nt{aexp} \verb"-" \nt{aexp}} \Or{\nt{aexp} \verb"*" \nt{aexp}}}
+\end{bnf}
+where \nt{var} and \nt{num} have their usual connotations.
+\begin{subsubquestions}
+\subsubquestion
+Show that this grammar is ambiguous. Disambiguate the grammar,
+arranging the productions so that 
+the \verb"+" and \verb"-" operators
+have equal precedence lower than that of \verb"*",
+and so that expressions with the same precedence group 
+left-to-right (ie \verb"2+3-4+5*6" groups \verb"(((2+3)+4)+(5*6))").
+\marks{20}
+\subsubquestion
+        Explain why left-recursion must be eliminated from
+        grammar productions which are to be used in
+        construction of a recursive-descent parser.
+        Write down a general rule for rewriting left-recursive
+        grammar productions to be right-recursive. Use the rule
+	to rewrite your answers to part i.
+\marks{20}
+\end{subsubquestions}
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+
+The following is an extract from the BNF syntax for
+an imperative programming language:
+\begin{bnf}
+\Rule{\nt{stms}}{\nt{stm}\Or{\nt{stm} \verb";" \nt{stms}}}\\
+\Rule{\nt{stm}}{\nt{\dots}\Or{\nt{loop}}\Or{\nt{\ldots}}} \\
+\Rule{\nt{loop}}{\verb"from" \nt{stms$_1$} \verb"until" \nt{bexp} \verb"loop" \nt{stms$_2$}} \verb"endloop"\\
+\Rule{\nt{aexp}}{\nt{var}\Or{\nt{num}}\Or{\nt{aexp} \verb"+" \nt{aexp}}
+        \Or{\nt{aexp} \verb"-" \nt{aexp}} \Or{\nt{aexp} \verb"*" \nt{aexp}}}\\
+\Rule{\nt{bexp}}{\nt{aexp} \verb"=" \nt{aexp}\Or{\nt{aexp} \verb"<=" \nt{aexp}}}
+\end{bnf}
+where \nt{stm}, \nt{num} and \nt{var} have their usual connotations.
+\begin{subquestions}
+\subquestion
+Sketch a parsing procedure for \nt{loop}.
+\marks{15}
+\subsubquestion
+Write down an abstract syntax for \nt{loop}, \nt{bexp} and \nt{aexp}.
+\marks{15}
+\subquestion
+The meaning of a \nt{loop} is as follows:
+\begin{itemize}
+\item The effect of a \nt{Loop} is the effect of executing 
+        \nt{stms$_1$} followed by the rest of the loop.
+\item The effect of executing the rest of the loop
+        \verb|until| \ldots\ \verb|end|
+        is to leave the
+        state of the computation unchanged if the \nt{bexp}
+        evaluates to true.
+\item Otherwise, when the \nt{bexp} evaluates to false,
+        it is the effect of executing \nt{stms$_2$},
+        followed by the effect of executing the rest of the loop
+        \verb|until| \ldots\ \verb|end| again in the resulting state.
+\end{itemize}
+\begin{subsubquestions}
+\subsubquestion
+        Outline the structure of the
+        code that might be generated in translation of
+        a \nt{loop} with an example \nt{bexp} (\verb"a+1 <= b*2", say). 
+        Assume code generation for a simple
+        stack machine, and briefly explain the
+        instructions you use in your outline.
+\marks{25}
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{loop} and \nt{bexp} which produces such code.
+        Describe any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{aexp}, but you need not produce translations for
+        \nt{aexp}.
+\marks{45}
+\end{subsubquestions}
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+Sketch a possible structure for a stack activation
+record (stack frame) and briefly explain the purpose of
+each component. Comment on how local variables,
+parameters and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use,
+and explain the need for a register `spill' area
+in some records.
+\marks{30}
+
+\subquestion
+Explain the purpose of the {\em heap} storage structure and
+describe a simple heap allocator.  Explain what is 
+meant by {\em fragmentation}, and mention some methods
+for reducing fragmention in heaps.  
+{\em Garbage\/} and {\em dangling pointers}
+can occur in the implementation of programming languages which
+support explicit deallocation of heap objects. Define
+these terms and explain using simple example program
+fragments how they arise.
+%Sketch the simple mark-sweep garbage collection algorithm
+%for automatic deallocation of inaccessible heap objects.
+\marks{40}
+
+\subquestion
+Outline the Sethi-Ullman numbering algorithm and
+describe potential uses for it.  Assuming two registers
+are required for loading a variable, and one for loading a literal number,
+draw the labelled
+tree produced by your algorithm for the expression:
+\marks{30}
+\begin{verbatim}
+       ((a + 4) + (b * c)) + (d - 3)
+\end{verbatim}
+
+\end{subquestions}
+
+ 
+\question
+
+\begin{subquestions}
+
+\subquestion
+Draw a diagram of the usual run time memory
+subdivision (memory model) for execution of
+programs compiled from languages such as
+Modula-2 and C.  
+%Briefly describe the function of each
+%of the subdivisions (areas), and 
+Discuss the programming language features which influence
+the organisation and functioning of run time storage,
+clearly associating the memory subdivisions you 
+mention with the implementation of particular language features.
+Choose a language you know well and briefly describe
+its run time storage requirements and functioning.
+%Explain why a typical C language memory model does not
+%have an area set aside for dynamically allocated
+%storage.
+\marks{40}
+
+\subquestion
+
+        Explain what is meant by the parameter passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+%                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is printed by the 
+        program shown below, assuming that in each
+	case both parameters are passed with the same mechanism.
+        In each case you must clearly justify your answer.
+\begin{verbatim}
+       MODULE prettypass;
+       
+       IMPORT InOut;
+
+       VAR i, j: INTEGER;
+
+       PROCEDURE mult (m,n: INTEGER);
+       BEGIN
+            m := m * n;
+            InOut.WriteInt (m);
+            InOut.WriteInt (n)
+       END mult;
+               
+       BEGIN
+            i := 2;
+            j := 3;
+            mult (i, j)
+            mult (i, i)
+       END.
+\end{verbatim}                   
+Although the program is written in a Modula-2-like syntax, 
+the Modula-2 parameter-passing semantics do not apply and you must
+instead consider each of the mechanisms mentioned.
+\marks{60}
+
+\end{subquestions}
+\end{questions}
+
+\end{document}
+

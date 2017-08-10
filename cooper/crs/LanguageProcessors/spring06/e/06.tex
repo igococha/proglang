@@ -1,0 +1,349 @@
+%\documentstyle[cityexam,11pt]{article}
+\documentclass[11pt]{bareexam}
+\usepackage{semantic}
+%\withmodelanswers
+\begin{document}
+%\examnumber{???}
+%\begin{preamble}
+%\degrees{???}
+
+%\part{II}
+%\title{Language Processors}
+%\examdate{???}
+%\examtime{???}
+%\rubric{Answer {\sl TWO} questions \\ All questions carry equal marks}
+%\end{preamble}
+%\externals{???}
+\internals{\ }
+
+\reservestyle{\nonterm}{\textit}
+\nonterm{Statement,Exp,dec,decs,vardec,fundec,id,exp,tyfields,type-id,fundecs,expseq,op}
+\reservestyle{\keyword}{\textbf}
+\keyword{var,function,let,in,end,if,then,else,while,do,for,break,to,switch,of,case,default}
+
+
+\begin{questions}
+
+\question
+
+The reference manual for a MiniJava-like programming language contains
+the following grammar rule for a do-while statement: 
+
+\[
+\<Statement> \; -> \; \<do> \; \<Statement> \; \<while> \; ( \<Exp>  ) \; ; 
+\]
+
+\begin{subquestions}
+\subquestion
+Write down or draw a possible abstract syntax for the do-while statement.
+\marks{10}
+
+\begin{modelanswer}
+\begin{verbatim}
+Do Statement Exp 
+(be flexible about how this is expressed - it might be Java and have types;
+it might be a picture)
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Show how semantic actions in a grammar for a parser-generator such as JavaCC
+can be used to produce abstract syntax trees for the do-while statement.
+\marks{25}
+
+\begin{modelanswer}
+\begin{verbatim}
+Statement DoWhileStatement() :
+{ Exp e;
+  Statement s;
+}
+{
+  "do" s=Statement() "while" "(" e=Expression() ")"
+  { return new DoWhile(s,e); }
+}
+\end{verbatim}
+5 marks for framework, 10 marks for syntax, 10 marks for correct actions.
+\end{modelanswer}
+
+\subquestion
+Informally describe an appropriate typecheck for the do-while statement.
+\marks{10}
+
+\begin{modelanswer}
+e must be a boolean expression.
+\end{modelanswer}
+
+\subquestion
+
+Suppose a compiler for a MiniJava-like language 
+translates all statements and expressions
+into intermediate code (eg intermediate representation (IR) trees).
+
+\begin{subsubquestions}
+
+\subsubquestion
+Draw or write down
+the intermediate representation
+required to access a local variable declared in a method.
+Explain your answer.
+\marks{20}
+
+\begin{modelanswer}
+MEM(BINOP(PLUS,TEMP fp, CONST k)) where k is offset of var in frame, fp the
+register holding the framepointer. Has to compute place in frame.
+\end{modelanswer}
+
+\subsubquestion
+Suppose the MiniJava-like language includes a do-while statement.
+Outline the intermediate code that might be generated
+in translation of the do-while statement. You may wish to use a simple
+example to explain your translation, eg:
+\begin{verbatim}
+do { 
+  x = i*i; System.out.println (x); i = i+1;
+} while (i < j) ;
+\end{verbatim}
+You can assume that the expression tree for any variable \verb"v" is
+simply \verb"TEMP v". You need not show translations for the body of the
+example do-while statement (in braces in this example \verb+{...}+).
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+LABEL(Lstart)
+code for body (here square, print and add 1)
+CJUMP(<,TEMP i,TEMP j,Lstart,Lend)
+LABEL(Lend)
+\end{verbatim}
+Might be expressed as trees.
+\end{modelanswer}
+
+\end{subsubquestions}
+\end{subquestions}
+
+\newpage
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+The following regular expression recognises certain strings over the
+alphabet $\{a,b,c\}$
+\[
+(a|c)((bc)|c)\!*c*
+\]
+Indicate which of these five strings are recognised by the above regular expression:
+\begin{quote}
+$cbc$, $abbc$, $c$, $abcbcbccc$, $ccbbcbcc$
+\end{quote}
+Also, show three more strings that are recognised by the above expression.
+Finally, show two more strings consisting of 
+the letters $a$, $b$ and $c$ that are \emph{not} 
+recognised by the above regular expression.
+\marks{30}
+
+\begin{modelanswer}
+Yes, No, Yes, Yes, No. 4 marks each. 
+Five further strings, 2 marks each.
+\end{modelanswer}
+
+%\subquestion
+
+\typeout{USE THIS IN RESIT!!!!!!}
+%Using the character class extension
+%for regular expressions, the pattern
+%\verb![0-9]*! recognises decimal integers (and the empty string). 
+%Use regular expressions to specify a pattern that recognises {\em only\/} 
+%decimal integers that are divisible by 2. You may use the character 
+%class extension if you wish.
+%\marks{25}
+%
+%\begin{modelanswer}
+%\begin{verbatim}
+%[0-9]*[24680]
+%\end{verbatim}
+%\end{modelanswer}
+
+\subquestion
+Consider the following grammar for 
+strings of balanced parentheses:
+\begin{quote}
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+S \> $\rightarrow$ \> {\it S\/} {\it S} \\
+\it
+S \> $\rightarrow$ \> \verb!(! {\it S\/} \verb!)! \\
+\it
+S \> $\rightarrow$ \> \verb!(! \verb!)!
+\end{tabbing}
+\end{quote}
+Explain what it means for a context-free grammar to be ambiguous. 
+Using your explanation, show that the balanced parentheses grammar is 
+ambiguous using the shortest string that will illustrate the ambiguity.
+\marks{30}
+
+\begin{modelanswer}
+Two parse trees, two derivations, for same sentence. 10 marks.
+20 for the two trees of () () ().
+\end{modelanswer}
+
+
+\subquestion
+
+Explain why left-recursion must be eliminated from
+grammar productions which are to be used in
+construction of a recursive-descent parser.
+Write down a general rule for rewriting left-recursive
+grammar productions to be right-recursive and use it to 
+rewrite the following productions for an
+arithmetic expression grammar to be right-recursive:
+\begin{quote}
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+E \> $\rightarrow$ \> {\it E\/} \verb!+! {\it T} \\
+\it
+E \> $\rightarrow$ \> {\it T\/} \\
+\it
+T \> $\rightarrow$ \> {\it T\/} \verb!*! {\it F} \\
+\it
+T \> $\rightarrow$ \> {\it F\/} \\
+\it
+F \> $\rightarrow$ \> ( {\it E\/} ) \\
+\it
+F \> $\rightarrow$ \> \verb!integer!
+\end{tabbing}
+\end{quote}
+\vspace{-1em}
+\marks{40}
+
+\begin{modelanswer}
+Because the usual way of writing the 
+procedures leads to immediate recursive call. 5 marks.
+
+Rule (10 marks):
+\begin{verbatim}
+A  -> A a | b
+(a and b strings of terms and non-terms)
+rewrites to 
+A  -> b A'
+A' -> a A' | empty
+\end{verbatim}
+Answer (30 marks):
+\begin{verbatim}
+E  -> T E'
+E' -> + T E' | empty
+T  -> F T'
+T' -> * F T' | empty
+F  -> ( E )  | integer
+\end{verbatim}
+\end{modelanswer}
+
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+\begin{subquestions}
+\subquestion
+\begin{subsubquestions}
+\subsubquestion
+State two reasons why many 
+programming language implementations require a memory model that 
+implements a runtime stack?
+\marks{10}
+\subsubquestion
+Explain in detail how a stack frame is pushed to the stack, and 
+removed from the stack, during program execution. 
+\marks{25}
+\end{subsubquestions}
+
+\begin{modelanswer}
+Procedure or method calls, recursion, need for separate storage space for
+parameters and locals.
+Code generated for a proc/func does the pushing/popping.
+\begin{verbatim}
+caller g(...) calls callee f(a1,...,an)
+calling code in g puts arguments to f at end of g frame
+stores return address, old FP in control link
+referenced through SP, incrementing SP
+on entry to f, SP points to first argument g passes to f
+old SP becomes current frame pointer FP
+f then allocates frame by setting SP=(SP - framesize)
+old SP becomes current frame pointer FP
+f then initialises locals
+on exit from f : SP = FP, removing frame
+jumps to return address, restores old FP
+\end{verbatim}
+5 marks each reason
+for answer to first part and explanation. 
+25 marks for details.
+\end{modelanswer}
+
+\subquestion
+\begin{subsubquestions}
+\subsubquestion
+Some programming language implementations avoid in some circumstances the
+need to pass parameters via a stack frame. Outline what these circumstances
+might be and why passing via the stack frame might be avoided.
+\marks{15}
+
+\begin{modelanswer}
+Appropriate when leaf procs, interproc
+reg alloc, dead variables, reg windows (but\ldots).
+\end{modelanswer}
+
+\subsubquestion
+Explain three situations where the use of a 
+stack frame to pass parameters cannot usually be avoided.
+\marks{15}
+\end{subsubquestions}
+\begin{modelanswer}
+Reg saves: when address is taken,
+when call-by-ref,
+when accessed by inner nesting,
+value too big,
+an array,
+convention of save for partic reg prior to call,
+spilling in exp evaluation,
+saving a reg window.
+\end{modelanswer}
+
+\subquestion
+\begin{subsubquestions}
+\subsubquestion
+Explain the difference between \emph{caller-save\/} and \emph{callee-save\/}
+registers. 
+\marks{10}
+\subsubquestion
+Study the following methods and suggest for each whether a caller-save 
+or callee-save register is appropriate for variable \verb+x+. 
+Explain your answers.
+\begin{verbatim}
+int f (int a) { int x; x=a+1; g(x); return x+2; }
+
+void p (int y) { int x; x=y+q(y); q(2); q(y+1)}
+\end{verbatim}
+\marks{25}
+\end{subsubquestions}
+
+\begin{modelanswer}
+Caller-save if code for caller of a func saves and restores the reg value
+around a func call. Callee save if code for a func does it. First method x in
+callee-save, since x live across the method calls. Second caller-save, since
+x not live after x=y+q(y) (so code generated shouldn't save it).
+
+10 marks for explanation,  12.5 each for x answers and explanations.
+\end{modelanswer}
+
+\end{subquestions}
+
+\end{questions}
+
+\end{document}
+
+

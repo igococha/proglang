@@ -1,0 +1,127 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+\section*{Language Processors Lab Week 2 - Solution}
+
+
+\medskip\noindent The implementation of the solution to lab2 can be found in CitySpace; the file name if {\tt LexTestSolution.jj}. 
+
+\subsection*{Regular expressions and JavaCC}
+
+\subsubsection*{New integer definition}
+
+\textbf{Question:} Modify the regular expression \verb+INTEGER_LITERAL+ to instead match integers that do not start with 0, unless they are zero. For example, it should not accept 012, 00, etc. Instead, for example, the string 0012056 should be split into: \\
+\verb+INTEGER_LITERAL('0')+, \verb+INTEGER_LITERAL('0')+, \verb+INTEGER_LITERAL('12056')+.
+
+\begin{itemize}
+
+\item The regular expression: 0 $|$ ([1-9] [0-9]*) \\
+
+\item The implementation:
+
+\begin{verbatim}
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: "0" | (["1"-"9"] (<DIGIT>)*) >
+}
+\end{verbatim}
+where \verb+<DIGIT>+ is defined by:
+\begin{verbatim}
+TOKEN : /* Definitions for use in other lexical definitions 
+           Token names must start with `#'. */
+{
+  < #DIGIT: [ "0"-"9"] >
+}
+\end{verbatim}
+
+\end{itemize}
+
+Note that in JavaCC all characters or strings need to be put between double quotes. Regular expression operators, such as \verb+?+, \verb+*+ and \verb-+-, need to be applied to expressions sorrounded by parenthesis e.g. \verb+<DIGIT>*+ won't work, \verb+(<DIGIT>)*+ should be used instead.
+
+\subsubsection*{Adding a new token: {\tt <KEYENDWHILE>}}
+
+\textbf{Question:} Add a new keyword to match \verb+'endwhile'+. Note that you will also have to modify the grammar i.e. TokenList.
+
+\begin{itemize}
+\item The regular expression: {\tt endwhile} or \verb+"endwhile"+
+
+\item The implementation:
+\begin{verbatim}
+TOKEN : { < KEYENDWHILE: "endwhile" > }   /* lab2 - new */
+\end{verbatim}
+\end{itemize}
+
+However, just adding the new token to the JavaCC definition won't be enough. The JavaCC file contains both a lexical and syntactic specification (grammar). In our example, the grammar is specified by the non-terminal {\tt TokenList} at the end of the file. The grammar is basically a Kleene-closure (*) that encloses a list of token names and alternation operators $|$. It basically says: accept a sequence of the tokens specified here.
+
+In order to instruct the parser to accpt out new token we must re-write the definition of {\tt TokenList} to:
+
+\begin{verbatim}
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <INTEGER_LITERAL> | t = <KEYTRUE> | 
+      t = <KEYFALSE> |  t = <IDENTIFIER> |
+      /* lab2: New tokens added here */
+      t = <KEYENDWHILE> | t=<REAL> )
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}
+\end{verbatim}
+
+Note that I have already included {\tt <REAL>}.
+
+
+\subsubsection*{The {\tt <REAL>} token}
+
+\textbf{Question:} Add the regular expression definition of the \verb+REAL+ token  to instead match signed real numbers as written in Pascal. Such numbers must contain a decimal point, and at least one digit before and after the decimal point. They may optionally be prefixed by '-' and may optionally be followed by a signed exponent that begins with the letter 'E' and is followed by a (possibly signed) integer. In this notation, 39.37, -6.336E4, 0.894E-4 and 0.0 are legal, while .36, 4. and +.7E6 are illegal.
+
+\begin{itemize}
+\item Regular expression:\\
+ -? (0 $|$ [1-9][0-9]*) . [0-9]+ ((e$|$E) -? (0$|$[1-9][0-9]*))? \\
+
+As expressions get more complicated, is becomes useful to introduce intermediate names, as the ones used by JavaCC (\verb+#+ prefix). The expression above can be re-writen as:\\
+
+\begin{tabular}{ll}
+\verb+<integer>+ &  -? (0 $|$ [1-9][0-9]*) . [0-9]+ \verb+<exponent>?+ \\
+\verb+<exponent>+ & (e$|$E) -? (0 $|$ [1-9][0-9]*) \\
+\end{tabular}
+
+\item Implementation:
+\begin{verbatim}
+TOKEN : /* Literal integers. */
+{
+  < REAL: ("-")? ("0" | (["1"-"9"] (<DIGIT>)*)) "." (<DIGIT>)+
+          <EXPONENT> >           
+}
+\end{verbatim}
+where:
+\begin{verbatim}
+TOKEN : 
+{
+  < #EXPONENT: (("e" | "E") ("-")? ("0" | (["1"-"9"] (<DIGIT>)*)))? >
+}
+\end{verbatim}
+\end{itemize}
+
+\subsection*{Testing from a file}
+
+In Unix, standard input (default is the keyboard) can be re-directed to a file by running the program with \verb+< filename+. For example, in order for our program to accept input form a file we can write:
+\begin{quote}
+{\tt java LexTest < input.txt}
+\end{quote}
+where {\tt input.txt} is a text file.
+
+\end{document}
+

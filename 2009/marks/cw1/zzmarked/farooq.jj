@@ -1,0 +1,189 @@
+
+PARSER_BEGIN(IntFloatLiterals)
+
+/** Integer Float Literal Parser */
+public class IntFloatLiterals {
+
+  /** Main entry point. */
+  public static void main(String args[])  {
+  
+	
+    try{
+	System.out.println("Input: ");
+	IntFloatLiterals parser = new IntFloatLiterals(System.in);
+    parser.Start();
+	}
+	catch( NumberFormatException e)
+	{
+	}
+	catch(TokenMgrError e)
+	{
+		
+	}
+	catch(ParseException e)
+	{
+		
+	}
+  }
+  /* Convert from Hexadecimal number to Int */
+  static Long convertHexToInt(String hex)
+  {
+		int  valchar=0,l;
+		Long exp, val=0L;
+	    short base=16;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(hex);
+	    l = buf.length();
+
+	    exp = 1L;
+	    for(int i=0; i < l; i++) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9')
+		    valchar = ch-'0';
+		else if (ch >= 'a' && ch <= 'f')
+		    valchar = 10 + (ch-'a');
+		else if (ch >= 'A' && ch <= 'F')
+		    valchar = 10 + (ch-'A');
+		val = val*base + valchar;
+	
+		exp = exp*base;
+	    }
+	    return val;
+
+  }	
+  /* Convert from Octal number to Int */
+  static Long convertOctToInt(String octal)
+  {
+		int  valchar=0,l;
+		Long exp, val=0L;
+	    short base=8;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(octal);
+	    l = buf.length();
+
+	    exp = 1L;
+	    for(int i=0; i < l; i++) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '9')
+		    valchar = ch-'0';
+		val = val*base + valchar;
+		
+		exp = exp*base;
+	    }
+	    return val;
+
+  }	
+  /* Convert from Binary number to Int */
+  static Long convertBinToInt(String binary)
+  {
+		int  valchar=0,l;
+		Long exp, val=0L;
+	    short base=2;
+	    char ch; 
+	    StringBuffer buf = new StringBuffer(binary);
+	    l = buf.length();
+
+	    exp = 1L;
+	    for(int i=0; i < l; i++) {
+		ch=buf.charAt(i);
+		if (ch >= '0' && ch <= '1')
+		    valchar = ch-'0';
+		val = val*base + valchar;
+		exp = exp*base;
+	    }
+	    return val;
+  }	
+  
+}
+
+PARSER_END(IntFloatLiterals)
+
+SKIP :
+{
+ " "
+|  "\t"
+| "\n"
+| "\r"
+}
+
+MORE : 
+{ 
+  "//" : IN_SINGLE_LINE_COMMENT /* for handling single line comment starting with // */
+| 
+  "/*" : IN_MULTI_LINE_COMMENT  /* for handling multiline comment*/
+} 
+
+/* for single line comment, consume all tokens till the end of line */
+<IN_SINGLE_LINE_COMMENT> 
+SPECIAL_TOKEN : 
+{ 
+  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > {System.out.println("Singleline comment");} : DEFAULT 
+} 
+
+<IN_SINGLE_LINE_COMMENT> 
+MORE : 
+{ 
+  < ~[] > 
+} 
+
+/* for multiline comment, consume all tokens till the end of end of comment token => */
+<IN_MULTI_LINE_COMMENT> 
+SPECIAL_TOKEN : 
+{ 
+  <MULTI_LINE_COMMENT: "*/" > {System.out.println("Multiline comment");} : DEFAULT 
+} 
+<IN_MULTI_LINE_COMMENT> 
+MORE : 
+{ 
+  < ~[] > 
+} 
+/* defining integer and floating point literals*/
+TOKEN :
+{
+<#INT_LIT : ["1"-"9"] (["0"-"9"])*>
+| <FLOAT : <SIGN> (((<INTEGER> ( "." (["0"-"9"])* )? <EXPONENT>)(["d","f"])?) | ((<INTEGER> "." (["0"-"9"])* (<EXPONENT>)?)(["d","f"])?)| ((<FRACTION> (<EXPONENT>)?)(["d","f"])?) |(<INTEGER> (( "." (["0"-"9"])* ) <EXPONENT>)?(["d","f"])))> 
+| <INTEGER : <SIGN>("0" | <INT_LIT>)>
+| <OCTAL : ["o","O"] (["0"-"7"])+>
+| <HEXADECIMAL : ["x","X"] (["0"-"9","a"-"f","A"-"F"])+>
+| <BINARY : ["b","B"] (["0"-"1"])+>
+| <#EXPONENT : ["e", "E"] <SIGN> <INTEGER>>
+| <#SIGN : (["-"])?>
+| <#FRACTION : <SIGN> "." (["0"-"9"])+>
+}
+
+/* for all other tokens besides the literals & comments, display error.*/
+< * > TOKEN : 
+{ 
+< UNEXPECTED_CHAR : ~[] > { System.out.println("Error"); }
+}  
+
+
+
+
+// Start point of the parser
+void Start() :
+{}
+{
+
+	literals() 
+	(
+		literals()  /* consume more than one type of literals. */
+	)*
+	
+	<EOF>
+}
+
+/* handling the literals for conversions */
+void literals() :
+{	Token t;
+	Long i;
+	
+}
+{
+	t = <INTEGER> {System.out.println(t.image + ": " + "INT(" + t.image + ") ");  } 
+	|(t = <OCTAL>) {i = convertOctToInt( t.image );System.out.println(t.image + ": " +"INT("+i+") "); }
+	|t = <HEXADECIMAL> {i = convertHexToInt( t.image );System.out.println(t.image + ": " + "INT(" + i + ") ");}
+	|t = <BINARY> {i = convertBinToInt( t.image);System.out.println(t.image + ": " + "INT(" + i +") ");}
+	|t = <FLOAT> {System.out.println(t.image + ": "+ "FLOAT("+t.image+") ");}
+}
+

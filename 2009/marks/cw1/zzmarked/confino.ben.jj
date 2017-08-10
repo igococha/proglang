@@ -1,0 +1,272 @@
+PARSER_BEGIN(LexCoursework)
+
+public class LexCoursework {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexCoursework parser = new LexCoursework(System.in);
+    parser.Input();
+  }
+
+  private static long getValue(int base, String number) // a wrapper makes the code look cleaner
+  {
+    StringBuffer buffer = new StringBuffer(number);
+    buffer = buffer.reverse();
+    char[] reversedNumber = buffer.toString().toCharArray();
+
+    long l = 0;
+    long i = 0;
+    long exponent = 1;
+    for (char c : reversedNumber){
+      if (c >= '0' && c <= '9'){
+        i = c - '0';
+      }
+      else if (c >= 'a' && c <= 'f'){ //although only needed for base 16, it is cleaner to include this in all cases.
+        i = 10 + (c - 'a');
+      }
+      else if (c >= 'A' && c <= 'F'){
+        i = 10 + (c - 'A');
+      }
+      l += (i * exponent);
+      exponent = exponent * base; 
+    }
+    return l; 
+  }
+
+  private static String clean(String s)
+  {
+    s = s.replace(" ","");
+    s = s.replace("\n","");
+    s = s.replace("\r","");
+    s = s.replace("\f","");
+    s = s.replace("+",""); //no b, that messes with hex values
+    s = s.replace("-","");
+    s = s.replace("o","");
+    s = s.replace("O","");
+    s = s.replace("z","");
+    s = s.replace("Z","");
+    s = s = s.replace("L",""); 
+    return s;
+  }
+}
+
+PARSER_END(LexCoursework)
+
+/*
+ * Lexical items.
+ */
+
+<IN_ERROR> TOKEN :
+{
+ <ERROR:  [" ","\t","\n","\r","\f"] > : DEFAULT //errors occur if this is not defined before skip
+}
+
+SKIP :
+{ " " 
+| "\t" 
+| "\n" 
+| "\r" 
+| "\f" 
+| "/*" : IN_COMMENT //this is skiped because I chose to make the parser print COMMENT only at the ends of comments
+}
+
+TOKEN: /*Integer Literal*/
+{
+  < KEYBINARY: ("+"|"-")? ["b","B"] ("0"|"1")+ ("L")? [" ","\n","\r","\f"]>
+|
+  < KEYOCTAL: ("+"|"-")? ["o","O"] (<OCTALDIGIT>|"0") ("L")? [" ","\n","\r","\f"]>
+|
+  < KEYINT: ("+"|"-")? (<DIGIT>|"0") ("L")? [" ","\n","\r","\f"]>
+|
+  < KEYHEX: ("+"|"-")? ["z","Z"] (<HEXDIGIT>|"0") ("L")? [" ","\n","\r","\f"]>
+}
+
+TOKEN: /* Real Numbers */
+{
+ < KEYFLOAT: (<FLOATBYEXPONENT>|<FLOATBYPOINT>|<FLOATBYSUFFIX>) >
+}
+
+TOKEN : 
+{
+  <#DIGIT: ["1"-"9"] (["0"-"9"])* >
+|
+  <#OCTALDIGIT: ["1"-"7"] (["0"-"7"])* >
+|
+  <#HEXDIGIT:  ["1"-"9","a"-"f","A"-"F"] (["0" - "9", "a" - "f", "A" - "F"])*>
+}
+
+TOKEN:
+{
+  <#FLOATBYEXPONENT: ("+"|"-")? (<FLOATMIDDLEC> | <FLOATMIDDLED>) <EXPONENT> ("d"|"f")? [" ","\n","\r","\f"]>
+|
+  <#FLOATBYPOINT: ("+"|"-")? (<FLOATMIDDLEA> | <FLOATMIDDLEB>) (<EXPONENT>)? ("d"|"f")? [" ","\n","\r","\f"]>
+|
+  <#FLOATBYSUFFIX: ("+"|"-")? (<FLOATMIDDLEC> | <FLOATMIDDLED>) (<EXPONENT>)? ["d","f"] [" ","\n","\r","\f"]>
+|
+  <#FLOATMIDDLEA: (["0"-"9"])+ "." (["0"-"9"])*> //at least one digit and point
+|
+  <#FLOATMIDDLEB: (["0"-"9"])* "." (["0"-"9"])+> //at least one digit and point
+|
+  <#FLOATMIDDLEC: (["0"-"9"])* (".")? (["0"-"9"])+> //at least one digit, maybe a point
+|
+  <#FLOATMIDDLED: (["0"-"9"])+ (".")? (["0"-"9"])*> //at least one digit, maybe a point
+|
+  <#EXPONENT: (["e","E"] ("+"|"-")? (["0"-"9"])+)>
+}
+
+MORE :
+{
+ < ~[] > : IN_ERROR
+}
+
+<IN_ERROR>MORE:
+{
+ < ~[] >
+}
+
+TOKEN :
+{
+  <COMMENT: ("//"(~["\n","\r"])* ("\n"|"\r"|"\r\n")?) >
+}
+
+<IN_COMMENT>SKIP:
+{
+  < ~[] >
+}
+<IN_COMMENT>TOKEN:
+{
+  <LONGCOMMENT: "*/" > : DEFAULT
+}
+
+/*
+ * grammar 
+ */
+
+void Input() :
+{}
+{
+    BinaryToken() Input()
+|
+    OctalToken() Input()
+|
+    IntToken() Input()
+| 
+    HexToken() Input()
+| 
+    FloatToken() Input()
+|
+    ERROR() Input()
+|
+    COMMENT() Input()
+|
+    LONGCOMMENT() Input()
+|
+   <EOF>
+}
+
+void BinaryToken() :
+{Token t;}
+{
+  (t = <KEYBINARY>)
+  {boolean negative = false; //sensible default
+   String s = t.image;
+   if(s.indexOf('-') != -1){
+     negative = true;
+   }
+
+   s = s.replace("b",""); //b is a valid hexidecimal number
+   s = s.replace("B","");
+   s = clean(s);
+   if (negative) {
+     System.out.println ("INT (-"+ getValue(2,s)+")");
+   }
+   else {
+     System.out.println ("INT ("+ getValue(2,s)+")");
+   }
+  }
+}
+
+void OctalToken() :
+{Token t;}
+{
+  (t = <KEYOCTAL>)
+  {boolean negative = false; 
+   String s = t.image;
+   if(s.indexOf('-') != -1){
+     negative = true;
+   }
+   s = clean(s);
+   if (negative) {
+     System.out.println ("INT (-"+ getValue(8,s)+")");
+   }
+   else {
+     System.out.println("INT ("+ getValue(8,s)+")");
+   }
+  }
+}
+
+void IntToken() :
+{Token t;}
+{ 
+  (t = <KEYINT>)
+  {boolean negative = false; //sensible default
+   String s = t.image;
+   if(s.indexOf('-') != -1){
+     negative = true;
+   }
+   s = clean(s); //other tokens go through getValue, this dosn't so the string must be cleaned
+   if (negative){
+     System.out.println ("INT (-"+s+ ")" );
+   }
+   else{
+     System.out.println ("INT ("+s+ ")" );
+   }
+  }
+}
+
+void HexToken() :
+{Token t;}
+{
+  (t = <KEYHEX>)
+  {boolean negative = false; //sensible default
+   String s = t.image;
+   if(s.indexOf('-') != -1){
+     negative = true;
+   }
+   s = clean(s);
+   if (negative) {
+     System.out.println("INT (-"+ getValue(16,s)+")");
+   }
+   else {
+     System.out.println("INT ("+ getValue(16,s)+")");
+   }
+  }
+}
+
+void FloatToken() :
+{Token t;}
+{
+  (t = <KEYFLOAT>)
+  {System.out.println ("FLOAT (" + t.image.trim() +")");}
+}
+
+void ERROR() :
+{Token t;}
+{
+  (t = <ERROR>)
+  {System.out.println ("ERROR ("+ t.image.trim() +")");}
+}
+
+ void LONGCOMMENT() :
+ {Token t;}
+ {
+   (t = <LONGCOMMENT>)
+   {System.out.println ("COMMENT");}
+ }
+
+void COMMENT() :
+{Token t;}
+{
+  (t = <COMMENT>)
+  {System.out.println ("COMMENT");}
+}

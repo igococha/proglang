@@ -1,0 +1,47 @@
+PARSER_BEGIN(Exp1)
+
+public class Exp1 {
+}
+
+PARSER_END(Exp1)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+/* Entry Point to parser */
+int S() :
+{ int s; }
+{
+    s=E() <EOL> { return s; }
+  | <EOL>
+  | <EOF>
+}
+
+// Production for Expression
+int E() :
+{ int e,result;}
+{
+  result=F() 
+  ("+" e=E() { result += e; }
+  | "-" e=E() { result -=e;}
+  | "*" e=E() { result *=e;} 
+  | "/" e=E() { result /= e; }
+  )?
+  { return result; }
+}
+
+// Production: F -> number | ( E )
+int F() :
+{ int e;  Token t; }
+{
+    t=<NUM> { return Integer.parseInt(t.image); }
+  | "(" e=E() ")" { return e; }
+}
+

@@ -1,0 +1,579 @@
+/*** Comments and marks  - CW1 *******/
+
+--------------------
+Alla Kebire
+
+    Integer(20): 20
+      Float(20): 17
+    Comment(15): 0
+      Error(15): 0
+    Printing(8): 4
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 41
+
+Float incomplete
+Error with signs: -32.4 -32e12
+
+------------------------------------------------
+Kester Ford
+Mikko Eley
+
+    Integer(20): 20
+      Float(20): 20
+    Comment(15): 15
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 100
+
+---------------------------------------------------
+Benjamin Confino
+
+    Integer(20): 20
+      Float(20): 20
+    Comment(15): 15
+      Error(15): 10
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 95
+
+Why the special symbols after the tokens? That should've been taken care by the <ERROR> implementation. It complicates things because you have to trim (or clean) those symbols whenever you want to use the contents of the token.
+
+
+----------------------------------
+Mikias Girmay
+Mahamed Mahamud
+
+    Integer(20): 15
+      Float(20): 4
+    Comment(15): 0
+      Error(15): 0
+    Printing(8): 4
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 23
+
+- "true", "false", identifiers, and "while" are not part pf this coursework.
+Integers:
+- Integers can't start with 0, unless they are zero e.g. 012 is incorrect.
+- All integer literals can be signed e.g. -B0101 is valid.
+- They can also have a type suffix e.g. 32L is a valid integer.
+- Your floating points accept any combination of digits, periods, "e", etc: wrong
+
+----------------------------------
+Derek Chan
+Chiara DiSantis
+
+    Integer(20): 18
+      Float(20): 12
+    Comment(15): 13
+      Error(15): 13
+    Printing(8): 7
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 85
+
+- <KEYWHILE> is not part of the token list.
+- A <DEC> should be 0 or a digit [1-9] plus one or more [0-9]. Your implemenation accepts 000, 012, etc.
+- Minus sign missing when displaying values in Integer Literals.
+- Plus sign missing as Float prefix.
+- There's a problem with your Float implementation. Even though it accepts most of all valid floats, it also accepts invalid ones e.g 3-4.5, 4e8.9. This is mainly because of the way the exponent part is specified - it would've ben better to create a separate token for exponents. You also allow "." to sho up after E, which is wrong.
+- COMMENT1 does not have to end with a newline (comment2 does). If, however, you want to force this then you should use all valid characters for end-of-line. You should also be able to include * and / inside the comment.
+- ANYTHING/ERROR should not consider the characters used in SKIP (It was giving me trouble with the end-of-lines in my MAC)
+
+----------------------------------
+Mihai Oprea
+
+    Integer(20): 13
+      Float(20): 0
+    Comment(15): 7
+      Error(15): 0
+    Printing(8): 4
+ IntToValue(12): 0
+  Test File(10): 10
+     Total(100): 34
+
+- Forgot to include Decimal literal in grammar.
+- 0 not included.
+- Binary, hex and octal can't start with 0.
+- Signs missing
+- Forgot suffix for L integer literals
+- Float spec missing
+- Multiple line comment wrong
+
+----------------------------------
+Deepak Bains
+
+
+    Integer(20): 4
+      Float(20): 0
+    Comment(15): 0
+      Error(15): 0
+    Printing(8): 0
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 4
+
+Incomplete
+
+----------------------------------
+Kark Newman-Smart
+
+    Integer(20): 16
+      Float(20): 8
+    Comment(15): 0
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 10
+  Test File(10): 8
+     Total(100): 65
+
+- Sign missing in Integer literals
+- Integers must not start with '0', unless the number is 0.
+- Decimal should be actually FLOAT
+- Float: 
+-- .34 not acceptted
+-- No sign in exponent
+-- Exponent shows up twice in specification. Allows for floats like 2e4.4e44
+-- It parses -45, for example, as a Float.
+-  IntegerCount does not consider the 'L' suffix. It shifts values to the left e.g. b10L is considered as b100 = 4.
+- Incomplete testing
+- It's better to define new methods inside the PARSE_BEGIN and PARSE_END section (inside the class).
+
+----------------------------------
+Priyank Vyas
+
+    Integer(20): 20
+      Float(20): 19
+    Comment(15): 8
+      Error(15): 5
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 82
+
+- Small problem with float: it accepts -2.-5 for example. Don't allow sign after period.
+- The set of characters allowed inside a comment is limited. It should not be done by enumeration. Instead use the complement operator e.g. ~["\n"] specifies any character except \n.
+- Unfortunately the latter causes the program to break. The error part should be able to catch any possible string that does not match any of the other specifications. This does not happen.
+-/* */ Comment should be able to take more than one line
+- ERROR should also be defined using a specification of ANY that uses ~. The current specification is huge since it introduces an error per TOKEN specification. This is the wrong approach - it should take have a line. 
+
+
+----------------------------------
+Hiten Dudakia
+Amiraya Toussi (missed)
+
+    Integer(20): 1
+      Float(20): 16
+    Comment(15): 0
+      Error(15): 0
+    Printing(8): 0
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 17
+
+- KEYWHILE is not part of this exercise.
+- Float: type suffix missing
+- <DIGIT> undefined.
+- Incomplete.
+
+----------------------------------
+Radoslav Lutov
+
+    Integer(20): 13
+      Float(20): 3
+    Comment(15): 4
+      Error(15): 10
+    Printing(8): 8
+ IntToValue(12): 0
+  Test File(10): 5
+     Total(100): 43
+
+- keywhile, keytrue, keyfalse not part of this exercise.
+- Sign Prefix and Long suffix shoud not be *, use ? instead.
+- Octal accepts all combinations of digits and O: wrong.
+- Float accepts any combination of period, digits and e: wrong.
+- Comment incomplete. Comments should accept any characters.
+- ERROR should accept any symbol. Use the ~ operator.
+
+----------------------------------
+Nicholas Diakomihalis
+
+    Integer(20): 20
+      Float(20): 12
+    Comment(15): 15
+      Error(15): 0
+    Printing(8): 4
+ IntToValue(12): 6
+  Test File(10): 8
+     Total(100): 65
+
+- Program is not compiling. StringtoInt methods have compilation errors. TokenList has syntax errors.
+After fixing them:
+- Float does not have L suffix
+- Wrong floats recognised by your implementation: 0000012, -e12,-.e12
+- No error handling
+- StringToInt: Not compiling. ^ operator not valid in java. Loginc seems ok except for the use of char value - must subtract '0' from digits.
+- Test file only shows good results
+
+----------------------------------
+Hibah Kureshi
+Kumaal Khemlani
+
+    Integer(20): 12
+      Float(20): 3
+    Comment(15): 3
+      Error(15): 0
+    Printing(8): 7
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 25
+  
+- keywhile, keyfalse, keytrue not part of this exercise.
+- Initially not compiling due to wrong types in removerChar.
+- Decimal and IntegerLiteral conflict (use one).
+- Suffix L in Binary must be optional.
+- Octals must at least contain one digit: O is invalid.
+- Hexadecimals has many errors e.g. z-zL valid?
+- Your float accept any combination of dgits, period and e!
+- Comments should include any character.
+- No test file
+
+
+----------------------------------
+Palmira Nhassengo
+
+    Integer(20): 16
+      Float(20): 20
+    Comment(15): 15
+      Error(15): 7
+    Printing(8): 8
+ IntToValue(12): 0
+  Test File(10): 9
+     Total(100): 75
+
+- Decimal or IntegerLiteral?
+- Binary, octals and hex must at least have one digit e.g. z is incorrect.
+- 0000012 is accepted as IntLiteral: wrong
+- Error should capture the whole string e.g. ERROR(ss12ss)
+- Test file show YOUR errors as well.
+
+----------------------------------
+Shahram Kazemi
+Mohammed Choudhery
+
+    Integer(20): 20
+      Float(20): 19
+    Comment(15): 15
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 99
+
+- 0012 is parsed as Float (it should be an error).
+
+----------------------------------
+Fay Adams
+
+    Integer(20): 20
+      Float(20): 19
+    Comment(15): 14
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 98
+
+- Javacc complained about the "\n\r" in singlelinecomment. My Javacc version only accepts single chracter lists, apparently (no problem).
+- Your definition of Float accepts two signs.
+- The multiline comment should accept * as well.
+
+----------------------------------
+Richard Chapman
+
+    Integer(20): 20
+      Float(20): 13
+    Comment(15): 15
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 71
+
+- Use ? (optional) instead of (...| "").
+- Your float implementation accepts .e12, e12, 0000: wrong
+- Better use complement operator ~ to express all possible characters e.g. ~[].
+
+----------------------------------
+Usman Ahmed
+
+    Integer(20): 20 
+      Float(20): 20
+    Comment(15): 15
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 11
+  Test File(10): 10
+     Total(100): 99
+
+- Sign is not displayed. Code "if (img.charAt(0) == '0')" should compare to "-" instead.
+- Forgot to test negative literals!
+
+----------------------------------
+Apostolos Flessas
+
+
+    Integer(20): 13
+      Float(20): 17
+    Comment(15): 7 
+      Error(15): 0
+    Printing(8): 7
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 44
+
+- L is optional
+- Binary should have at least one digit
+- Octal must contain a sequence of one or more digits
+- 012 must not be valid
+- Sign missing from Integer literals
+- First line of FLOAT spec wrong: it accpets e12.e12 (it looks like a cut and paste error - I'll assume that's the case).
+- Sign missing from float
+- Forgot to add SngleLineComment to grammar.
+ 
+
+----------------------------------
+Junichiro Okuno
+
+    Integer(20): 20
+      Float(20): 15
+    Comment(15): 15
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 95
+
+- 000 parsed as float
+- 2.4-4 accepted - exponent not defined properly
+
+----------------------------------
+Mohammed Akhtar
+Mohammad Farooq
+
+    Integer(20): 18
+      Float(20): 19
+    Comment(15): 15
+      Error(15): 5 
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 8
+     Total(100): 85
+
+- Integer literals must have an optional sign
+- Hexadecimals start with z.
+- Error in float: --.12 accepted
+- The program should report an error and continue parsing (see example in instructions). The string b3b is invalid and therefore should be reported as such, instead of error(b) int(3) error(b). Use a separate token for this.
+- Your test file does not contain error cases.
+
+----------------------------------
+Yu Teng
+
+    Integer(20): 17
+      Float(20): 5
+    Comment(15): 13
+      Error(15): 5
+    Printing(8): 8
+ IntToValue(12): 10
+  Test File(10): 0
+     Total(100): 58
+
+- TEN specification accepts zeroes to the left e.g. 0012: wrong
+- +L is parsed as INT.
+- FLOAT seems to accept all valid floats but also parses a large number of incorret strings: L +L e e12e12
+- Comments should be able to accept any kind of characters. Use ~[] for that.
+- ERROR is too weak, it should be able to accept any string except from spaces and newlines - you should be getting ERROR instead of parse exceptions.
+- The separation of tokens with space (one or more!!) should be enforced by the token definition and not by the grammar.
+- StringToInt does not work for hex.
+- No test file (same jj file submitted instead)
+
+
+----------------------------------
+Ocal Korkmaz
+
+
+    Integer(20): 16
+      Float(20): 5 
+    Comment(15): 0
+      Error(15): 0
+    Printing(8): 8 
+ IntToValue(12): 10
+  Test File(10): 10
+     Total(100): 49
+
+- DEC_LITERAL or INTEGER_LITERAL?
+- FLOATING_LITERAL ii used by the parser. However, this definition is incomplete.
+- FLOAT1,2 and 3 are incorrect.
+- Hexadecimals start with z.
+- L suffix missing
+- parseOctal and rest were not compiling. They do not accept signed numbers (or suffix L)
+
+----------------------------------
+Andrew Jones
+
+    Integer(20): 20
+      Float(20): 20
+    Comment(15): 15
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 100
+
+- Include other newline characters (differ depending on OS)
+- I would consider * and / inside mutiple line comments.
+
+----------------------------------
+Paul Clearly
+Michael Whittet
+
+    Integer(20): 18
+      Float(20): 17 
+    Comment(15): 15 
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 95
+
+- Forgot type sufix L
+- -2-2-2-2.3 and 2.-3 parsed as float.
+
+----------------------------------
+Chirag Jamnadas
+H. Patel
+
+
+    Integer(20): 19
+      Float(20): 20
+    Comment(15): 0
+      Error(15): 0
+    Printing(8): 6
+ IntToValue(12): 2
+  Test File(10): 0
+     Total(100): 47
+
+- toDecimal not compiling (error removed)
+- Octal starts with o or O, not zero.
+- No ERROR, COMMENT.
+- No text file.
+
+----------------------------------
+Suyanthan Vickineswaran
+
+    Integer(20): 20 
+      Float(20): 20
+    Comment(15): 8
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 93
+
+- Multiple line comment missing
+
+
+----------------------------------
+Chris Roope
+Abib Ogunbowale
+
+    Integer(20): 20
+      Float(20): 20
+    Comment(15): 10
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 9
+  Test File(10): 10
+     Total(100): 92
+
+- Problems with hexadecimal to int.
+- Multiline comment not working acroos lines
+- Don't call parseLong on comments and errors.
+
+----------------------------------
+James Worker
+
+    Integer(20): 20 
+      Float(20): 20
+    Comment(15): 14
+      Error(15): 15
+    Printing(8): 6  // remove while, true, etc
+ IntToValue(12): 12
+  Test File(10): 10
+     Total(100): 97
+
+- Keytrue, keywhile, keyfalse, identifier not part of this exercise.
+- Comments should include every character, even *.
+
+----------------------------------
+Erwin Emmanuel
+
+    Integer(20): 15
+      Float(20): 20
+    Comment(15): 0
+      Error(15): 0
+    Printing(8): 8
+ IntToValue(12): 3
+  Test File(10): 4
+     Total(100): 50
+
+- parseBin not compiling, wrong Java syntax (fixed). ParseException removed.
+- Sign incorrectly added. String "+" parsed as Integer Literal.
+- No comment, Error.
+- String to int methods do not compile. Do not condider sign prefix and type suffix. Code given in class with few modifications.
+- Test file incomplete
+
+----------------------------------
+Oluwaseun Ilegbusi
+Mihir Sangani
+
+    Integer(20): 17 
+      Float(20): 18
+    Comment(15): 15
+      Error(15): 15
+    Printing(8): 8
+ IntToValue(12): 10
+  Test File(10): 10
+     Total(100): 93
+
+- Integer literals must be signed.
+- 000, 012 parsed as INT - It should be an error.
+- ParseInt methods do not consider suffix L - it shifts numbers to the left.
+- Your float spec accepts negative (and non-negative) integers. Luckily, an Integer Literal is reported because it's first in the list of tokens.
+
+
+_______
+Late - ok
+Very similar to Flessas (plag)
+Lukasz Jelenski
+
+    Integer(20): 13
+      Float(20): 17
+    Comment(15): 7 
+      Error(15): 0
+    Printing(8): 7
+ IntToValue(12): 0
+  Test File(10): 0
+     Total(100): 44
+
+- Sign and L missing from Integer Literal spec.
+- Binary should have at least one digit
+- Octal must contain a sequence of one or more digits
+- 012 must not be valid
+- First line of FLOAT spec wrong: it accepts e12.e12. Same error as Flessas!!
+- Sign missing from float
+- Forgot to add SingleLineComment to grammar.

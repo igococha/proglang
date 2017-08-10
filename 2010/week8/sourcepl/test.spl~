@@ -1,0 +1,8 @@
+void main() {
+  int x; int y; int z;
+     x := 5+y;
+     y := 9;
+     if (!(x>0)) then { z := 2+y; } else { z := 4+y; }
+     print(x); print(y);
+     print(z);
+}

@@ -1,0 +1,344 @@
+%\documentstyle[cityexam,11pt]{article}
+\documentclass[11pt]{bareexam}
+\usepackage{semantic}
+\withmodelanswers
+\begin{document}
+%\examnumber{???}
+%\begin{preamble}
+%\degrees{???}
+
+%\part{II}
+%\title{Language Processors}
+%\examdate{???}
+%\examtime{???}
+%\rubric{Answer {\sl TWO} questions \\ All questions carry equal marks}
+%\end{preamble}
+%\externals{???}
+\internals{\ }
+
+\reservestyle{\nonterm}{\textit}
+\nonterm{Statement,Exp,dec,decs,vardec,fundec,id,exp,tyfields,type-id,fundecs,expseq,op}
+\reservestyle{\keyword}{\textbf}
+\keyword{var,function,let,in,end,if,then,else,while,do,for,break,to,switch,of,case,default}
+
+
+\begin{questions}
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+
+What is an ambiguous grammar? Show that the following grammar is ambiguous:
+
+\begin{quote}
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+S \> $\rightarrow$ \> \textbf{if} {\it E\/} \textbf{then} {\it S} \\
+\it
+     \> $\mid$ \> \textbf{if} {\it E\/} \textbf{then} {\it S\/} \textbf{else} {\it S} \\
+     \> $\mid$ \> {\it other}
+\end{tabbing}
+\end{quote}
+Here {\it other\/} stands for any other statement {\it S}.
+\marks{15}
+
+\begin{modelanswer}
+Two parse trees for \verb"if a then if b then s1 else s2".
+\end{modelanswer}
+
+
+\subquestion
+
+The reference manual for a MiniJava-like programming language contains
+the following grammar rule for an if-statement: 
+
+\[
+\<Statement> \; -> \;\; \<if> \;\; ( \; \<Exp> \; ) \;\; \<Statement> \;\; \<else> \;\; \<Statement> 
+\]
+
+
+\begin{subsubquestions}
+
+\subsubquestion
+Draw or write down a possible abstract syntax for the if-statement.
+\marks{10}
+
+\begin{modelanswer}
+\begin{verbatim}
+If Exp Statement Statement
+(be flexible about how this is expressed - it might be Java and have types)
+\end{verbatim}
+\end{modelanswer}
+
+\subsubquestion
+Show how semantic actions in a grammar for a parser-generator such as JavaCC
+can be used to produce abstract syntax trees for the if-statement. 
+\marks{25}
+
+\begin{modelanswer}
+\begin{verbatim}
+Statement IfStatement() :
+{ Exp e;
+  Statement s1,s2;
+}
+{
+  "if" "(" e=Expression() ")" s1=Statement() "else" s2=Statement() 
+  { return new If(e,s1,s2); }
+}
+\end{verbatim}
+5 marks for framework, 10 marks for syntax, 10 marks for correct actions.
+\end{modelanswer}
+
+\subsubquestion
+Informally describe an appropriate typecheck for the if-statement.
+\marks{10}
+
+\begin{modelanswer}
+e must be a boolean expression.
+\end{modelanswer}
+
+\subsubquestion
+
+Suppose a compiler for a MiniJava-like language that includes
+an if-statement translates all statements and expressions
+into intermediate code, for example intermediate representation (IR) trees.
+Outline the intermediate code that might be generated
+in translation of the if-statement. You may wish to use a simple
+example to explain your translation, eg:
+\begin{quote}
+\begin{verbatim}
+if (a < b) c = a; else c = b;
+\end{verbatim}
+\end{quote}
+You can assume that the expression tree for any variable \verb"v" is
+simply \verb"TEMP v". 
+\marks{40}
+
+\begin{modelanswer}
+\begin{verbatim}
+SEQ(SEQ(CJUMP(LT, TEMP a, TEMP b, L0, L1),
+        SEQ(SEQ(SEQ(LABEL L0,
+                  MOVE(TEMP c, TEMP a)),
+                JUMP(NAME L2)),
+            SEQ(SEQ(LABEL L1,
+                  MOVE(TEMP c, TEMP b)),
+                JUMP(NAME L2)))),
+     LABEL L2)
+\end{verbatim}
+(might be a longer translation where a < b is evaluated to 
+the 0 or 1 and then checked)
+
+Might be expressed as trees.
+
+15 marks for the comparison, 15 marks for appropriate jumping code, 10
+marks for the assignments code.
+\end{modelanswer}
+
+\end{subsubquestions}
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+The following regular expression recognises certain strings over the
+alphabet $\{a,b,c\}$
+\[
+a(b|(cb))\!*c*
+\]
+Indicate which of these five strings are recognised by the above regular expression:
+\begin{quote}
+$acc$, $abac$, $a$, $abcbcbccc$, $abbbccbc$
+\end{quote}
+Also, write down three more strings that are recognised by the above expression.
+Finally, write down two more strings consisting of 
+the letters $a$, $b$ and $c$ that are \emph{not} 
+recognised by the above regular expression.
+\marks{25}
+
+\begin{modelanswer}
+Yes, No, Yes, Yes, No. 3 marks each. 
+Five further strings, 2 marks each.
+\end{modelanswer}
+
+\subquestion
+
+Explain why left-recursion must be eliminated from
+grammar productions which are to be used in
+construction of a recursive-descent parser.
+Write down a general rule for rewriting left-recursive
+grammar productions to be right-recursive and use it to 
+rewrite the following productions to be right-recursive:
+\begin{quote}
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+S \> $\rightarrow$ \> ( {\it L\/} ) \ \  $\mid$ \ \  {\it a} \\
+\it
+L    \> $\rightarrow$ \> {\it L\/} , {\it S\/} \ \  $\mid$ \ \  {\it S} \\
+\end{tabbing}
+\end{quote}
+\vspace{-1em}
+\marks{45}
+
+\begin{modelanswer}
+Because the usual way of writing the 
+procedures leads to immediate recursive call. 5 marks.
+
+Rule (15 marks):
+\begin{verbatim}
+A  -> A a | b
+(a and b strings of terms and non-terms)
+rewrites to 
+A  -> b A'
+A' -> a A' | empty
+\end{verbatim}
+Answer (25 marks):
+\begin{verbatim}
+S  -> ( L ) | a
+L  -> S L'
+L' -> , S L' | empty
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Consider the following Java class:
+\begin{verbatim}
+1  class A {
+2   String a; int c;
+3   public void f(int b, String c) {
+4     System.out.println(c);
+5     int d = 3;
+6     int a = b;
+7     System.out.println(a+d); System.out.println(b);
+8     System.out.println(c); System.out.println(d);
+9   }
+10 }
+\end{verbatim}
+Given an initial environment $\sigma_0$, 
+derive the type binding environments for the method at each
+use of an identifier and indicate where type lookups will occur.
+\marks{30}
+
+\begin{modelanswer}
+0  $\sigma_0$ is starting environment\\
+2  $\sigma_1 = \sigma_0 + \{a\rightarrow string,c\rightarrow int\}$\\
+3  $\sigma_2 = \sigma_1 + \{b\rightarrow int,c\rightarrow String\}$ (overrides instance c)\\
+4  lookup id c  in $\sigma_2$\\
+5  $\sigma_3 = \sigma_2 + \{d\rightarrow int\}$ \\
+6  lookup id b, then $\sigma_4 = \sigma_3 + \{a\rightarrow int\}$ (overrides instance a)\\
+7  lookup a, d, b  in $\sigma_4$\\
+8  lookup c, b in $\sigma_4$\\
+9  discard $\sigma_4$ revert to $\sigma_1$\\
+10 discard $\sigma_1$ revert to $\sigma_0$
+
+
+3 marks per line.
+\end{modelanswer}
+
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+\begin{subsubquestions}
+\subsubquestion
+State two reasons why many 
+programming language implementations require a memory model that 
+implements a runtime stack?
+\marks{10}
+\subsubquestion
+Explain in detail how a stack frame is pushed to the stack, and 
+removed from the stack, during program execution. 
+\marks{30}
+\end{subsubquestions}
+
+\begin{modelanswer}
+Procedure or method calls, recursion, need for separate storage space for
+parameters and locals.
+Code generated for a proc/func does the pushing/popping.
+\begin{verbatim}
+caller g(...) calls callee f(a1,...,an)
+calling code in g puts arguments to f at end of g frame
+stores return address, old FP in control link
+referenced through SP, incrementing SP
+on entry to f, SP points to first argument g passes to f
+old SP becomes current frame pointer FP
+f then allocates frame by setting SP=(SP - framesize)
+old SP becomes current frame pointer FP
+f then initialises locals
+on exit from f : SP = FP, removing frame
+jumps to return address, restores old FP
+\end{verbatim}
+5 marks each reason
+for answer to first part and explanation. 
+25 marks for details.
+\end{modelanswer}
+
+\subquestion
+
+\begin{subsubquestions}
+\subsubquestion
+Some programming language implementations avoid in some circumstances the
+need to pass parameters via a stack frame. Outline what these circumstances
+might be and why passing via the stack frame might be avoided.
+\marks{20}
+
+\begin{modelanswer}
+Appropriate when leaf procs, interproc
+reg alloc, dead variables, reg windows (but\ldots).
+\end{modelanswer}
+
+\subsubquestion
+Explain three situations where the use of a 
+stack frame to pass parameters cannot usually be avoided.
+\marks{15}
+\end{subsubquestions}
+\begin{modelanswer}
+Reg saves: when address is taken,
+when call-by-ref,
+when accessed by inner nesting,
+value too big,
+an array,
+convention of save for partic reg prior to call,
+spilling in exp evaluation,
+saving a reg window.
+\end{modelanswer}
+
+
+
+\subquestion
+Suppose  that a compiler translates a MiniJava-like language
+to an intermediate representation (for example IR trees) 
+that will include 
+the calculations required to address variables in stack frames.
+Draw or write down
+the intermediate representation
+required to access a local variable declared in a method.
+Explain your answer.
+\marks{25}
+
+\begin{modelanswer}
+MEM(BINOP(PLUS,TEMP fp, CONST k)) where k is offset of var in frame, fp the
+register holding the framepointer. Has to compute place in frame.
+\end{modelanswer}
+
+\end{subquestions}
+
+\end{questions}
+
+\end{document}
+
+

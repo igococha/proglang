@@ -1,0 +1,48 @@
+Return-Path: <ross@soi.city.ac.uk>
+Received: from vega.soi.city.ac.uk (vega.soi.city.ac.uk [138.40.91.5])
+	by altair.soi.city.ac.uk (8.12.8/8.12.3) with ESMTP id h2VHkLnY005630
+	for <daveb@altair.soi.city.ac.uk>; Mon, 31 Mar 2003 18:46:21 +0100 (BST)
+Received: from liberty.soi.city.ac.uk (mail@liberty.soi.city.ac.uk [138.40.92.97])
+	by vega.soi.city.ac.uk (8.12.8/8.12.5) with ESMTP id h2VHkKXY003932
+	for <daveb@soi.city.ac.uk>; Mon, 31 Mar 2003 18:46:20 +0100 (BST)
+Received: from ross by liberty.soi.city.ac.uk with local (Exim 3.36 #1 (Debian))
+	for daveb@soi.city.ac.uk
+	id 1903MR-0001Zk-00
+	for <daveb@soi.city.ac.uk>; Mon, 31 Mar 2003 18:46:19 +0100
+Date: Mon, 31 Mar 2003 18:46:19 +0100
+From: Ross Paterson <ross@soi.city.ac.uk>
+To: David Bolton <daveb@soi.city.ac.uk>
+Subject: Re: Second setting
+Message-ID: <20030331174618.GA6007@soi.city.ac.uk>
+References: <024201c2f76d$81423150$4a5c288a@Garfield>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <024201c2f76d$81423150$4a5c288a@Garfield>
+User-Agent: Mutt/1.5.3i
+X-Scanned-By: MIMEDefang 2.15 (www dot roaringpenguin dot com slash mimedefang)
+
+On Mon, Mar 31, 2003 at 11:08:36AM +0100, David Bolton wrote:
+> 
+> Herewith Lang Proc finally.
+
+My comments:
+
+Only 1(a) and 1(c) have mark schemes.
+
+1(a), answer: first one should be Yes.
+
+2(d), answer: add "and then the whole expression produces no value".
+
+Add \clearpage before Q4 to avoid splitting it over the page.
+
+4(b)i, answer: I expected the ANDs to bind more tightly than the ORs.
+Also, does the production work?  If there's another production
+
+	exp ::= ... | boolop_exp
+
+isn't there a shift/reduce conflict?  I would expect these four RHSs
+to be added to the exp production.  This would probably require some
+rephrasing of the question.
+
+Ross

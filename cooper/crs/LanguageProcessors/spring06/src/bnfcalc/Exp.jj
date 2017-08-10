@@ -1,0 +1,63 @@
+PARSER_BEGIN(Exp)
+
+public class Exp {
+}
+
+PARSER_END(Exp)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+int S() :
+{ int result; }
+{
+  result = E() <EOL>
+    { return result; }
+  | <EOL>
+  | <EOF>
+}
+
+int E() :
+{ int t; int result; }
+{
+  t=T() result=Eprime(t)
+    { return result; }
+}
+
+int Eprime(int e1) :
+{ int t; int e2; }
+{
+    ( "+" t=T() e2=Eprime(e1+t) ) { return e2; } 
+  | ( "-" t=T() e2=Eprime(e1-t) ) { return e2; } 
+  | /* empty */ { return e1; }
+}
+
+int T() :
+{ int f; int result; }
+{
+  f=F() result = Tprime(f)
+    { return result; } 
+}
+
+int Tprime(int t1) :
+{ int f; int t2; }
+{
+    ( "*" f=F() t2=Tprime(t1*f) ) { return t2; }
+  | ( "/" f=F() t2=Tprime(t1/f) ) { return t2; }
+  | /* empty */ { return t1; }
+} 
+
+int F() :
+{ Token t; int result; }
+{
+    t=<NUM> { result = Integer.parseInt (t.image); return result; } 
+  | "(" result=E() ")" { return result; }
+}
+

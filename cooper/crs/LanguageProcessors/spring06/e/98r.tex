@@ -1,0 +1,295 @@
+\documentstyle[/homes/daveb/doc/exam_style/cityexam,11pt]{article}
+\begin{document}
+\withmodelanswers
+\examnumber{904.02}
+\begin{preamble}
+\degrees{BSc Degree in Computer Science \\  B.Eng Degree in Software Engineering}
+\part{II RESIT}
+\title{Language Processors (348)}
+\examdate{??? 1998}
+\examtime{9.30--11.00}
+\rubric{Answer two questions \\ All questions carry equal marks}
+\end{preamble}
+\externals{P Lee \\ J Woodcock}
+\internals{DJ Bolton}
+
+\begin{questions}
+
+% Herewith four questions for Language Processors
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+
+Give a definition for regular expressions which shows how
+arbitrary regular expressions can be constructed for a
+given alphabet (set) of symbols. Do not include shorthand
+notations you may know.
+\marks{10}
+
+\subquestion
+        In some editors, pattern matching notation is
+        provided as detailed in the table below.
+        For example, the expression \verb"{.*}" 
+        matches any sequence of characters with enclosing
+        curly brackets.
+        Show how the patterns in the table can be represented by regular
+        expressions. Show also that regular expression notation is
+        more powerful than the editor pattern notation by
+        finding examples of patterns that can be expressed in the
+        regular expression notation but not in the editor pattern
+        notation.
+
+%\vspace{0.2in}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}        \hline
+Expression & Matches & Examples \\ \hline
+\verb"c"                & single character \verb"c"      & \verb"c", \verb"x", \verb"!"\\                     
+\verb"*"                & zero or more characters        & \verb"lo*p" matches \verb"lp", \verb"lop", \verb"loop", \verb"looop"\ldots\\
+\verb"."                & any character                  & \verb"c.t" matches \verb"cat", \verb"cct", \verb"c%t"\ldots\\
+\verb"["{\it s\/}\verb"]" & any character in {\it s}     & \verb"c[aou]t"  matches \verb"cat", \verb"cot", \verb"cut"\\
+ \hline
+\end{tabular}
+\end{center}
+\marks{30}
+
+\begin{modelanswer}
+\begin{verbatim}
+c -- c   3\\
+* -- a*, a in alphabet    5\\
+. -- a1 or a2 \ldots for all a in alphabet    5 \\
+\[s\] -- a1 or a2 \ldots for all a in s    7
+
+* in editor constrained to work on characters; alternates in
+\[..\] may only be characters (15).
+\end{verbatim}
+\end{modelanswer}  
+
+
+\subquestion
+
+Explain what is meant by the argument passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                %\item call-by-value-result
+                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is the effect of
+        the following procedure:
+\begin{verbatim}
+       PROCEDURE pass (p,q,r: INTEGER);
+       BEGIN
+            q := q + 1;
+            r := r + p
+       END pass;
+\end{verbatim}
+        when the sequence of assignments and a procedure call
+        shown below is executed, assuming that all arguments are
+        passed with the same mechanism, and that \verb"a" and
+        \verb"b" are variables of type INTEGER.
+        Write down what is printed in each case by the \verb"WriteInt"
+        call, and clearly justify your answer by reference to your
+        description of the argument passing mechanism.
+\begin{verbatim}
+       a := 2;
+       b := 3;
+       pass (a+b,a,a);
+       InOut.WriteInt (a)
+\end{verbatim}
+Although the program is written in a Modula-2-like syntax,
+the Modula-2 parameter-passing semantics do not apply and you must
+instead consider each of the mechanisms mentioned.
+\marks{60}
+
+\begin{modelanswer}
+\begin{verbatim}
+cbv explanation -- answer is 2.
+cbr explanation -- 
+   a := a+1 = 3
+   a := a+5 = 8    answer 8
+[ cbvr explanation NOT ASKED HERE
+   5,2,2 passed
+   q := q+1 = 3
+   r := r+5 = 7    answer 7 or 3 depending on copy back order ]
+cbn explanation --
+   a+b,a,a passed
+   a := a + 1 = 3
+   a := a + a + b = 3 + 3 + 3 = 9 
+\end{verbatim}
+\end{modelanswer}
+
+\end{subquestions}
+
+%\newpage
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+The following is an extract from a possible BNF syntax for
+an imperative programming language: 
+\begin{bnf}
+\Rule{\nt{Compound\ }}{\nt{Instruction} \verb";" \nt{Compound}\Or{\nt{Instruction}}} \\
+\Rule{\nt{Instruction\ }}{\nt{Cond}\Or{\ldots}} \\
+\Rule{\nt{Cond}}{\verb"if" \nt{BoolExp} \verb"then" \nt{Compound$_1$} \verb"else" \nt{Compound$_2$} \verb"end"}\\
+\Rule{\nt{IntExp}}{\nt{IntVar}\Or{\nt{IntConstant}}\Or{\nt{IntExp} \verb"+" \nt{IntExp}}
+        \Or{\nt{IntExp} \verb"*" \nt{IntExp}}}\\
+\Rule{\nt{BoolExp}}{\nt{IntExp} \verb"=" \nt{IntExp}\Or{\nt{IntExp} \verb"<=" \nt{IntExp}}}
+\end{bnf}
+where \nt{IntVar} is a variable of type INTEGER, \nt{IntConstant}
+is an INTEGER type constant (eg 3).
+
+The meaning of a \nt{Cond} is as follows:
+\begin{itemize}
+\item On entry to the instruction, the \nt{BoolExp} is 
+        evaluated. 
+\item If the value of the \nt{BoolExp} is true, the effect of
+        the \nt{Cond} is the effect of \nt{Compound$_1$}.
+\item Otherwise, when the \nt{BoolExp} evaluates to false,
+        the effect of the \nt{Cond} is the effect of
+        of \nt{Compound$_2$}.
+\end{itemize}
+
+\begin{subsubquestions}
+%\subquestion
+%Show that the grammar rules for \nt{IntExp} are ambiguous.
+%\marks{20}
+\subsubquestion
+Write down an abstract syntax for \nt{Cond}, 
+\nt{BoolExp} and \nt{IntExp}.
+\marks{20}
+\begin{modelanswer}
+\begin{verbatim}
+Cond -> COND BoolExp Compound Compound
+BoolExp     -> BEQ IntExp IntExp | BLE IntExp IntExp
+IntExp      -> INTVAR name | INTCONST int | INTPLUS IntExp IntExp |
+                 INTMULT IntExp IntExp
+\end{verbatim}
+\end{modelanswer}
+\subsubquestion
+        Outline the structure of the
+        code that might be generated in translation of
+        a \nt{Cond} with an example 
+        \nt{BoolExp} (\verb"a+1 <= b*2", say). 
+        Assume code generation for a simple
+        stack machine, and briefly explain the
+        instructions you use in your outline.
+\marks{40}
+
+\begin{modelanswer}
+\begin{verbatim}
+code for RHS IntExp, result on stack top
+code for LHS IntExp, result on stack top
+LE                   top <= top-1
+JUMPFALSE LABEL1
+code for Compound1
+JUMP LABEL2
+LABEL1:
+code for Compound2
+LABEL2:
+\end{verbatim}
+Plus explanation.
+\end{modelanswer}
+
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{Cond} and \nt{BoolExp} which produces such code.
+        Describe any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{IntExp}, but you need not produce translations for
+        \nt{IntExp}.
+\marks{40}
+\begin{modelanswer}
+\begin{verbatim}
+Cond -> COND BoolExp { 
+                         elsepart := newlabel()
+                         gen (JUMPFALSE elsepart) }
+               Compound {
+                         end := newlabel()
+                         gen (JUMP end)
+                         gen (LABEL elsepart) }
+               Compound {
+                         gen (LABEL end) }
+BoolExp     -> BEQ IntExp IntExp { gen (EQ) }
+            |  BLE IntExp IntExp { gen (LE) }
+\end{verbatim}
+Plus explanation for attrs, results of IntExp translation.
+\end{modelanswer}
+\end{subsubquestions}
+
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+
+
+\subquestion
+%Briefly describe the function of each
+%of the subdivisions (areas), and
+Discuss the programming language features which influence
+the organisation and functioning of run time storage,
+clearly associating any storage structures you
+mention with the implementation of particular language features.
+Choose a language you know well and briefly describe
+its run time storage requirements and functioning.
+%Explain why a typical C language memory model does not
+%have an area set aside for dynamically allocated
+%storage.
+\marks{40}
+\begin{modelanswer}
+Language features: procedure call and parameter passing,
+lexical scoping, dynamic storage allocation and deallocation,
+including object creation. Name stack, heap, why different.
+More marks for example languages
+(eg Eiffel object creation, Pascal `new' etc). Operation of
+stack and heap (with mention of garbage collection).
+Particular language example gets more marks.
+\end{modelanswer}
+
+\subquestion
+
+Comment on how local variables,
+parameters (arguments) and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use,
+and explain the need for a register `spill' area
+in some records.
+\marks{25}
+
+\subquestion
+Explain what is 
+meant by {\em fragmentation}, and mention some methods
+for reducing fragmention in heaps.  
+{\em Garbage\/} and {\em dangling pointers}
+can occur in the implementation of programming languages which
+support explicit deallocation of heap objects. Define
+these terms and explain using simple example program
+fragments how they arise.
+%Sketch the simple mark-sweep garbage collection algorithm
+%for automatic deallocation of inaccessible heap objects.
+\marks{35}
+
+\end{subquestions}
+
+\end{questions} 
+
+\end{document}
+

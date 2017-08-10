@@ -1,0 +1,4 @@
+The MiniJava abstract syntax tree classes.
+
+(Note: DB removed the TypeVisitor stuff from this before
+distribution - it was erroneously included before.)

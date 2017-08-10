@@ -1,0 +1,27 @@
+The MiniJava visitor classes, and a visitor PrettyPrintVisitor that
+simply traverses the abstract syntax tree and pretty-prints the
+program (ie prints it out in a standard indented form), classes
+to represent a symbol table (in SymbolTable.java), and various
+visitors to implement symbol table building and typechecking.
+
+I have written a better visitor (DBPrettyVisitor) that deals with
+nested statements (the supplied PrettyPrintVisitor doesn't).
+
+There is both a null visitor Visitor and a Type visitor TypeVisitor
+interface so that we can both visit nodes with no values returned and 
+with Type values returned.
+
+DepthFirstVisitor and TypeDepthFirstVisitor implement these interfaces
+by simply traversing the tree depth-first visiting each node.
+
+Then BuildSymbolTableVisitor extends TypeDepthFirstVisitor overriding
+methods so as to add classes, methods, variables etc to the symbol
+table. It extends TypeDepthFirstVisitor because it needs the types to 
+return a type to put in the symbol table and to check against.
+
+For typechecking, TypeCheckVisitor extends DepthFirstVisitor overriding 
+methods so as to typecheck statments; TypeCheckExpVisitor extends 
+TypeDepthFirstVisitor so as to typecheck expressions.
+
+The system.exits can mostly be removed, but if you do so you will have to 
+check that the correct value is subsequently returned or used in the method.

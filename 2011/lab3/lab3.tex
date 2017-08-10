@@ -1,0 +1,145 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+\section*{Language Processors Lab 3 - Week 3 }
+
+\medskip\noindent In this lab we will continue practising with JavaCC and lexical specifications. You will learn how to introduce new tokens and how to mix JavaCC with your own Java code.
+
+\subsection*{The LexInt.jj file}
+
+Start a Unix shell window and move to your {\tt LanguageProcessors} directory. Create a new directory {\tt lab3} and move inside it. Download the file {\tt LexInt.jj} from Moodle (Lab3) to your {\tt lab3} directory. Make sure you load java and javacc by executing the command:
+
+\begin{quote}
+{\tt module add java javacc}.
+\end{quote}
+
+Start the text editor and load {\tt LexInt.jj}. Inspect its contents: you will see that the JavaCC specification defines the {\tt LexInt} class followed by three tokens: \verb+SKIP+, \verb+INTEGER_LITERAL+ and \verb+IDENTIFIER+.
+
+Execute JavaCC, compile the generated java files and execute the program by typing the usual commands:
+
+\begin{verbatim}
+    javacc LexInt.jj
+    javac LexInt.java
+    java LexInt
+\end{verbatim}
+
+Test the program with a few examples. You will see that the lexical analyser acepts unsigned integers and identifiers that start with a letter. The program prints the type and contents of each accepted token, followed by its numeric value (cuurently undefined).
+
+\subsection*{Modifying Token Specifications}
+
+\begin{itemize}
+\item \verb+IDENTIFIER+: Most programming languages accept identifiers that contain special characters such as underscore(\verb+'_'+). {\tt LexInt} does not accept underscores as part of indentifiers; verifiy this by typing a few examples.  Modify the \verb+IDENTIFIER+ token specification so that it includes underscores (after the first letter).
+
+\textbf{Solution:} Replace the current specification with:
+\begin{verbatim}
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER> | <DIGIT> | "_")* >
+}
+\end{verbatim}
+
+\item \verb+INTEGER_LITERAL+: The current specification for integers in {\tt LexInt} accepts strings with leading zeroes e.g. \verb+0034+. Furthermore, it only deals with unsigned integers i.e. it does not accept a sign symbol (plus or minus) e.g. enter \verb+-45+ and see what happens. Modify the current \verb+INTEGER_LITERAL+ specification so it accepts integers with (optional) signs and no leading zeroes.
+
+\textbf{Solution:} The new \verb+INTEGER_LITERAL+ specification should look like this:
+\begin{verbatim}
+        < INTEGER_LITERAL: ("+"|"-")? ("0" | ["1"-"9"] (<DIGIT>)*)  >
+\end{verbatim} 
+
+
+\textbf{Explanation:} The regular expression above indicates that an integer literal may start with a plus or minus (the alternation \verb+|+ symbol means OR). The sign symbol is optional, as indicated by the question mark. We want to make sure that integers do not contain leading zeroes. Therefore, if an integer starts with zero then it must be \verb+"0"+. Otherwise, it must start with any digit between 1 and 9 (i.e. non-zero), followed by a possibly empty sequence of digits.
+
+\end{itemize}
+
+\subsubsection*{Adding new Tokens}
+
+\begin{itemize}
+
+\item Keywords and reserved words. A keyword is a word or identifier that has a particular meaning to a programming language. Example of keywords are words used in control flow such as \verb+if+, \verb+for+ and \verb+while+. Usually keywords are reserved words and cannot be used for variable or function names. 
+Define a new token \verb+IF+ that specifies the keyword \verb+if+
+
+\textbf{Solution:} Add the following token specification AFTER (below) the \verb+IDENTIFIER>+ token specification:
+\begin{verbatim}
+TOKEN : /* Reserved words and Keywords */
+{
+  < IF: "if" >
+}
+\end{verbatim}
+and update the grammar specification at the bottom of the document to:
+\begin{verbatim}
+     (t = <INTEGER_LITERAL> | t = <IDENTIFIER> | t=<IF> )
+\end{verbatim}
+Run javacc. The following warning should appear:
+\begin{verbatim}
+Warning:  "if" cannot be matched as a string literal token at line 45, 
+column 3. It will be matched as  <IDENTIFIER>.
+\end{verbatim}
+Ignore the warning message, compile the program and execute it. Enter the following input: \verb+"if25 if 25"+. What happens? The first word is correctly identified as an identifier. Unfortunalety, the second word, \verb+if+, should have been identified as an \verb+IF+ token instead of an identifier. This is related to the warning displayed above. JavaCC, when presented with a string that matches two tokens, reports the token that has been defined first (in this case, IDENTIFIER). 
+
+\textbf{Solution:} Move the \verb+IF+ specification BEFORE (above) the IDENTIFIER specification. Run javacc, re-compile and execute the program with the same input. What happens? \verb+if+ is now recognised as an \verb+IF+ token. Note that \verb+if25+ could have been split into an IF token and an integer. However, Javacc will always try to match the longest possible string against the available tokens.
+
+\item A binary literal consists of the leading characters b or B followed by one or more digits 0 or 1 e.g. {\tt b101, B0001, b111101}. Add the token \verb+BINARY_LITERAL+ that implements binary literals.
+
+\noindent \textbf{Solution:} Add a new token to the lexical spefication:
+\begin{verbatim}
+TOKEN : /* Integers literals */
+{
+  < INTEGER_LITERAL: ("+"|"-")? ("0" | ["1"-"9"] (<DIGIT>)*) >
+|
+  < BINARY_LITERAL: ("b" | "B") (["0"-"1"])+  >
+}
+\end{verbatim}
+
+and update the grammar accordingly.
+
+\item Comments and the complement (\verb+~+) operator:
+The complement \verb+~(e)+ operator, as with set theory, is used to express the characters not belonging to the set specified by \verb+e+ i.e. its negation. For example, \verb+~["a","b"]+ expresses all characters except \verb+a+ and \verb+b+.\\
+Use the complement operator to define the token \verb+<TOKEN>+ that implements single line comments that start with \verb+//+. Single line comment must end with the new line character.\\
+
+\end{itemize}
+
+
+\subsubsection*{Manipulating {\tt Token}}
+
+Each token generated by the lexical analyser has a {\tt Token} object associated with it. We can assign this object to a variable e.g. {\tt Token t} and use its contents in the Java code attached to the JavaCC specification. We are currently doing that inside {\tt TokenList}:
+\begin{itemize}
+\item \verb+tokenImage[t.kind])+ extracts the token's type.
+\item \verb+t.image+ extracts the token's content - it returns a string.
+\end{itemize}
+
+In particular, the value associated to our \verb+INTEGER_LITERAL+ token is a string. In order to get the integer value we need to evaluate the string  e.g. the value of string '12' must be converted to 12. The {\tt Integer.parseInt} method does the job. We need to do something similar for binary numbers e.g. string b110 has value 6. How do we do this? Fortunately, {\tt Integer.parseInt} can take the base or radix of a number as an argument. In our case, we need to pass 2 as argument: \verb+Integer.parseInt("110",2)+. Note that we have to remove the prefix!!
+
+Update {\tt TokenList} with the following code (this assumes you have defined COMMENT):
+\begin{verbatim}
+   (
+     (t = <INTEGER_LITERAL> | t = <IDENTIFIER> | t=<IF> | 
+      t = <BINARY_LITERAL> | t = <COMMENT> )
+         { System.out.print("token found: "+ tokenImage[t.kind]);
+           System.out.print(" (`"+t.image+"') value: "); 
+           switch (t.kind) {
+           case INTEGER_LITERAL:
+             System.out.println(Integer.parseInt(t.image)); break;
+           case BINARY_LITERAL:
+             s = t.image.substring(1);
+             System.out.println(Integer.parseInt(s,2)); break;
+           default: System.out.println("UNDEFINED");
+         }
+       }
+   )* <EOF>
+\end{verbatim}
+
+Note that we have removed the first character of the binary string. We have used the {\tt substring} method from the {\tt String } class.
+
+\textbf{Exercise:} Define a new token \verb+RATIONAL+ that implements rational numbers of the form \verb+ 1/2  3/5 23/100 0/5+ etc. How do we compute their numeric value?
+
+\end{document}
+

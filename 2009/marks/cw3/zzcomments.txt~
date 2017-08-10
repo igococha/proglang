@@ -1,0 +1,266 @@
+IN2009 Language Processors - Coursework 3
+
+******************************
+Kester Ford
+
+         Or (30) : 30
+Conditional (30) : 28
+     Repeat (30) : 30
+       Test (10) : 10
+      Total (10) : 98
+
+Comments:
+- ShortOf: Wrong message, op1 must be of Boolan type - 
+
+******************************
+Richard Chapman (abcc318)
+Mihai Oprea (abcy204)
+
+         Or (30) : 27
+Conditional (30) : 5
+     Repeat (30) : 12
+       Test (10) : 5
+      Total (10) : 49
+
+Comments:
+- Or - not included in DepthFirstVisitor
+- Or messages for typechecking errors.
+- IfElse: Compilation problems, Wrong type for e1,e2,e3 in IfElseStatement.
+- IfElse: Your IfElse should be an expression, not an statement - not fully included in Minijava. Wrong pretty-print and type check.
+- Repeat Until: It must be included in DepthFirstVisitor and TypeCheckVisitor, not in TypeCheckExpVisitor - which has compilation errors.
+- RepeatUntil: Wrong pretty-print.
+- The test had an complete unrelated type error before repeat and or where tested.
+
+
+******************************
+Chirag Jamnadas (abdf020)
+Himesh Patel abcy927
+
+         Or (30) : 30
+Conditional (30) : 20
+     Repeat (30) : 28
+       Test (10) : 8
+      Total (10) : 86
+
+Comment:
+- ShortIf is an expression, not a statement (syntax).. The pretty-print is correct but the type-checker does not compare the types of e1 and e2 (or s1 and s2).
+- Repeat: Pretty-printer with indentation problem.
+- No test for Repeatuntil.
+
+******************************
+Apostolos Flessas (abcy122)
+Luckasz Jelenski.
+
+         Or (30) : 28
+Conditional (30) : 24
+     Repeat (30) : 20
+       Test (10) : 8
+      Total (10) : 80
+
+Comments:
+- Wrong message for OR type checking error: left/right hand side must be of type Boolean!!
+- Same error with QC. Plus, e2 and e3 mut be of the same type.
+- Repeat: Pretty-print with indentation problems.
+- Repeat: The expression e must be of type boolean, not s - it's the other way around!!
+- Test: The repeat test contains a correctly typed statement, but it throws an error.
+
+******************************
+ Mohammad Farooq (abcx714)
+Mohammed Atiq Akhtar
+
+         Or (30) : 4
+Conditional (30) : 2
+     Repeat (30) : 4
+       Test (10) : 10
+      Total (10) : 20
+
+Comments:
+- Only minijava.jj file and test cases provided.
+- ShortIf is an expression, not an statement.
+
+******************************
+Derek Chan (abcy873)
+
+         Or (30) : 23 
+Conditional (30) : 14
+     Repeat (30) : 28
+       Test (10) : 10
+      Total (10) : 75
+
+Comments:
+- Or must contain booleans!!
+- DepthFirstVisitor file not included: No implementations of ShortIf and Repeat in DepthFirstVisitor. (added and waved)
+- ShortIf (e?e1:e2) is not an statement, it IS an expression made of three subexpressions. The type of e1 must be bool and the type of e1 and e2 must be the same. Wrong syntax and type checking. Pretty-print poor.
+- Repeat: Pretty print with wrong indentations. Rest OK.
+
+******************************
+Yu Teng (abcc741)
+
+         Or (30) : 30
+Conditional (30) : 18
+     Repeat (30) : 28
+       Test (10) : 10
+      Total (10) : 86
+
+Comments:
+- e1?e2:e3 is an sexpression, not an statement. Extra spaces in pretty-print - indent is only used when starting a new line.
+- e2 and e3 must be of the same type.
+- Repeat pretty-print with wrong indentation. Rest OK.
+
+******************************
+Nicholas Diakomihalis (abcb515)
+
+         Or (30) : 30
+Conditional (30) : 25
+     Repeat (30) : 28
+       Test (10) : 7
+      Total (10) : 90
+
+Comments:
+- No default implementation of visit for Or, IfExp and Repeat in DepthFirstVisitor. I think there were similar problems in cw2 so I'll assume that your compiler waves this.
+- IfExp: s1 and s2 must be of the same type. The type of IfExp is either the type of s1 or s2.
+- Repeat: Wrong indentation - correc type checking.
+- Test: You should include cases where type checking fails.
+
+******************************
+ Mouctar Diallo (abdd238)
+
+         Or (30) : 10
+Conditional (30) : 0
+     Repeat (30) : 28
+       Test (10) : 5
+      Total (10) : 43
+
+Comment:
+- No default implementations of visit for Or and Repeat in DepthFirstVisitor.
+- No type checking for Or - only pretty-print.
+- Wrong indentation for RepeatUntil - typechecking ok.
+- Test cases do not show examples of programs with wrong types. Incomplete
+
+******************************
+Hiten Dudakia (abdd306)
+Amirarya Toussi abcy602
+
+         Or (30) : 28
+Conditional (30) : 10
+     Repeat (30) : 26
+       Test (10) : 4
+      Total (10) : 68
+
+Comments:
+- Or: Incorrect error message - it should say Boolean.
+- If2 is not an statement, it is an expression.
+- No prettyPrinter for If2. Type checking method in the wrong file - it won't compile because you have defined If2 as a statement. Type checking incorrect.
+- RepeatUntil: Wrong pretty-print.
+- test file: Only Or tested - difficult to add new tests.
+
+******************************
+Mahamed Mahamud (abcx892)
+
+         Or (30) : 28
+Conditional (30) : 0
+     Repeat (30) : 24
+       Test (10) : 5
+      Total (10) : 57
+
+Comments:
+- Minijava warning: According to your syntax, "repeatuntil" must be defined as  a token.
+- Or: Wrong error message.
+- RepeatUntil: wrong syntax, it should be repeat s until(e). Bad indentation used by pretty print. Correct type checking
+- Your test file include an example of repeatuntil that does not match your syntax. 
+
+******************************
+Alla Kebire (abdc692)
+Usman Ahmed, abcy973
+
+         Or (30) : 28
+Conditional (30) : 20
+     Repeat (30) : 28
+       Test (10) : 9
+      Total (10) : 85
+
+Comments:
+- ShortIf should be an expression, not an statement.
+- ShortIf typecheck. The types of s1 and s2 must be the same - s1 and s2 are expessions and should be traversed accordingly.
+- Incorrect indentations used in Repeat.
+- Your test should include (commented out) type errors. 
+
+******************************
+Karl Newman-Smart (abcy859)
+
+         Or (30) : 28
+Conditional (30) : 22
+     Repeat (30) : 23
+       Test (10) : 7
+      Total (10) : 80
+
+Comments:
+- RepeatUntil typecheck: Condition must be boolean!
+- ShortIf. Types of e1 and e2 must be the same. In your code, e1 is checked twice.
+- Incorrect indentationfor Repeat (prety printer).
+- Testfile: incomplete, the variables are not declared.
+- Test your program!!
+
+******************************
+Erwin Emmanuel (abdb278)
+
+         Or (30) : 30
+Conditional (30) : 20
+     Repeat (30) : 28
+       Test (10) : 8
+      Total (10) : 86
+
+Comments:
+- ShortIf must be an expression.
+- In e?e1:e2, the types of e1 and e2 must be the same.
+- Repeat pretty-print: Incorrect indentation.
+- No test for repeat. Your examples do not include type errors.
+
+******************************
+Abib Ogunbowale (abdd731)
+abcy200 Chris Roope
+
+         Or (30) : 30
+Conditional (30) : 30
+     Repeat (30) : 28
+       Test (10) : 10
+      Total (10) : 98
+
+Comment:
+- Repeat pretty-print: Incorrect indentation.
+
+******************************
+
+
+         Or (30) : 
+Conditional (30) : 
+     Repeat (30) : 
+       Test (10) : 
+      Total (10) : 
+
+******************************
+
+
+         Or (30) : 
+Conditional (30) : 
+     Repeat (30) : 
+       Test (10) : 
+      Total (10) : 
+
+******************************
+
+
+         Or (30) : 
+Conditional (30) : 
+     Repeat (30) : 
+       Test (10) : 
+      Total (10) : 
+
+******************************
+
+
+         Or (30) : 
+Conditional (30) : 
+     Repeat (30) : 
+       Test (10) : 
+      Total (10) : 

@@ -1,0 +1,11 @@
+class Test {
+  public static void main(String[] args) 
+    {   System.out.println((new A()).m()); }}
+
+class A {
+    public int m() { 
+        int x; int y; int z;
+        x =3; y = x * 10; 
+        while (x < 8) x = 4;
+        repeat x = 4; until (x < 8)
+        return (x / y); }}

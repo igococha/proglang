@@ -1,0 +1,211 @@
+// Priyank Vyas, abbd827
+
+PARSER_BEGIN(Literal)
+
+public class Literal {
+  public static void main(String args[]) throws ParseException {
+	System.out.println ("Enter tokens, they can be seperated by spaces, tabs and new lines");
+	Literal parser = new Literal(System.in);
+	parser.Start();
+ }
+
+  public static long convert(String tImage) throws Exception {
+	long exp, valchar = 0, val = 0; 				// Stored as long to capture larger integer literals
+	int length, loopIt;						// loopIt is for letting the loop know how many times to iterate
+	short base = 10;						// initialised but is subject to integer identification
+	boolean prefix = false;						// this boolean is set to true when a prefix is present (negative only)
+	StringBuffer buf = new StringBuffer(tImage);
+	char ch;
+	int first = 0;							// variable for first char
+	length = buf.length();
+	exp = 1;
+	
+	if (buf.charAt(first) == '-') { prefix = true; first = 1;}  // first index number is now set to 1 instead of 0 because of prefix
+	if (buf.charAt(first) == '+') { first = 1;}					// positive numbers will not be prefixed
+	
+	// Set iterations to be until the '2nd character' (only applicable when int is not a decimal numeral)
+	loopIt = first;
+	
+	if (buf.charAt(first) == 'b' || buf.charAt(first) == 'B') 	{  base = 2; }		// Binary
+	else if (buf.charAt(first) == 'o' || buf.charAt(first) == 'O') {  base = 8;	} 	// Octal
+	else if (buf.charAt(first) == 'z' || buf.charAt(first) == 'Z') {  base = 16; }	// Hexidecimal	
+	// Decimal int, can have extra iteration because you have to account for the first char (given no prefixes) is not a letter
+	else if (buf.charAt(first) >= '0' && buf.charAt(first) <= '9') {  base = 10; loopIt = first-1;}	
+
+	// This is a gerneric loop for binary/octal/hexidecimal
+	// It assumes the int literal type based on the first character (b = binary, o = octal, z = hex etc)
+	// It then applies the base calculations pre-determined above to the generic loop below
+	// The loop has been modified to not read the first char (0) from the arguement string (tImage)
+	for(int i = length-1; i > loopIt; i--) {
+		ch=buf.charAt(i);
+		boolean lchar = false;
+		if (ch >= '0' && ch <= '9')
+			valchar = ch-'0';
+		else if (ch >= 'a' && ch <= 'f')
+			valchar = 10 + (ch-'a');
+		else if (ch >= 'A' && ch <= 'F')
+			valchar = 10 + (ch-'A');
+		else if (ch == 'L') 				// special case for when the last letter is L
+			lchar = true;
+		else
+			throw new ParseException("Bad Char "+ch);
+		
+		if (lchar == false) { 				// when an 'L' is found at the end, this segment does not execute
+			val = val + valchar*exp;		// meaning the value does not get modified
+			exp = exp*base;
+		}
+	}
+	if (prefix == true) {	return -val;  }	// Return negative value if negative prefix was found
+	else return val; 	  
+  }
+}
+
+PARSER_END(Literal)
+
+
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r"
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+// NOTE: int type long can be suffixed with character L
+// NOTE: Question Mark '?' = 0 or 1 repetition
+// NOTE: Symbol '+' means 1 or more times repeat
+// NOTE: Symbol '*' means 0 or more times repeat
+
+
+// I N T E G E R  L I T E R A L  D E F I N I T I O N ----------------
+< INTEGER_LITERAL:
+        (<PREFIX>)?
+        (<DECIMAL_NUMERAL> ("L")?
+		| <BINARY_NUMERAL> ("L")?
+     	| <HEX_NUMERAL> ("L")?
+      	| <OCTAL_NUMERAL> ("L")?)
+  >
+
+// F L O A T  L I T E R A L  D E F I N I T I O N ---------------------
+| < FLOAT_LITERAL:
+	<WHOLE_NUM> "." (<WHOLE_NUM>)? (<EXPONENT>)? (<TYPESUFFIX>)? 		// e.g. 223.223e-232f
+	| "." <WHOLE_NUM> (<EXPONENT>)? (<TYPESUFFIX>)?						// e.g. .223e-232f
+	| <WHOLE_NUM> <EXPONENT> (<TYPESUFFIX>)?							// e.g. 2323e-22d
+	| <WHOLE_NUM> (<EXPONENT>)? <TYPESUFFIX>							// e.g. 2f
+  >
+
+  
+ // C O M M E N T
+ | < COMMENT:
+	<COM_START> (<COM_MID>)* (<ANY>)? <COM_END>		// for '/* comment */
+	| <COM2> (<COM_MID>)* (<ANY>)? <NEWLINE>				// for '// comment'
+ >
+
+// E R R O R  L I T E R A L  D E F I N I T I O N ---------------------
+// NOTE: '(<ANY>)' is added at the end so that input does not get split up into parts
+|  < ERROR:
+	// Int errors
+	(<NON_DEC_NUM>)+										// when a number comes after '0' without spaces
+	| <DECIMAL_NUMERAL> ("L")? (<NON_DEF_CHAR>)+ (<ANY>)?	// for when int is followed by random letters
+	| <DECIMAL_NUMERAL> ("L")? <E_CHAR>	(<ANY_CHAR>)? (<ANY>)?	// for when int is followed by e and then not by a number
+	| <DECIMAL_NUMERAL> ("L")? <DOT> (<DOT>)+ (<ANY>)?		// for when int is followed by multiple dots
+	| <DECIMAL_NUMERAL> ("L")? <MISC> (<ANY>)?				// for when int is followed by misc character
+	| <BINARY_NUMERAL> ("L")? (<NON_BIN_INT>)+ (<ANY>)?		// if "2-9" comes after the binary number
+	| <BINARY_NUMERAL> ("L")? (<ANY_CHAR>)+ (<ANY>)?		// if "string" comes after the binary number
+	| <PREFIX> <PREFIX> (<ANY>)?							// if two prefixes are used together
+	| <HEX_NUMERAL> ("L")? (<NON_HEX_CHAR>)+ (<ANY>)?	// if letters g-z/G-Z are used
+	| <OCTAL_NUMERAL> ("L")? (<NON_OCT_NUM>)+ (<ANY>)?   	// if 8 or 9 are used after valid octal number
+	| <OCTAL_NUMERAL> ("L")? (<ANY_CHAR>)+ (<ANY>)? 	// if 8 or 9 are used after valid octal number
+	
+	// Float errors 
+	| <WHOLE_NUM> "." (<WHOLE_NUM>)? (<EXPONENT>)? (<TYPESUFFIX>)? (<NON_DEF_CHAR>)+ (<ANY>)?	// for when letters other than 'd,e or f' are used
+	| <WHOLE_NUM> "." (<WHOLE_NUM>)? (<EXPONENT>)? (<TYPESUFFIX>)? (<NON_DEF_CHAR>)? (<ANY>)?	// for when are multiple dots in a number
+	| <WHOLE_NUM> "." (<WHOLE_NUM>)? (<E_CHAR>)+ (<TYPESUFFIX>)? (<ANY>)?						// for a bad use of exponent without (possibly signed) int
+	| <WHOLE_NUM> "." (<WHOLE_NUM>)? (<EXPONENT>) (<TYPESUFFIX>)? (<NON_DEF_CHAR>)? (<E_CHAR>)+ (<ANY>)?	// for when there are 2 e's 
+	| "." <WHOLE_NUM> (<EXPONENT>)? (<TYPESUFFIX>)? (<NON_DEF_CHAR>)+ (<ANY>)?						// same as above, but without whole number at start
+	| <WHOLE_NUM> (<EXPONENT>)+ (<TYPESUFFIX>)? (<DOT>)+ (<NON_DEF_CHAR>)? (<ANY>)?	
+	| <WHOLE_NUM> (<EXPONENT>)? (<TYPESUFFIX>)+ (<DOT>)* (<NON_DEF_CHAR>)? (<ANY>)?
+	
+	// Misc
+	| (<NON_DEF_CHAR>)+ (<ANY>)					// random chars like ssf.ssr2323
+	| (<ANY_CHAR>) (<ANY_CHAR>) (<ANY>)? 		// when there is atleast 2 letters at start
+	| <DOT> (<DOT>)+ <ANY>						// dots at the start
+	| (<PREFIX>)+ (<ANY_CHAR>)	(<ANY>)*		// for e.g. -i2
+	| <MISC> (<ANY>)?							// misc input followed by optional chars e.g. !'~232
+	| <ANY_CHAR>								// for when the input is just a single letter
+	| <COM_START> (<COM_MID>)* (<ANY>)? <NEWLINE>	// broken comment /* sdsdsdsd
+
+	
+ >
+
+// Lower level definitions
+| < #PREFIX: ("+" | "-") >
+
+// Int literal expressions
+| < #DECIMAL_NUMERAL: (["0"]) | (["1"-"9"] (["0"-"9"])*) >
+| < #BINARY_NUMERAL: ["b", "B"](["0", "1"])+ >
+| < #HEX_NUMERAL: ["Z","z"] (["0"-"9","a"-"f","A"-"F"])+ >
+| < #OCTAL_NUMERAL: (["O","o"] (["0"-"7"])+) >
+
+// Float literal expressions
+| < #WHOLE_NUM: (["+","-"])? (["0"-"9"])+ >
+| < #TYPESUFFIX: ["f","d"] >
+| < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >		
+
+
+// Error literal expressions i.e. not float or int literals
+| < #NON_DEC_NUM: (["0"])+ (["0"-"9"])+ > 
+| < #NON_BIN_INT: (["2"-"9"])+ >
+| < #NON_HEX_CHAR: (["g"-"z","G"-"Z"])+ >
+| < #NON_OCT_NUM: (["8","9"]) >
+| < #NON_DEF_CHAR: (["a"-"c","g"-"z","A"-"C","G"-"Z"]) >		// all letters but d,e,f
+
+
+// Misc expressions
+| < #COM_START: "/*" >
+| < #COM_END: "*/" >
+| < #COM2: "//" >
+| < #NEWLINE: ["\n","\r"] >
+| < #ANY: (["A"-"Z","a"-"z", "0"-"9", ".", "!", "(", ")", "$", "£", "&", "<", ">","+", "-", "_", "=", "#", "'", "@", "~", "^"])+ >
+| < #DOT: "." >
+| < #ANY_CHAR: (["A"-"Z","a"-"z"]) >
+| < #SPACE: [" "] >
+| < #COM_MID: ([" ", "A"-"Z","a"-"z", "0"-"9", "."])+ >
+| < #E_CHAR: ["e","E"] >
+| < #MISC: (["!", "$", "£", "&", "<", ">", "(", ")", "*", "_", "+", "-", "=", "#", "'", "@", "~", "^"])+ >
+
+	
+}
+
+
+// NOTE: t.kind = type of token
+// NOTE: t.image = string value of token
+
+void Start() :
+{Token t;}
+{
+   (
+     (t = <FLOAT_LITERAL> | t = <INTEGER_LITERAL> | t = <ERROR> | t = <COMMENT>)
+		{ 
+			if (tokenImage[t.kind].equals("<INTEGER_LITERAL>")) {
+				try {
+					System.out.println ("token found: "+ tokenImage[t.kind]	+ " ("+convert(t.image)+")"); 
+				} catch (Exception e) {
+					System.out.println ("Error found when converting Integer");
+				}
+			}
+
+			else if (tokenImage[t.kind].equals("<COMMENT>")) {
+				System.out.println ("token found: "+ tokenImage[t.kind] + " (`"+t.image+"')"); }
+			else if (tokenImage[t.kind].equals("<ERROR>")) {
+				System.out.println ("token found: "+ tokenImage[t.kind] + " (`"+t.image+"')"); }
+			
+			// This is for float literals
+			else {	
+				System.out.println ("token found: "+ tokenImage[t.kind]
+										+ " (`"+t.image+"')"); }
+		}
+   )* <EOF>
+}

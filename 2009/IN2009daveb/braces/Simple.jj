@@ -1,0 +1,30 @@
+PARSER_BEGIN(Simple)
+
+public class Simple {
+}
+
+PARSER_END(Simple)
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r"
+}
+
+TOKEN :
+{
+  <LBRACE: "{"> | <RBRACE: "}">
+}
+
+void Input() :
+{ int count; }
+{
+  count=MatchedBraces() <EOF>
+  { System.out.println("The levels of nesting is " + count); }
+}
+
+int MatchedBraces() :
+{ int nested_count=0; }
+{
+  <LBRACE> [ nested_count=MatchedBraces() ] <RBRACE>
+  { nested_count = nested_count + 1; return nested_count; }
+}

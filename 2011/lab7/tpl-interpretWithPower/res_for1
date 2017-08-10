@@ -1,0 +1,43 @@
+TPL Interpreter Version 0.1:  Reading from file /export/SOI-2/staff/ck655/LecturesAndLabs/PPL/2003_cw1/marking/TestFiles/for1.tpl . . .
+CompilationUnit
+ VarDeclaration n INT
+ VarDeclaration a INT
+ VarDeclaration i INT
+ VarDeclaration final INT
+ AssignStatement
+  Id n
+  IntConst 24
+ AssignStatement
+  Id a
+  IntConst 5
+ ForStatement
+  AssignStatement
+   Id i
+   IntConst 21
+  LT
+   Id i
+   Id n
+  UpdateStatement
+   Id i
+   Add
+    Id i
+    IntConst 1
+  StatementBlock
+   AssignStatement
+    Id a
+    Mul
+     Id a
+     Id i
+   WriteStatement i
+   WriteStatement a
+ AssignStatement
+  Id final
+  Id a
+ WriteStatement final
+Value of i : 21
+Value of a : 105
+Value of i : 22
+Value of a : 2310
+Value of i : 23
+Value of a : 53130
+Value of final : 53130

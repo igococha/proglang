@@ -1,0 +1,15 @@
+A braces matcher. Reg exps are in Simple.jj, the driver class DoSimple in DoSimple.java
+
+Run JavaCC on it with
+
+   module add java soi javacc/3.2
+   javacc Simple.jj
+
+Compile it with
+
+   javac DoSimple.java
+
+Run it with
+
+   java DoSimple
+

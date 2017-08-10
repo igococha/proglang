@@ -1,0 +1,74 @@
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::27.25: Expression of bool type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::30.21: Expression of bool type found where one of integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::31.19: Expression of int array type found where one of integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::32.19: Expression of bool type found where one of integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::35.25: Expression of int type found where one of boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::36.25: Expression of int type found where boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::38.14: Expression of bool type found where one of integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::39.14: Expression of int array type found where one of integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::39.24: Expression of int array type found where one of integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/ArrayMismatch.java::40.14: Expression of bool type found where one of integer type expected
+
+
+/home/grad08/apaka/csci5161/HW4/examples/CircularInh.java::11.7: Circularity in inheritance for class Test3
+
+
+/home/grad08/apaka/csci5161/HW4/examples/ExtendClassCheck.java::11.7: Undefined parent class Test4
+
+
+/home/grad08/apaka/csci5161/HW4/examples/MethodCheck.java::22.21: Method Something of matching type does not exist for class Test1
+/home/grad08/apaka/csci5161/HW4/examples/MethodCheck.java::24.22: Method SomethingMore of matching type does not exist for class Test2
+/home/grad08/apaka/csci5161/HW4/examples/MethodCheck.java::25.22: Method SomethingMore of matching type does not exist for class Test2
+/home/grad08/apaka/csci5161/HW4/examples/MethodCheck.java::32.22: Method Check of matching type does not exist for class Test2
+
+
+/home/grad08/apaka/csci5161/HW4/examples/NewClassCheck.java::21.6: Expression of class Test2 type found where one of class Test3 type expected
+/home/grad08/apaka/csci5161/HW4/examples/NewClassCheck.java::22.6: Expression of class Test2 type found where one of class Test4 type expected
+/home/grad08/apaka/csci5161/HW4/examples/NewClassCheck.java::23.6: Undeclared class identifier Test5
+
+
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::34.16: Expression of bool type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::35.16: Expression of bool type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::36.16: Expression of bool type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::38.16: Expression of int array type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::39.16: Expression of int array type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::40.16: Expression of int array type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::42.16: Expression of int type found where boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::42.25: Expression of int type found where one of boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::43.16: Expression of int array type found where boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::45.16: Expression of int array type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::45.16: Expression of bool type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::46.16: Expression of bool type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::46.16: Expression of bool type found where one of int type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::47.18: Expression of int type found where boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/OperatorCheck.java::48.18: Expression of int array type found where boolean type expected
+
+
+/home/grad08/apaka/csci5161/HW4/examples/StmtCheck.java::31.28: Expression of bool type found where integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/StmtCheck.java::32.28: Expression of int array type found where integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/StmtCheck.java::33.28: Expression of bool type found where integer type expected
+/home/grad08/apaka/csci5161/HW4/examples/StmtCheck.java::35.15: Expression of int type found where boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/StmtCheck.java::40.15: Expression of int array type found where boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/StmtCheck.java::45.12: Expression of int type found where boolean type expected
+/home/grad08/apaka/csci5161/HW4/examples/StmtCheck.java::54.12: Expression of int array type found where boolean type expected
+
+
+/home/grad08/apaka/csci5161/HW4/examples/UndefVarTypeCheck.java::14.2: Undeclared class Test3
+
+
+/home/grad08/apaka/csci5161/HW4/examples/VarCheck.java::17.21: Undeclared class identifier Test3
+/home/grad08/apaka/csci5161/HW4/examples/VarCheck.java::19.2: Undeclared identifier bVal2
+/home/grad08/apaka/csci5161/HW4/examples/VarCheck.java::31.18: Undeclared identifier iVal5
+/home/grad08/apaka/csci5161/HW4/examples/VarCheck.java::32.2: Undeclared variable arr2
+
+
+
+/home/grad08/apaka/csci5161/HW4/examples/VarClassCheck.java::14.5: Variable iVal3 is already defined in class Test1
+/home/grad08/apaka/csci5161/HW4/examples/VarClassCheck.java::15.5: Variable arr1 is already defined in class Test1
+
+
+/home/grad08/apaka/csci5161/HW4/examples/VarMethodCheck.java::19.2: Variable bVal1 is already defined in class Something
+/home/grad08/apaka/csci5161/HW4/examples/VarMethodCheck.java::21.2: Variable arr1 is already defined in class Something
+
+
+/home/fac07/gopalan/.www/courses/5161/examples/MethodTest2.java::29.12: Method setParField defined more than once in class OneClass

@@ -1,0 +1,363 @@
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 276
+\begin_document
+\begin_header
+\textclass report
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize default
+\spacing single
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\leftmargin 2.5cm
+\topmargin 2.5cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\headheight 1cm
+\headsep 1cm
+\footskip 1cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Subsection*
+
+\series bold
+\begin_inset Graphics
+	filename logo.bmp
+	width 25page%
+
+\end_inset
+
+
+\series default
+ 
+\size small
+
+\hfill
+IN2009 Language Processors (2007/2008)
+\end_layout
+
+\begin_layout Subsection*
+Assessment 1, Part 1 (Regular Expressions)
+\end_layout
+
+\begin_layout Paragraph*
+Organisation:
+\end_layout
+
+\begin_layout Standard
+This coursework assessment may be completed individually, or in pairs, and
+ there is no penalty for working in a pair.
+ You will hand work in as individuals but the handin procedure will allow
+ you to say who you collaborated with (and you must do so!).
+ 
+\emph on
+Pairs
+\emph default
+ only -- not threesomes!
+\end_layout
+
+\begin_layout Paragraph
+Hand in:
+\end_layout
+
+\begin_layout Standard
+The deadline and the electronic handin procedure, and exactly what you should
+ hand-in, are documented online.
+ Obviously you should change file and directory permissions while you are
+ working so that your work is not visible to others -- remember plagiarism
+ carries severe penalties.
+ Finally, guard your work, don’t risk plagiarism charges by leaving a USB
+ key with your work around, or “sharing answers” etc.
+\end_layout
+
+\begin_layout Paragraph
+Weighting:
+\end_layout
+
+\begin_layout Standard
+This component is worth 40% of assessment 1 (or if you prefer, 4.8% of the
+ entire module).
+\end_layout
+
+\begin_layout Subsection*
+Task 1 - Regular Expressions
+\end_layout
+
+\begin_layout Standard
+Use JavaCC regular expressions to define precisely integer literals and
+ floating point literals as described below.
+ In this context, 'literal' means the piece of text that appears in a program
+ to denote a number (for example, the text '
+\family typewriter
+3.142
+\family default
+' denotes the number 
+\begin_inset Formula $3.142$
+\end_inset
+
+.
+ You are to implement and test your expressions using JavaCC (make your
+ expressions readable and understandable).
+\end_layout
+
+\begin_layout Paragraph
+Integer Literals
+\end_layout
+
+\begin_layout Standard
+An integer literal may be expressed as 
+\emph on
+binary
+\emph default
+, 
+\emph on
+decimal
+\emph default
+, 
+\emph on
+hexadecimal
+\emph default
+, or 
+\emph on
+octal
+\emph default
+ numerals.
+ Each may be suffixed with an '
+\family typewriter
+L
+\family default
+' to denote an integer of type 
+\family typewriter
+long
+\family default
+, and may be prefixed with a 
+\family typewriter
++
+\family default
+ or a 
+\family typewriter
+-
+\family default
+ character to indicate sign.
+\end_layout
+
+\begin_layout Enumerate
+A binary numeral consists of the leading characters 
+\family typewriter
+0b
+\family default
+ or 
+\family typewriter
+0B
+\family default
+ followed by one or more of the digits 0 or 1.
+ 
+\end_layout
+
+\begin_layout Enumerate
+A decimal numeral is either the single character 
+\family typewriter
+0
+\family default
+, or consists of a digit from 
+\family typewriter
+1
+\family default
+ to 
+\family typewriter
+9
+\family default
+, optionally followed by one or more digits from 
+\family typewriter
+0
+\family default
+ to 
+\family typewriter
+9
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+A hexadecimal numeral consists of leading characters 
+\family typewriter
+0X
+\family default
+ or 
+\family typewriter
+0x
+\family default
+ followed by one or more hexadecimal digits.
+ A hexadecimal digit is a digit from 
+\family typewriter
+0
+\family default
+ to 
+\family typewriter
+9
+\family default
+ or a letter from 
+\family typewriter
+a
+\family default
+ through 
+\family typewriter
+f
+\family default
+ or 
+\family typewriter
+A
+\family default
+ through 
+\family typewriter
+F
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+An octal numeral consists of a digit 
+\family typewriter
+0
+\family default
+ followed by one or more of the digits 
+\family typewriter
+0
+\family default
+ to 7.
+ Examples of integer literals: 
+\family typewriter
+0 1996 0372 0xDadaCafe 0L 0777L 0xC0B0L 0x00FF00FF 42635569000313371112113311464
+1
+\end_layout
+
+\begin_layout Paragraph
+Floating point literals
+\end_layout
+
+\begin_layout Standard
+A floating point literal has the following parts:a 
+\emph on
+whole-number
+\emph default
+ part, a 
+\emph on
+decimal
+\emph default
+ point (represented by a period character), a 
+\emph on
+fractional
+\emph default
+ part, an 
+\emph on
+exponent
+\emph default
+, and a 
+\emph on
+type suffix
+\emph default
+ (in that order).
+ A type suffix is either the letter 
+\family typewriter
+d
+\family default
+ (denoting 
+\family typewriter
+double
+\family default
+ type) or 
+\family typewriter
+f
+\family default
+ (denoting 
+\family typewriter
+float
+\family default
+ type).
+ The exponent, if present, is indicated by the letter 
+\family typewriter
+e
+\family default
+ followed by an optionally signed number.
+ At least one digit, in either the whole number or the fraction part, and
+ either a decimal point, an exponent, or a float type suffix are required.
+ All other parts are optional.
+\end_layout
+
+\begin_layout Standard
+Subject to the above constraints, the fractional-part and the number in
+ the exponent are sequences of digits from 
+\family typewriter
+0
+\family default
+ to 
+\family typewriter
+9
+\family default
+.
+ The whole-number part is a sequence of digits from 0 to 9 and may optionally
+ be prefixed with a 
+\family typewriter
++
+\family default
+ or a 
+\family typewriter
+-
+\family default
+ character to indicate sign.
+ Examples: 
+\family typewriter
+1e1f 2.f .3f 0f 3.14f 6.022137e23f 1e1 2.
+ 0.3 0.0 3.14 1e-9d 1e137 -5.56e4263 -42f
+\end_layout
+
+\begin_layout Paragraph*
+Advice
+\end_layout
+
+\begin_layout Itemize
+Create regular expressions for each useful case (so perhaps one for binary
+ integer literals, another for decimal integer literals, etc.), and build
+ up larger expressions from smaller ones.
+\end_layout
+
+\begin_layout Itemize
+Test your expressions regularly! Don't forget, an acceptable test plan must
+ be provided to achieve full marks.
+\end_layout
+
+\begin_layout Itemize
+Aim for a smaller number of entirely correct cases rather than lots of broken
+ ones.
+\end_layout
+
+\end_body
+\end_document

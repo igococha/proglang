@@ -1,0 +1,151 @@
+
+PARSER_BEGIN(cw1)
+/* Java declarations to be inserted by JavaCC  */
+
+/* Class declaration for cw1 used instead of default */
+public class cw1 {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    cw1 parser = new cw1(System.in);
+    parser.TokenList(); /* TokenList declared below */
+  }
+
+  public static int parseLiteral(String hex, int base)  {
+       int valchar=0, val=0, l;
+       char ch;
+       StringBuffer buf = new StringBuffer(hex);
+       l = buf.length();
+       for(int i=0; i < l; i++) {
+	ch=buf.charAt(i);
+	if (ch >= '0' && ch <= '9')
+	   valchar = ch-'0';
+	else if (ch >= 'a' && ch <= 'f')
+	     valchar = 10 + (ch-'a');
+	else if (ch >= 'A' && ch <= 'F')
+	     valchar = 10 + (ch-'A');
+	else {
+	     System.out.println("Bad Char "+ch); // better trow an exception
+	     return -1;
+	}
+	if (valchar >= base) {
+	     System.out.println("Bad Char "+ch+" greater or equal than base "+base);
+	     return -1;
+        }
+	val = val*base + valchar;
+       }
+      return val;
+  }
+
+}
+
+
+PARSER_END(cw1)
+
+/* 
+ * Lexical items.
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : /* Integers literals */
+{
+  < INTEGER_LITERAL: ("+"|"-")? (["0"-"9"] (<DIGIT>)*) >
+}
+
+TOKEN : /* My ID 2. */
+{
+  < MYID2: <ALPHA> (<ALPHA> | <NUMERIC>)+ <NUMERIC> >
+}
+
+TOKEN : /* My ID. */
+{
+  < MYID: <ALPHA> <NUMERIC> >
+}
+
+TOKEN : /* My ID 3. */
+{
+  < MYID3: <ALPHA> ("11" ("1")+ "7" | "117" ("7")+) >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Rational. */
+{
+  < RATIONAL: (<DIGIT>)+ "/" (<DIGIT>)+ >
+}
+
+TOKEN :
+{
+ < HORROR: (~[  " ", "\t", "\n", "\r", "\f", "/"])+  >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+|
+  < #ALPHA: ("abdt") >
+|
+  < #NUMERIC: ("117") >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t; int val; int div; String val1; String val2; double rat;}
+{
+   ( { val = 0;}
+     (t = <INTEGER_LITERAL> | t = <IDENTIFIER> | t = <HORROR> |
+      /* New tokens added here. */
+      t = <MYID> | t = <MYID2> | t = <MYID3> | t = <RATIONAL>)
+     // Code executed after any match to tokens above
+     { System.out.print(tokenImage[t.kind]+" ('"+t.image+"') ");
+       switch(t.kind)  {
+         case INTEGER_LITERAL:
+	     if (t.image.charAt(0) == '+') {
+		val = cw1.parseLiteral(t.image.substring(1), 10);
+		System.out.println(" value = " + val);
+	     }
+	     else if (t.image.charAt(0) == '-') {
+		val = cw1.parseLiteral(t.image.substring(1), 10);
+		System.out.println(" value = " + (val * -1));
+	     }
+	     else {
+		 val = cw1.parseLiteral(t.image,10);
+		 System.out.println(" value = " + val);
+	     }
+	     break;
+         case RATIONAL:
+	     div = t.image.indexOf('/');
+	     val1 = t.image.substring(0, div);
+	     val2 = t.image.substring(div + 1, t.image.length());
+	     rat = cw1.parseLiteral(val1,10) / cw1.parseLiteral(val2,10);
+	     if (val2 == "0") {
+		System.out.println("infinity");
+	     }
+	     else {
+	     System.out.println(" value = " + rat);
+	     }
+	     break;
+	 default:
+	     System.out.println(" "); // new line
+       }
+     }
+   )* <EOF>
+}
+

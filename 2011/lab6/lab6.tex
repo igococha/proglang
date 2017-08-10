@@ -1,0 +1,238 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+\section*{Language Processors Lab 6 (Week7)\\
+ Building Abstract Syntax Trees (ASTs) with jjtree}
+
+\medskip\noindent In this lab you will learn how to use jjtree to create Abstract Syntax Trees, and how to modify the generated classes to traverse the generated ASTs.
+
+\subsection*{Downloading the files}
+
+Start a Unix shell window and move to your LanguageProcessors directory. Download the file {\tt lab6.tar.gz} from Moodle (week7) or from \verb+http://www.soi.city.ac.uk/~sbbc287/lab6.tar.gz+. Unzip and untar the file with the following commands:
+
+\begin{verbatim}
+gunzip lab6.tar.gz       // this will genenerate lab6.tar
+tar -xvf lab6.tar
+\end{verbatim}
+
+The last command will generate the {\tt lab6} directory. It is possible that, while downloading, the file system automatically unzips, and even expands (untars), the file. If that's the case, you may have to skip one or both of the above commands, though make sure to copy the new directory. \\
+
+Your new {\tt lab6} directory should contain two directories: {\tt exp} and {\tt tpl}. Double check that this is the case.
+
+Load java and javacc by executing the command:
+\begin{verbatim}
+      module add java javacc
+\end{verbatim}
+
+\subsection*{Generating ASTs for expressions using jjtree}
+
+\subsubsection*{The Files}
+
+Move into the {\tt exp} subdirectory, inside the {\tt lab6} directory. \textbf{For example}, if you are in the {\tt LanguageProcessors} directory, type:
+\begin{verbatim}
+cd lab6/exp       
+\end{verbatim}
+
+The contents of the {\tt exp} directory are:
+\begin{itemize}
+\item {\tt Exp.jj}: Defines the grammar, and parser, for arithmetical expressions.
+\item {\tt Main.java}: Entry point of the program. It calls the parser for arithmetical expression.
+\end{itemize}
+
+Check the {\tt Exp.jj} file. Note that it contains the grammar for arithmetical expressions used in the provious labs:
+
+\begin{tabular}{lcl}
+E & $\rightarrow$ & T ( \verb-+- T $|$ \verb+-+ T)$^*$ \\
+T & $\rightarrow$ & F ( \verb+*+ F $|$ \verb+/+ F)$^*$ \\
+F & $\rightarrow$ & number $|$ \verb+(+ E \verb+)+\\
+\end{tabular}
+
+ Note also that it contains no semantic actions and that all non-terminal definitions are of type {\tt void} i.e. this file defines a pure parser.
+
+Execute JavaCC, compile the generated java files and execute the program by typing the usual commands:
+
+\begin{verbatim}
+    javacc Exp.jj              javac Main.java                  java Main
+\end{verbatim}
+
+\noindent Test the program with a few examples just to make sure that we are working with the correct parser.
+
+\subsubsection*{Generating ASTs}
+
+The current parser does not generate ASTs. In the previous lab we did this by creating new classes that implemented the ASTs for arithmetical expressions and added semantics actions to the grammar with the respective constructor calls. In this lab we will use a program that can achieve the same result automatically: JJTree.
+
+JJTree is a program, part of the JavaCC tool chain, that takes as input a {.jjt} file and generates a JavaCC file ({\tt .jj}) together with a set of classes that implement the AST defined by the grammar in {.jj}. A brief (but comprehensive enough) introduction to jjtree can be found in \verb+www.soi.city.ac.uk/~sbbc287/jjtree.html+.
+
+We will start by working with the default settings of jjtree. First, we need to change the extension of our JavaCC file to {\tt .jjt}. Type the following\footnote{You can also do Save As and remove the old file}:
+
+\begin{verbatim}
+    mv Exp.jj Exp.jjt
+\end{verbatim}
+
+Start a text editor and load {Exp.jjt}. Add the following to the beginning of the file:
+\begin{verbatim}
+     options {
+        MULTI=true;
+     }
+
+     PARSER_BEGIN(ExpParser)  //  first line old file - don't copy!
+\end{verbatim}
+Now, invoke jjtree with the following command:
+
+\begin{verbatim}
+     jjtree Exp.jjt
+\end{verbatim}
+
+Type {\tt ls} and double-check that jjtree has created a fresh {Exp.jj} file, and a class definition per non-terminal specified in the JJTree file, namely, ASTS, ASTE, ASTT and ASTF. All these classes inherit from  Node and SimpleNode (part of the JJTree package).
+
+In order to see JJTree in action, add the following line to {\tt Main.java}:
+
+\begin{verbatim}
+       parser.S();  // Part of the original Main.java - don't add
+      ((SimpleNode)parser.jjtree.rootNode()).dump("");
+\end{verbatim}
+
+Now we are ready to call JavaCC, compile the resulting files and execute the new program:
+
+\begin{verbatim}
+      javacc Exp.jj           javac Main.java                 java Main      
+\end{verbatim}
+
+Type any arithmetical expression. What happens? Try more.\\
+After parsing, {\tt Main.java} prints the contents of the generated AST by invoking the method {\tt dump} - that's the last line you added above!
+
+OK, so JJTree is working. Now we need to tell JJTree to generate the ASTs we want. Instead of the default classes we want ASTs made of classes that follow the structure used in the previous lab i.e. a class per binary expression and another for numerical constants. First, remove the generated files with:
+
+\begin{verbatim}
+     rm  AST*
+\end{verbatim}
+
+\noindent i.e. remove all files starting with AST. Make sure {\tt Exp.jjt} is loaded in your text editor and follow the instructions below:
+
+\begin{itemize}
+\item Change the declaration of {\tt S()} to:
+
+\begin{verbatim}
+      void S()  #void :
+\end{verbatim}
+
+By adding \verb+#void+ we stop jjtree from creating a new node. Why? Because we don't want an {\tt S} node.
+
+\item Change the specification of {\tt E()} to:
+
+\begin{verbatim}
+void E() #void :
+{  }
+{
+    T() (  "+" T() #PlusExp(2)
+         | "-" T() #MinusExp(2)
+        )*
+}
+\end{verbatim}
+
+Similarly, \verb+#void+ prevents jjtree from creating a new {\tt E} node. Instead, we instruct jjtree to create \verb+#PlusExp(2)+ and \verb+#MinusExp(2)+ nodes using the last two nodes created by jjtree, that is, the ones matched by {\tt T()}.
+
+\item Change the specification of {\tt F()} to:
+
+\begin{verbatim}
+void T() #void:
+{  }
+{
+   F() (  "*"  F() #TimesExp(2) 
+         | "/" F() #DivExp(2) 
+       )*
+}
+\end{verbatim}
+
+Explanation: Same as above
+
+\item And, finally, change the specification of {\tt F()} to:
+
+\begin{verbatim}
+void F() #void :
+{  }
+{
+     <NUM> #NumExp
+  | "(" E() ")"
+}
+\end{verbatim}
+
+As above, \verb+#void+ prevents jjtree from creating a new {\tt F} node. Instead, we instruct jjtree to create \verb+#NumExp+ after the token \verb+<NUM>+ is matched. Note, however, that we are not storing the numeric value of the number!! (we'll sort that out soon). \\
+We don't need to create a new node for expression in parenteses.
+
+\end{itemize}
+
+We are ready to run our new parser. Execute each of the commands below:
+
+\begin{verbatim}
+      jjtree Exp.jjt     javacc Exp.jj       javac Main.java        java Main      
+\end{verbatim}
+
+Type a few arithmetical expression. What happens? The program, after parsing, prints the structure of the generated AST. Make sure that the strcuture makes sense!!
+
+\subsubsection*{Modifying the generated jjtree classes}
+
+The current version of the parser generates a well-formed AST. However, the new AST does not store - as with our previous versions - the value of integer constants (the ones matched against \verb+<NUM>+). 
+
+Change the specification of {\tt F()} to:
+\begin{verbatim}
+void F() #void :
+{ Token t; }    // 
+{
+     (t=<NUM>  { jjtThis.val = Integer.parseInt(t.image);})  #NumExp
+  | "(" E() ")"
+}
+\end{verbatim}
+
+Note that we have introduced a {\tt Token t} variable, and that the parsed integer value is being stored in data field {\tt val} of generated class {\tt ASTNumExp}. Therefore, we need to declare a new field {\tt val} inside {\tt ASTNumExp} class declaration. Furthermore, we would like to modify the {\tt dump} method to print the value associated woth ASTNumExp.
+
+Open file {\tt ASTNumExp.java} and add the following (at the bottom of the class declaration):
+
+\begin{verbatim}
+    public int val;
+
+    public void dump(String prefix) {
+       System.out.print(toString(prefix));
+       System.out.println(" "+val);
+    }
+ } // This must be the parenthesis that closes the class declaration
+\end{verbatim}
+
+MAke sure you save the file!! Execute jjtree, javacc, javac and run the program>
+Do you see any changes?
+
+\noindent\textbf{Task:} How would you implement the calculator? \textbf{Hint:} For tree traversal, use the method {\verb+jjtGetChild(int i)+}, which returns a Node's child (also a Node) indexed by i (starts from 0).
+
+\subsubsection*{Introducing the SIMPLE language} 
+
+Go to the {\tt tpl} subdirectory. There you will find four files: TPL.jjt, TPLTypes.java, TPL.java and ident.tpl. TPL.jjt defines the syntax of the SIMPLE language used in your coursework, together with the jjtree annotations used to create the respective AST. ident.tpl is a sample program written in the SIMPLE language.
+
+Execute: {\tt jjtree TPL.jjt}, {\tt javacc TPL.jj} and javac {\tt TPL.java}.
+
+What happens? You will get a few compilation errors. That's because the generated AST classes are missing a few fields (set by TPL.jjt). In order to fix this you ned to declare:
+\begin{verbatim}
+    public int type;
+    public String name;
+\end{verbatim}
+in {\tt ASTVarDeclaration.java},
+\begin{verbatim}
+   public String name;
+\end{verbatim}
+in {\tt ASTReadStatement.java}, {\tt ASTWriteStatement.java}, and {\tt ASTId.java}, and:
+\begin{verbatim}
+   public int val;
+\end{verbatim}
+in {\tt ASTIntConst.java}. Recompile and run.
+
+\end{document}
+

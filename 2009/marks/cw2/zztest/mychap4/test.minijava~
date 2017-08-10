@@ -1,0 +1,8 @@
+class Test {
+  public static void main(String[] args) 
+    {   System.out.println((new A()).m()); }}
+
+class A {
+    public int m() { 
+        int x; int y; int z;
+        x =3; y = x * 10; return (x / y); }}

@@ -1,0 +1,82 @@
+/* ****** Part One ******
+* Class Definition and other Jave code
+*/
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space");
+    System.out.println ("Press ENTER to finish");
+    LexTest parser = new LexTest(System.in);
+    System.out.print("Enter Input > ");
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+/* ***** Part Two *******
+ * Lexical items - Token Specifications
+ */
+
+/* SKIP is a special token that is ignored by the lexer i.e. it defines the 
+   sequence of characters that will be considered as Whitespace.
+   According to the definition below, blanks and tabs will be ignored.
+*/
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+}
+
+TOKEN : /* Token defined to end input */
+{
+ < END_INPUT:  "\n" | "\r" | "\f" >	
+}
+
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: (<DIGIT>)+ >
+}
+
+
+TOKEN : /* Operators */
+{ 
+  < PLUS: "+" > 
+ | < MINUS: "-" >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). 
+         JavaCC does not generate Tokens for the specifications below. 
+         The names <LETTER> and <DIGIT> can be used by the other
+          specifications (above)
+        */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+}
+
+/* ******* Part Three
+ * A simple grammar to match tokens and print them.
+ */
+
+/* The grammar consists of one non-terminal: TokenList.
+   Note that TokenList is called by the main method */
+void TokenList() :
+{Token t;} /* Declarations */
+{
+   (
+     (t = <INTEGER_LITERAL> | t = <PLUS> | t = <MINUS> | t = <IDENTIFIER> )
+     /* Java code inserted */
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <END_INPUT>
+}
+

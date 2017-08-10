@@ -1,0 +1,325 @@
+%\documentstyle[cityexam,11pt]{article}
+\documentclass[11pt]{cityexam}
+\usepackage{semantic}
+\withmodelanswers
+\begin{document}
+%\examnumber{905.57}
+\begin{preamble}
+\degrees{B.Eng. Degree in Computing \\ B.Eng. Degree in Software Engineering}
+\part{II}
+\title{Language Processors}
+\examdate{??? September 2002}
+\examtime{???--???}
+\rubric{Answer {\sl TWO} questions \\ All questions carry equal marks}
+\end{preamble}
+\externals{P. Hall \\ M. Moulding}
+\internals{D. Bolton}
+
+\reservestyle{\nonterm}{\textit}
+\nonterm{dec,decs,vardec,fundec,id,exp,tyfields,type-id,fundecs,expseq,op}
+\reservestyle{\keyword}{\textbf}
+\keyword{var,function,let,in,end,if,then,else,while,do,for,break,to,switch,of,case,default}
+
+
+\begin{questions}
+
+\newpage
+
+\question
+
+\begin{subquestions}
+
+
+\subquestion
+Give a definition for regular expressions which shows how
+arbitrary regular expressions can be constructed for a
+given alphabet (set) of symbols. Do not include shorthand
+notations you may know.
+\marks{10}
+
+\subquestion
+Write down regular expressions that define a pattern to recognise
+unsigned real numbers that are composed of an non-zero number of digits
+followed by a decimal point (period) followed by an non-zero number of
+digits. If there is more than a single digit in the string of 
+digits before the point, the string must not begin with a `0'. 
+If there is more than a single digit in the string of digits after the point, 
+the string must not end with a `0'.
+\marks{20}
+
+\begin{modelanswer}
+\begin{verbatim}
+(([1-9][0-9]+)|[0-9]).([0-9]|[0-9]+[1-9])
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+What is an ambiguous grammar? 
+By giving suitable examples show that the
+        following grammar is ambiguous. 
+\begin{tabbing}
+stmtxxx\=$\rightarrow$xxx\=if\kill
+\it
+exp \> $\rightarrow$ \> {\it exp\/} \verb!+! {\it exp} \\
+\it
+     \> $\mid$ \> {\it exp\/} \verb!-! {\it exp\/} \\
+     \> $\mid$ \> {\it id}
+\end{tabbing}
+Here {\it id\/} stands for any identifier.
+Explain the term {\em shift-reduce conflict\/} using as
+an example the program fragment \verb!a+b-c!.
+\marks{35}
+
+\begin{modelanswer}
+Two parse trees for a suitable expression (20).
+
+Point at which a parser can either shift, or reduce by a rule. 
+Here, reach the -, can shift, or reduce using first production (15).
+\end{modelanswer}
+
+
+\subquestion
+Consider the following Tiger function:
+\begin{verbatim}
+1 function f(a:string, b:int, c:int)=
+2       (print_int(b+c);
+3        let var c := "hi"
+4            var a := b
+5            var b := "hello"
+6        in print(b); print_int(a) 
+7        end;
+8        print_int(c); print_int(b);
+9       )
+\end{verbatim}
+Given an initial environment $\sigma_0 = \{\textrm{a} \rightarrow \textrm{int}, \textrm{b} \rightarrow \textrm{string}\}$, derive the type binding environments for the function at each
+use of an identifier and indicate where type lookups will occur.
+\marks{35}
+
+\begin{modelanswer}
+0 $\sigma_0$ is starting environment\\
+1 $\sigma_1 = \sigma_0 + \{a\rightarrow string,b\rightarrow int,c\rightarrow int\}$\\
+2 lookup ids b, c  in $\sigma_1$\\
+3 $\sigma_2 = \sigma_1 + \{c\rightarrow string\}$ (overrides arg c)\\
+4 lookup id b, then $\sigma_3 = \sigma_2 + \{a\rightarrow int\}$ (overrides arg a)\\
+5 $\sigma_4 = \sigma_3 + \{b\rightarrow string\}$ (overrides arg b\\
+6 lookup id b, then a  in $\sigma_4$\\
+6 discard $\sigma_4$, $\sigma_3$, $\sigma_2$ revert to $\sigma_1$\\
+7 lookup c, b in $\sigma_1$\\
+8 discard $\sigma_1$ revert to $\sigma_0$
+\end{modelanswer}
+
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+The reference manual for a Tiger'01-like programming language contains
+the following definition for a kind of expression: 
+
+The switch-expression
+\[
+\<switch> \; ( \; \<exp> \; ) \; \<of> \; ( \; \<case> \; \<exp>_{c1} \; : 
+\; \<exp>_1 \; \<case> \; \<exp>_{c2} \; : \; \<exp>_2 \;  \ldots \; \<default> \; : \; \<exp>_{\it default} \; ) \;
+\]
+first evaluates the integer expression $\<exp>$.
+This value is then compared in sequence 
+with $\<exp>_{c1}, \<exp>_{c2}, \ldots $.
+If there is a match for an $\<exp>_{cn}$, 
+the switch-expression yields
+the result of evaluating the corresponding $\<exp>_{\it n}$.
+If there is no match, the switch-expression yields the
+result of evaluating $\<exp>_{\it default}$.
+The $\<default> \; : \; \<exp>_{\it default}$ part may be omitted, 
+and then if there is no match the switch-expression produces no
+value.
+
+\begin{subquestions}
+\subquestion
+Write down a BNF concrete syntax for the switch-expression. 
+\marks{15}
+
+\begin{modelanswer}
+Terminals in CAPS.
+\begin{verbatim}
+switch-exp -> SWITCH ( exp ) OF ( cases default ) 
+           |  SWITCH ( exp ) OF ( cases )
+
+default    -> DEFAULT : exp
+
+cases      -> CASE exp : exp
+           |  CASE exp : exp cases
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Sketch a possible abstract syntax for the switch-expression.
+\marks{15}
+
+\begin{modelanswer}
+\begin{verbatim}
+SwitchExp (Exp intexp default) (CaseList cases)
+CaseList (Case head CaseList tail)
+Case (Exp case resultexp) 
+(be flexible about how this is expressed - it might be Java)
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Show how semantic actions in a grammar for a parser-generator such as CUP
+can be used to produce abstract syntax trees for the switch-expression.
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+public class SwitchExp extends Exp {
+   public Exp intexp, cdefault;
+   public CaseList cases;
+   public SwitchExp(int p, Exp e, CaseList l, Exp d) 
+     {pos=p; intexp=e; cases=l; cdefault=d; }
+}
+public class CaseList {
+   public Case head;
+   public CaseList tail;
+   public CaseList(Case h, CaseList t) {head=h; tail=t;}
+}
+public class Case extends Absyn {
+   public Exp switchcase, exp;
+   public Case (int p, Exp c, Exp e) 
+      {pos=p; switchcase=c; exp=e;}
+}
+...
+exp  ::= ....
+
+     |   SWITCH:s LPAREN exp:e RPAREN OF 
+           LPAREN cases:c default:d RPAREN
+         {: RESULT = new Absyn.SwitchExp(sleft,e,c,d); :}
+
+     |   SWITCH:s LPAREN exp:e RPAREN OF 
+           LPAREN cases:c RPAREN
+         {: RESULT = new Absyn.SwitchExp(sleft,e,c,null); :}
+
+     ;
+
+default ::= DEFAULT COLON exp:e {: RESULT = e ; :}
+     ;
+
+cases ::= CASE:p exp:ec COLON exp:e
+          {: RESULT = new Absyn.CaseList(
+                       new Absyn.Case(pleft,ec,e),null); :}
+      |   CASE:p exp:ec COLON exp:e cases:m
+          {: RESULT = new Absyn.CaseList(
+                       new Absyn.Case(pleft,ec,e),m); :}
+\end{verbatim}
+\end{modelanswer}
+ 
+\subquestion
+        Outline the intermediate representation
+        that might be generated from your
+        asbtract syntax trees in translation of
+        a switch-expression.
+        You may wish to use a simple example to explain your 
+        translation, eg:
+\begin{verbatim}
+a := switch ( x ) of 
+      ( case y: x+1  case y+1: x+3  
+           case y+3: x+5  default: x+10 )
+\end{verbatim}
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+eval exp (here, x) into R1 (some TEMP loc ie a virtual reg)
+eval first label exp (here, y) into R2 (some TEMP ie a reg)
+CJUMP(=,R1,R2,L1,L2)
+LABEL(L1)
+eval first result exp (here x+1) into R3 (some TEMP)
+JUMP(Lend)
+LABEL(L2)
+evaluate second ... (here y+1)...
+...
+LABEL(Ln)
+eval default result exp (here x+10) into R3 (some TEMP)
+JUMP(Send)
+LABEL(Lend)
+store result in R3 as appropriate (here into a)
+LABEL(Send)
+\end{verbatim}
+\end{modelanswer}
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+
+\begin{subquestions}
+
+\subquestion
+Choose a programming language you know well and describe
+its run time storage requirements and functioning.
+Clearly associate any storage structures you
+mention with the implementation of particular 
+language features.
+\marks{30}
+
+\begin{modelanswer}
+Language features: procedure/method call and parameter passing,
+lexical scoping, dynamic storage allocation and deallocation,
+including object creation. Name stack, heap, why different.
+More marks for good exposition of example language
+(eg Java object creation, method call). Operation of
+stack and heap (with mention of garbage collection).
+\end{modelanswer}
+
+
+\subquestion
+What is a stack frame?
+Outline a typical layout for a stack frame and describe 
+each element of a frame and how it is pushed to the stack during
+program execution. 
+Explain the term {\em static link\/} and explain why a C or Java
+implementation does not include static links in its stack frames.
+%Comment on how local variables, arguments and non-local variables
+%are addressed by the code generated for a procedure or method. 
+\marks{40}
+
+\begin{modelanswer}
+A structure to store info local to a proc invocation.
+Args, static link, locals, return address, regs/temp space.
+More marks for mentioning code genned for a proc/func doing the
+pushing.
+%Locals, args: offsets from SP or FP; non-locals: follow access links
+%(more for description of access link).
+\end{modelanswer}
+
+\subquestion
+Explain why registers might be used for parameter passing and
+suggest situations where passing in registers is particularly
+appropriate. 
+Outline situations where it is necessary for the code generated for a 
+procedure or method to write registers to the stack.
+\marks{30}
+
+\begin{modelanswer}
+Efficiency; particularly appropriate when leaf procs, interproc
+reg alloc, dead variables, reg windows (but\ldots).
+Reg saves: when address is taken,
+when call-by-ref,
+when accessed by inner nesting,
+value too big,
+an array,
+convention of save for partic reg prior to call,
+spilling in exp evaluation,
+saving a reg window.
+\end{modelanswer}
+
+\end{subquestions}
+
+
+\end{questions}
+
+\end{document}
+

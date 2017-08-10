@@ -1,0 +1,65 @@
+
+PARSER_BEGIN(LexInt)
+/* Java declarations to be inserted by JavaCC */
+
+/* Class declaration for LexInt used instead of default */
+public class LexInt {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexInt parser = new LexInt(System.in);
+    parser.TokenList(); /* TokenList declared below */
+  }
+}
+
+PARSER_END(LexInt)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: (<DIGIT>)+  >
+}
+
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t; String s;}
+{
+   (
+     (t = <INTEGER_LITERAL> | t = <IDENTIFIER> )
+           { System.out.print("token found: "+ tokenImage[t.kind]);
+             System.out.print(" (`"+t.image+"') value: "); 
+	     System.out.println("UNDEFINED");
+	   }
+   )* <EOF>
+}
+

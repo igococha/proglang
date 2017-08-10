@@ -1,0 +1,17 @@
+This is Appel example 2.9 for reg exps and lexical analysis.
+The JavaCC reg exps are in MyParser.jj, the driver class Main is in Main.java.
+
+Run JavaCC on it with
+
+   module add java soi javacc/3.2
+   javacc MyParser.jj
+
+Compile the resulting lexical analysis classes, and the Main class with
+
+   javac Main.java
+
+Run it with 
+
+   java Main
+
+

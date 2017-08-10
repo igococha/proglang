@@ -1,0 +1,43 @@
+// Integer tests
+
+/* Integer Numerals */
+0L 0 1234 4567L -89L -123 
+
+/* Binary tests */
+b1000 -b1000 -b101L // Binary with signing!
+
+/* Octal tests */
+O2456L -O2456L O244 -O677
+
+/* Hexidecimal tests */
+zffffff -zffffffL -z000000 zDaDaCaFE zffL zf0
+
+// Float tests
+
+/* These are more expansive than the tests above
+   Note: Multi line comment here */
+
+// Plain
+2.f .4f 0f 0.0f -1.4f 2. -2. 0. 1e-9d -5000f 21d
+
+// Exponents
+1e1f 6.022137E23f 1e1 1e137 -5.56e4263 1e-137 1e+137 11E11131f
+
+// Error Tests
+
+f d l --4 --4.6 -9590m 0123 13l // l is not LONG
+
+zff00er /* more hex tests */ ffffff zz9959 zcobol
+
+// Binary tests
+b10100110010102010101 -b110101-01 -b-1010101e101 -b10101e10L -b78 b101f
+
+// Octal
+o778 /* '8' is not valid here */ o343e129 o-1 -o1032-3 0808004 o999
+
+// Even more hex tests
+z999fffeeek z118118- zz99
+
+// Float
+040404400440e -030402002e4ff -32.. -0.23203202002020400e3203fh -1.1.1 3-e2f -31.eL
+z13121.1f ..0f .f

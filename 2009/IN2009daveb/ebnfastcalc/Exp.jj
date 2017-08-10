@@ -1,0 +1,49 @@
+PARSER_BEGIN(ExpParser)
+
+import syntaxtree.*;
+public class ExpParser {
+}
+
+PARSER_END(ExpParser)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+Exp S() :
+{ Exp s; }
+{
+    s=E() <EOL> { return s; }
+  | <EOL>
+  | <EOF>
+}
+
+Exp E() :
+{ Exp e; Exp t; }
+{
+  e=T() (  "+" t=T() { e=new PlusExp(e,t); }
+         | "-" t=T() { e=new MinusExp(e,t); } )*
+    { return e; }
+}
+
+Exp T() :
+{ Exp t; Exp f; }
+{
+  t=F() (  "*" f=F() { t=new TimesExp(t,f); }
+         | "/" f=F() { t=new DivideExp(t,f); } )*
+    { return t; }
+}
+
+Exp F() :
+{ Token t; Exp result; }
+{
+    t=<NUM> { return new NumExp(t.image); }
+  | "(" result=E() ")" { return result; }
+}
+

@@ -1,0 +1,53 @@
+Tests for INT (20%)
+-------------
+(POS - 2% for each matched)
+0
+894
+0267
+0xbacad00d
+0L
+66L
+0777L
+0xC0B0L
+0x00FF00FF
+
+(NEG - lose 3% for each matched as single token)
+0x0G11
+0778
+L
+
+Tests for FLOAT (20%)
+---------------
+(POS - 2% for each matched)
+1e2f
+6.f
+.4f
+1.337f
+5.5642e63f
+1e1
+1.
+2.27
+4e-9d
+1e337
+
+(NEG - lose 3% for each matched)
+e
+f
+e42
+
+FOR - 40%
+---------
+Check compiles
+Check minijava.jj
+Check Syntaxtree
+Check Visitor
+Check PrettyPrinter
+
+(Accept for(s;e;s) or for(e;e;e))
+
+TRY/CATCH - 20%
+---------------
+Check minijava.jj
+Check Syntaxtree
+Check Visitor
+Check PrettyPrinter

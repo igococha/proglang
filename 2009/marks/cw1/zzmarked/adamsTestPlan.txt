@@ -1,0 +1,217 @@
+-- Regular binary with lowercase b, value expected is 9
+
+b1010
+
+-- Regular binary with uppercase b, value expected is 9
+
+B1010
+
+-- Negative binary, value expected negative 2
+
+-b10
+
+-- Positive binary
+
++b10000000
+
+-- Both binary types as LONG but printed INT, value is 4
+
+b100L
+
+B100L
+
+-- Check only 1 or 0 can be in binary returning error
+
+b0021
+
+b10a0
+
+
+
+
+
+-- Decimal int 0
+
+0
+
+-- Positive negative normal and long decimal ints
+
+1123
+
+-123
+
++123
+
+123L
+
+-- Checks only numbers can be in int
+
+12a3
+
+
+
+
+
+-- Upper and lower case z for hexadecimal int, value is 716818
+
+zaf012
+Zaf012
+
+-- Positive and negative hexadecimal ints, value is 170
+
++zaa
+
+-zaa
+
+-- LONG hexadecimals, value is 170
+
+zaaL
+
+ZaaL
+
+-- Checks hexadecimal only accepts a to f
+
+zaja
+
+
+
+
+
+-- Uppercase lowercase o checked and positive negative and LONG, value is 63
+
+o77
+
+O77
+
++o77
+-o77
+
+o77L
+
+O77L
+
+-- Checks only 0 to 7 are accepted
+
+o0718
+
+o707a5
+
+
+
+
+-- Checks general floats
+
+234f
+
+-12321f
+
++123f
+
+
+-- Checks general doubles
+
+234d
+
++234d
+
+-234d
+
+
+-- Checks decimal numbers
+
+12.2
+
+.2
+
+12.
+
++12
+
+-12
+
++.2
+
+-- These decimal numbers should fail
+
+9..2
+
+9.-2
+9.2.
+
+
+
+-- Checks exponents
+
+1e2
+
+1E2
+
++2e3
+
+-2e3
+
+1.2e3
+
+.2e3
+
+2.e4
+
+1e3f
+
+1e4d
+
+-- These exponents should fail
+
+.2e
+
+
+2e
+
+3e6.1
+
+
+-- Checks double negative and positive should fail
+
+--2
+
+++2
+
+
+
+-- Checks a number cant be both float and double
+
+1fd
+
+
+
+-- Checks comments
+
+// this is a comment
+
+/* this is a multi line
+
+comment */
+
+// this one line comment works but the end wont, expect COMMENT ERROR because it is on the 
+next
+line
+
+/*
+
+This classes as a comment
+
+*/
+
+
+
+
+
+-- Checks the DadaCafe is accepted
+
+zDadaCafe
+
+
+
+-- Checks skipped characters, like tab and new line etc
+
+	2 3 4	2

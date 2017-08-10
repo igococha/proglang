@@ -1,0 +1,237 @@
+#LyX 1.4.4 created this file. For more info see http://www.lyx.org/
+\lyxformat 245
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+
+\usepackage{a4wide}
+
+
+
+\usepackage{color}
+\end_preamble
+\language english
+\inputencoding latin1
+\fontscheme default
+\graphics default
+\paperfontsize 11
+\spacing single
+\papersize default
+\use_geometry false
+\use_amsmath 0
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\end_header
+
+\begin_body
+
+\begin_layout Subsection*
+IN2009: Language Processors
+\end_layout
+
+\begin_layout Subsection*
+2006/2007 Coursework 2
+\end_layout
+
+\begin_layout Paragraph
+Organisation:
+\end_layout
+
+\begin_layout Standard
+This coursework assessment may be completed individually, or in pairs, and
+ there is no penalty for working in a pair.
+ You will hand work in as individuals but the handin procedure will allow
+ you to say who you collaborated with (and you must do so!).
+ 
+\emph on
+Pairs
+\emph default
+ only -- not threesomes!
+\end_layout
+
+\begin_layout Paragraph
+Hand in:
+\end_layout
+
+\begin_layout Standard
+The deadline and the electronic handin procedure, and exactly what you should
+ hand-in, are documented online.
+ Obviously you should change file and directory permissions while you are
+ working so that your work is not visible to others -- remember plagiarism
+ carries severe penalties.
+\end_layout
+
+\begin_layout Standard
+Modify the MiniJava implementation to undertake 
+\emph on
+type checking
+\emph default
+.
+\end_layout
+
+\begin_layout Subsubsection*
+The work
+\end_layout
+
+\begin_layout Standard
+You will extend the MiniJava implementation, including the typechecker.
+ Copy the MiniJava implementation directory to where you want to work, using:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+cp -R /soi/sw/courses/daveb/IN2009/minijava/chap5
+\end_layout
+
+\begin_layout Standard
+This is available as a zip file on Cityspace too.
+ Files README in the various directories give a brief description of the
+ structure of the implementation, and the symbol table mechanism and typechecker
+ were studied in Session 5.
+\end_layout
+
+\begin_layout Enumerate
+Add the operators 
+\family typewriter
+/
+\family default
+ (divide), 
+\family typewriter
+>
+\family default
+ (greater than), 
+\family typewriter
+||
+\family default
+ (or), and 
+\family typewriter
+a?b:c
+\family default
+ (shortcut for 
+\family typewriter
+if(a){b}else{c}
+\family default
+) to your implementation.
+ They have the same syntax and meaning as they do in Java (you may need
+ to research this if you are not familiar with how it works!), and appropriate
+ typechecks should be implemented for them (
+\family typewriter
+op1 ? op2 : op3
+\family default
+ returns 
+\family typewriter
+op2
+\family default
+ if 
+\family typewriter
+op1
+\family default
+ is true, and returns 
+\family typewriter
+op3
+\family default
+ if 
+\family typewriter
+op1
+\family default
+ is false).
+ [30%]
+\end_layout
+
+\begin_layout Enumerate
+Add appropriate typechecking for the 
+\family typewriter
+for
+\family default
+ statement you implemented in assessment 1 (for those who did not hand in
+ the first coursework, I will publish some guidance on what needs to be
+ added - this will be published 
+\bar under
+after
+\bar default
+ two weeks from the deadline of assessment 1).
+ [50%]
+\end_layout
+
+\begin_layout Enumerate
+For highest marks: add appropriate typechecking for the 
+\family typewriter
+throw
+\family default
+ and 
+\family typewriter
+try
+\family default
+ statements implemented in assessment 1.
+ 
+\series bold
+\emph on
+Please do not attempt this section until you have completed the previous
+ two - they are worth a much higher proportion of the marks!
+\series default
+\emph default
+ [20%]
+\end_layout
+
+\begin_layout Subsubsection*
+The 
+\family typewriter
+for
+\family default
+ statement
+\end_layout
+
+\begin_layout Standard
+A clarification of the 
+\family typewriter
+for
+\family default
+ statement.
+ To reduce the confusion caused by the definition of 
+\family typewriter
+for
+\family default
+ used in assessment 1, please follow this new definition for assessment
+ 2:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+<Statement>\;->\;<for>\;(<Id>=<Exp>;<Exp>;<Id>=<Exp>)\,\{<Statement>\}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This definition solves the issue of repeating 
+\family typewriter
+;
+\family default
+ and also removes the possibility of nested 
+\family typewriter
+for
+\family default
+ or 
+\family typewriter
+while
+\family default
+ loops in the conditional part.
+\end_layout
+
+\end_body
+\end_document

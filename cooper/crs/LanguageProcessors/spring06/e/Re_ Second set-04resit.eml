@@ -1,0 +1,24 @@
+Return-Path: <ross@soi.city.ac.uk>
+Received: (from ross@localhost)
+	by altair.soi.city.ac.uk (8.12.9/8.12.9) id i72N99Ca006840;
+	Tue, 3 Aug 2004 00:09:09 +0100 (BST)
+Date: Tue, 3 Aug 2004 00:09:09 +0100 (BST)
+Message-Id: <200408022309.i72N99Ca006840@altair.soi.city.ac.uk>
+From: ross@soi.city.ac.uk
+To: David Bolton <daveb@soi.city.ac.uk>
+Subject: Re: Second set
+In-Reply-To: <005901c47888$7e9b9f70$4a5c288a@Garfield>
+
+David,
+
+general: no breakdown of marks in marking scheme
+         School style now calls for new page for each question
+
+1(a): What sort of explanation is required?
+      (question seems to ask why procedure calls etc need stack frames)
+      "old SP becomes current frame pointer FP" repeated
+      is it OK to have an implementation without FP?
+
+1(d): can "value too big, an array" be relevant for a value in a reg?
+
+Ross

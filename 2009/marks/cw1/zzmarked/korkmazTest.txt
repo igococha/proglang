@@ -1,0 +1,21 @@
+Test File
+
+Test Cases	Expected Result		Achieved Result		Expected Result Achieved?
+1		1			1			Yes
+506947456	506947456		506947456		Yes
++1		+1			Error			No
+b1		1			1			Yes
+b0		0			0			Yes
+b1110111111	959			959			Yes
+x1		1			1			Yes
+xf		15			15			Yes
+xdada		56026			50626			Yes
+x12f		303			303			Yes
+o1		1			1			Yes
+o7		7			7			Yes
+0165734		60380			60380			Yes
+o8		Error			Error			Yes
+xz		Error			Error			Yes
+b2		Error			Error			Yes
+3.2		3.2			3.2			Yes
+3.2e5		3.2e5			3.2e5			Yes

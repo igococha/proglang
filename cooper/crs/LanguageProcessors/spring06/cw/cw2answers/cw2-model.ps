@@ -1,0 +1,557 @@
+%!  PostScript Source Code
+%
+%% Description: PostScript prolog for a2ps program.
+%% Copyright (c) 1990, Miguel Santana, miguel@imag.imag.fr
+%% a2ps 4.0
+%%EndComments
+
+/$a2psdict 100 dict def
+$a2psdict begin
+
+% General macros.
+/xdef {exch def} bind def
+/getfont {exch findfont exch scalefont} bind def
+
+% Create Courier backspace font
+/backspacefont {
+    /Courier findfont dup length dict begin
+	{ %forall
+	    1 index /FID eq { pop pop } { def } ifelse
+	} forall
+	currentdict /UniqueID known { %if
+	    /UniqueID UniqueID 16#800000 xor def
+	} if
+	CharStrings length 1 add dict begin
+	    CharStrings { def } forall
+	    /backspace { -600 0 0 0 0 0 setcachedevice } bind def
+	    currentdict
+	end
+	/CharStrings exch def
+	/Encoding Encoding 256 array copy def
+	Encoding 8 /backspace put
+	currentdict
+    end
+    definefont pop
+} bind def
+
+% FUNCTIONS
+
+% Function newfile: Initialize file printing.
+/newfile
+{ /filename xdef
+  /filenamewidth filename stringwidth pop def
+  /filenamefont
+       filenamewidth filenameroom gt
+       {
+	       filenamefontname
+	       filenamefontsize filenameroom mul filenamewidth div
+	     getfont
+       }
+       { stdfilenamefont }
+     ifelse
+  def
+} bind def
+
+% Function header: prints page header. no page and
+% sheetside are passed as arguments.
+/header
+  { upperx 1 index get  uppery headersize sub 1 add  moveto
+    datefont setfont
+    gsave
+      upperx 1 index get uppery moveto pop
+      0 headersize 2 div neg rmoveto 
+      headersize setlinewidth
+      0.85 setgray
+      pagewidth 0 rlineto stroke
+    grestore
+    gsave
+      datefontsize headermargin rmoveto
+      date show				% date/hour
+    grestore
+    gsave
+      pnum cvs pop				% page pop up
+        pagewidth (Page 999) stringwidth pop sub
+        headermargin
+	  rmoveto
+      (Page ) show pnum show		% page number
+    grestore
+    empty pnum copy pop
+    gsave
+      filenamefont setfont
+         filenameroom filename stringwidth pop sub 2 div datewidth add
+          bodymargin 2 mul 
+        add 
+        headermargin
+      rmoveto
+        filename show			% file name
+      grestore
+    } bind def
+
+% Function border: prints border page. Use sheetside as arg
+/border 
+{ upperx 1 index get uppery moveto pop
+  gsave				% print four sides
+    0.7 setlinewidth		% of the square
+    pagewidth 0 rlineto
+    0 pageheight neg rlineto
+    pagewidth neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function hborder: completes border of the header.
+/hborder 
+{ gsave
+	0.7 setlinewidth
+	0 headersize neg rmoveto
+	pagewidth 0 rlineto
+	stroke
+  grestore
+} bind def
+
+% Function sheetnumber: prints the sheet number.
+/sheetnumber
+    { sheetnumberx sheetnumbery moveto
+      datefont setfont
+      pnum cvs
+	  dup stringwidth pop (0) stringwidth pop sub neg 0 rmoveto show
+      empty pnum copy pop
+    } bind def
+
+% Function currentdate: prints the current date.
+/currentdate
+    { datex datey moveto
+      bodyfont setfont
+      (Date: ) show
+      currdate show
+    } bind def
+
+% Function s: print a source line
+/s  { gsave
+        show
+      grestore
+      0 bodyfontsize neg rmoveto
+    } bind def
+
+% Strings used to make easy printing numbers
+/pnum 12 string def
+/empty 12 string def
+
+% Global initializations
+
+/CourierBack backspacefont
+/filenamefontname /Helvetica-Bold def
+/inch {72 mul} bind def
+
+% Initialize page description variables.
+/sheetheight 11.64 inch def
+/sheetwidth 8.27 inch def
+/margin 1.2 inch def
+/rightmargin margin 3 div def
+/leftmargin margin 2 mul 3 div def
+/twinfiles false def
+/date () def
+/currdate (Apr 26 2006 14:47:54) def
+%%EndProlog
+
+/docsave save def
+/landscape false def
+/twinpage false def
+% Character size for fonts.
+/filenamefontsize 15 def
+/datefontsize filenamefontsize 0.8 mul def
+/datefont /Helvetica datefontsize getfont def
+/datewidth datefont setfont currdate stringwidth pop def
+/stdfilenamefont filenamefontname filenamefontsize getfont def
+/headermargin filenamefontsize 0.25 mul def
+/headersize 0.29 inch def
+/bodyfontsize 9 def
+/bodyfont /CourierBack bodyfontsize getfont def
+/boldfont /Courier-Bold bodyfontsize getfont def
+/bodymargin bodyfontsize 0.7 mul def
+/lines 80 def
+/columns 93 def
+
+% Logical page attributs (a half of a sheet).
+/pagewidth
+   bodyfont setfont (0) stringwidth pop columns mul bodymargin dup add add
+   def
+/pageheight
+   bodyfontsize lines mul bodymargin dup add add headersize add
+   def
+/filenameroom
+      pagewidth
+      filenamefontsize 4 mul datewidth add (Page 999) stringwidth pop add
+    sub
+  def
+
+% Coordinates for upper corner of a logical page and for
+% sheet number. Coordinates depend on format mode used.
+% In twinpage mode, coordinate x of upper corner is not
+% the same for left and right pages: upperx is an array of
+% two elements, indexed by the side of the sheet.
+/topmargin margin twinpage {3} {2} ifelse div def
+
+% Portrait format
+/uppery topmargin pageheight add def
+/upperx [ leftmargin dup ] def
+/sheetnumberx sheetwidth rightmargin sub datefontsize sub def
+/sheetnumbery
+  sheetheight
+  topmargin pageheight add datefontsize add headermargin add
+    sub
+  def
+/datey sheetnumbery def
+/datex leftmargin def
+/date (Apr 26 2006 14:17:38) def
+(cw2-model) newfile
+%%Page: 1 1
+1 0 header
+0 border
+hborder
+  upperx 0 get  bodymargin  add
+	uppery
+	bodymargin bodyfontsize add headersize add
+  sub
+moveto
+bodyfont setfont
+( This is coursework 2 revision guidance for students.) s
+( ) s
+( MiniJava typechecker) s
+( ) s
+( ----------------------minijava.jj----------------------------------) s
+( First minijava.jj has to be modified to put in the new operators \(and) s
+( the do-while from the first coursework if you didn't already - see) s
+( Coursework 1 model answer\).) s
+( ) s
+( Tokens have to be added:) s
+( ) s
+( | < DIVIDE: "/" >       /* Added by DB */) s
+( | < GT: ">" >           /* Added by DB */) s
+( | < OR: "||" >          /* Added by DB */) s
+( | < SIF: "?" >          /* Added by DB */ ) s
+( | < SELSE: ":" >        /* Added by DB */ ) s
+( ) s
+( ) s
+( and the grammar changed:) s
+( ) s
+( Exp Expression\(\) :) s
+( { Exp e; }) s
+( {) s
+( ...) s
+( |) s
+(   LOOKAHEAD\( PrimaryExpression\(\) "||" \)         /* Added by DB */) s
+(   e=OrExpression\(\)) s
+( |) s
+(   LOOKAHEAD\( PrimaryExpression\(\) ">" \)          /* Added by DB */) s
+(   e=CompareGTExpression\(\)) s
+( |) s
+(   LOOKAHEAD\( PrimaryExpression\(\) "/" \)          /* Added by DB */) s
+(   e=DivideExpression\(\)) s
+( |) s
+(   LOOKAHEAD\( PrimaryExpression\(\) "?" \)          /* Added by DB */) s
+(   e=ShortCutIfElseExpression\(\)) s
+( ...) s
+( ) s
+( Exp OrExpression\(\) :                    /* Added by DB */) s
+( { Exp e1,e2; } ) s
+( {) s
+(   e1=PrimaryExpression\(\) "||" e2=PrimaryExpression\(\)) s
+(   { return new Or\(e1,e2\); }) s
+( }) s
+( ) s
+( Exp CompareGTExpression\(\) :             /* Added by DB */) s
+( { Exp e1,e2; }) s
+( {) s
+(   e1=PrimaryExpression\(\) ">" e2=PrimaryExpression\(\)) s
+(   { return new GreaterThan\(e1,e2\); }) s
+( }) s
+( ) s
+( Exp DivideExpression\(\) :                /* Added by DB */) s
+( { Exp e1,e2; }) s
+( {) s
+(   e1=PrimaryExpression\(\) "/" e2=PrimaryExpression\(\)) s
+(   { return new Divide\(e1,e2\); }) s
+( }) s
+( ) s
+( Exp ShortCutIfElseExpression\(\) :                /* Added by DB */) s
+( { Exp e1,e2,e3; }) s
+( {) s
+(   e1=PrimaryExpression\(\) "?" e2=PrimaryExpression\(\) ":") s
+(       e3 = PrimaryExpression\(\)) s
+(   { return new ShortCutIfElse\(e1,e2,e3\); }) s
+( }) s
+( -------------------------------------------------------------) s
+( ) s
+( Then syntax tree classes have to be created for each new operator \(headers) s
+( missing here - same as other tree classes\):) s
+( ) s
+( public class Or extends Exp {   /* Added by DB */) s
+(   public Exp e1,e2;) s
+(   ) s
+(   public Or\(Exp ae1, Exp ae2\) { ) s
+(     e1=ae1; e2=ae2;) s
+(   }) s
+( ) s
+(   public void accept\(Visitor v\) {) s
+(     v.visit\(this\);) s
+showpage
+%%Page: 2 2
+2 0 header
+0 border
+hborder
+  upperx 0 get  bodymargin  add
+	uppery
+	bodymargin bodyfontsize add headersize add
+  sub
+moveto
+bodyfont setfont
+(   }) s
+( ) s
+(   public Type accept\(TypeVisitor v\) {) s
+(     return v.visit\(this\);) s
+(   }) s
+( }) s
+( ) s
+( public class Divide extends Exp {       /* Added by DB */) s
+(   public Exp e1,e2;) s
+(   ) s
+(   public Divide\(Exp ae1, Exp ae2\) {) s
+(     e1=ae1; e2=ae2;) s
+(   }) s
+( ) s
+(   public void accept\(Visitor v\) {) s
+(     v.visit\(this\);) s
+(   }) s
+( ) s
+(   public Type accept\(TypeVisitor v\) {) s
+(     return v.visit\(this\);) s
+(   }) s
+( }) s
+( ) s
+( public class GreaterThan extends Exp {  /* Added by DB */) s
+(   public Exp e1,e2;) s
+(   ) s
+(   public GreaterThan\(Exp ae1, Exp ae2\) {) s
+(     e1=ae1; e2=ae2;) s
+(   }) s
+( ) s
+(   public void accept\(Visitor v\) {) s
+(     v.visit\(this\);) s
+(   }) s
+( ) s
+(   public Type accept\(TypeVisitor v\) {) s
+(     return v.visit\(this\);) s
+(   }) s
+( }) s
+( ) s
+( public class ShortCutIfElse extends Exp {       /* Added by DB */) s
+(   public Exp e1, e2, e3;) s
+( ) s
+(   public ShortCutIfElse\(Exp ec, Exp et, Exp ee\) {) s
+(     e1=ec; e2=et; e2=ee;) s
+(   }) s
+( ) s
+(   public void accept\(Visitor v\) {) s
+(     v.visit\(this\);) s
+(   }) s
+( ) s
+(   public Type accept\(TypeVisitor v\) {) s
+(     return v.visit\(this\);) s
+(   }) s
+( }) s
+( ) s
+( ------------------------------------------------------------------) s
+( ) s
+( Then the pretty printer \(DBPrettyVisitor.java\) needs to print the new operators) s
+( - the binary ones are just the same as And etc, the if-else is:) s
+( ) s
+(   // Exp e1,e2,e3;) s
+(   public void visit\(ShortCutIfElse n\) {         /* Added by DB */) s
+(     System.out.print\("\("\);) s
+(     n.e1.accept\(this\);) s
+(     System.out.print\(" ? "\);) s
+(     n.e2.accept\(this\);) s
+(     System.out.print\(" : "\);) s
+(     n.e2.accept\(this\);) s
+(     System.out.print\("\)"\);) s
+(   }) s
+( ) s
+( -------------------------------------------------------------------) s
+( ) s
+( Then the visitor interfaces must be fixed up:) s
+( ) s
+( --Visitor.java------------) s
+(   public void visit\(Or n\);              /* Added by DB */) s
+(   public void visit\(GreaterThan n\);     /* Added by DB */) s
+(   public void visit\(Divide n\);          /* Added by DB */) s
+(   public void visit\(ShortCutIfElse n\);  /* Added by DB */) s
+showpage
+%%Page: 3 3
+3 0 header
+0 border
+hborder
+  upperx 0 get  bodymargin  add
+	uppery
+	bodymargin bodyfontsize add headersize add
+  sub
+moveto
+bodyfont setfont
+(   public void visit\(DoWhile n\);         /* Added by DB */) s
+( --TypeVisitor.java---) s
+(   public Type visit\(Or n\);              /* Added by DB */) s
+(   public Type visit\(GreaterThan n\);     /* Added by DB */) s
+(   public Type visit\(Divide n\);          /* Added by DB */) s
+(   public Type visit\(ShortCutIfElse n\);  /* Added by DB */) s
+(   public Type visit\(DoWhile n\);         /* Added by DB */) s
+( ) s
+( --------------------------------------------------------------------) s
+( ) s
+( Now the generic visitors themselves:) s
+( ) s
+( -----DepthFirstVisitor.java--------) s
+( ) s
+(   // Exp e1,e2;) s
+(   public void visit\(Or n\) {     /* Added by DB */) s
+(     n.e1.accept\(this\);) s
+(     n.e2.accept\(this\);) s
+(   }) s
+( ....Divide and GreaterThan similar....) s
+( ) s
+(   // Exp e1,e2,e3;) s
+(   public void visit\(ShortCutIfElse n\) {         /* Added by DB */) s
+(     n.e1.accept\(this\);) s
+(     n.e2.accept\(this\);) s
+(     n.e3.accept\(this\);) s
+(   }) s
+( ) s
+(   // Statement s;) s
+(   // Exp e;) s
+(   public void visit\(DoWhile n\) { /* Added by DB */) s
+(     n.s.accept\(this\);) s
+(     n.e.accept\(this\);) s
+(   }) s
+( ) s
+( ----TypeDepthFirstVisitor.java------) s
+( ) s
+(   // Exp e1,e2;) s
+(   public Type visit\(Or n\) {     /* Added by DB */) s
+(     n.e1.accept\(this\);) s
+(     n.e2.accept\(this\);) s
+(     return null;) s
+(   }) s
+( ....Divide and GreaterThan similar....) s
+( ) s
+(   // Exp e1,e2,e3;) s
+(   public Type visit\(ShortCutIfElse n\) { /* Added by DB */) s
+(     n.e1.accept\(this\);) s
+(     n.e2.accept\(this\);) s
+(     n.e3.accept\(this\);) s
+(     return null;) s
+(   }) s
+( ) s
+(   // Statement s;) s
+(   // Exp e;) s
+(   public Type visit\(DoWhile n\) { /* Added by DB */) s
+(     n.s.accept\(this\);) s
+(     n.e.accept\(this\);) s
+(     return null;) s
+(   }) s
+( --------------------------------------------------------------------) s
+( ) s
+( And finally the typechecking itself!) s
+( ) s
+( The new operators - we have to check that the two sides) s
+( of an Or are booleans, the two sides of Divide are integers, the) s
+( two sides of GreaterThan are integers, and that the first expression) s
+( in the if-else is a boolean and then the other two expressions) s
+( are compatible \(ie the same according to OO rules\):) s
+( ) s
+( --------TypeCheckExpVisitor.java---------) s
+(   // Exp e1,e2;) s
+(   public Type visit\(Or n\) {     /* Added by DB */) s
+(     if \(! \(n.e1.accept\(this\) instanceof BooleanType\) \) {) s
+(        System.out.println\("Left side of Or must be of type integer"\);) s
+(        System.exit\(-1\);) s
+(     }) s
+(     if \(! \(n.e2.accept\(this\) instanceof BooleanType\) \) {) s
+(        System.out.println\("Right side of Or must be of type integer"\);) s
+(        System.exit\(-1\);) s
+showpage
+%%Page: 4 4
+4 0 header
+0 border
+hborder
+  upperx 0 get  bodymargin  add
+	uppery
+	bodymargin bodyfontsize add headersize add
+  sub
+moveto
+bodyfont setfont
+(     }) s
+(     return new BooleanType\(\);) s
+(   }) s
+( ) s
+(   // Exp e1,e2;) s
+(   public Type visit\(GreaterThan n\) {    /* Added by DB */) s
+(     if \(! \(n.e1.accept\(this\) instanceof IntegerType\) \) {) s
+(        System.out.println\("Left side of GreaterThan must be of type integer"\);) s
+(        System.exit\(-1\);) s
+(     }) s
+(     if \(! \(n.e2.accept\(this\) instanceof IntegerType\) \) {) s
+(        System.out.println\("Right side of GreaterThan must be of type integer"\);) s
+(        System.exit\(-1\);) s
+(     }) s
+(     return new BooleanType\(\);) s
+(   }) s
+( ) s
+(   // Exp e1,e2;) s
+(   public Type visit\(Divide n\) {         /* Added by DB */) s
+(     if \(! \(n.e1.accept\(this\) instanceof IntegerType\) \) {) s
+(        System.out.println\("Left side of Divide must be of type integer"\);) s
+(        System.exit\(-1\);) s
+(     }) s
+(     if \(! \(n.e2.accept\(this\) instanceof IntegerType\) \) {) s
+(        System.out.println\("Right side of Divide must be of type integer"\);) s
+(        System.exit\(-1\);) s
+(     }) s
+(     return new IntegerType\(\);) s
+(   }) s
+( ) s
+(   // Exp e1,e2,e3;) s
+(   public Type visit\(ShortCutIfElse n\) {) s
+(     if \(! \(n.e1.accept\(this\) instanceof BooleanType\) \) {) s
+(        System.out.println\("First expression in shortcut" +) s
+(                           " if-else must be of type boolean"\);) s
+(        System.exit\(-1\);) s
+(     }) s
+(     Type t1 = n.e2.accept\(new TypeCheckExpVisitor\(\) \);) s
+(     Type t2 = n.e3.accept\(new TypeCheckExpVisitor\(\) \);) s
+(     if \(TypeCheckVisitor.symbolTable.compareTypes\(t1,t2\)==false\){) s
+(         System.out.println\("Second and third expressions in shortcut" +) s
+(                            " if-else must be of same type"\);      ) s
+(         System.exit\(0\);) s
+(     }) s
+(     return t1;) s
+(   }) s
+( ------end of TypeCheckExpVisitor.java---------------) s
+( ) s
+( And finally the do-while typecheck. We just have to see that the ) s
+( expression is a boolean.) s
+( ) s
+( ------TypeCheckVisitor.java-------------------------) s
+( public void visit\(DoWhile n\) {        /* Added by DB */) s
+(     n.s.accept\(this\);) s
+(     if \(! \(n.e.accept\(new TypeCheckExpVisitor\(\)\) instanceof BooleanType\) \) {) s
+(        System.out.println\("The condition of do-while must be"+) s
+(                           " of type boolean"\);) s
+(        System.exit\(-1\);) s
+(     }) s
+(   }) s
+( ------end of TypeCheckVisitor.java-------------------------) s
+( ) s
+( End of Guidance) s
+showpage
+
+%%Trailer
+docsave restore end

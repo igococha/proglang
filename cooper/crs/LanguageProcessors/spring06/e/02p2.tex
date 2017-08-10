@@ -1,0 +1,281 @@
+%\documentstyle[cityexam,11pt]{article}
+\documentclass[11pt]{cityexam}
+\usepackage{semantic}
+%\withmodelanswers
+\begin{document}
+\examnumber{510.00}
+\begin{preamble}
+\degrees{B.Eng. Degree in Computing \\ B.Eng. Degree in Software Engineering}
+\part{II}
+\title{Language Processors}
+\examdate{10th May 2002}
+\examtime{0900--1030}
+\rubric{Answer {\sl TWO} questions \\ All questions carry equal marks}
+\end{preamble}
+\externals{Professor M.E.C\@. Hull\\ Professor M\@. Moulding}
+\internals{D. Bolton}
+
+\reservestyle{\nonterm}{\textit}
+\nonterm{dec,decs,vardec,fundec,id,exp,tyfields,type-id,fundecs,expseq,op}
+\reservestyle{\keyword}{\textbf}
+\keyword{var,function,let,in,end,if,then,else,while,do,for,break,to,switch,of,case,default}
+
+
+\begin{questions}
+
+
+\question
+
+\begin{subquestions}
+
+
+\subquestion
+Give a definition for regular expressions which shows how
+arbitrary regular expressions can be constructed for a
+given alphabet (set) of symbols. Do not include shorthand
+notations you may know.
+\marks{10}
+
+\subquestion
+Write down regular expressions that define a pattern to recognise 
+a decimal literal. Decimal literals start with a numeral consisting of
+one or more digits. This may be followed by an optional decimal part consisting
+of a decimal point `.' followed by another numeral consisting of
+one or more digits. Finally this may be followed by an optional exponent
+consisting of the letter `E' followed by an optional sign followed 
+by a numeral consisting of one or more digits.
+\marks{25}
+
+\begin{modelanswer}
+\begin{verbatim}
+[0-9]+(.[0-9]+)?(E[-+]?[0-9]+)?
+\end{verbatim}
+More marks for breaking it up and making readable(!).
+\end{modelanswer}
+
+
+\subquestion
+Write down regular expressions that define a pattern to recognise 
+identifiers that begin with a letter, 
+and may be followed by any number of
+letters, digits, and underscores. 
+Sequences of underscores are not permitted,
+and the last character cannot be an underscore.
+\marks{30}
+
+\begin{modelanswer}
+\begin{verbatim}
+[A-Za-z](_?[A-Za-z0-9])*
+\end{verbatim}
+\end{modelanswer}
+
+
+
+\subquestion
+Consider the following Tiger function:
+\begin{verbatim}
+1 function f(a:string, b:int, c:int)=
+2       (print_int(b+c);
+3        let var a := b
+4            var b := "hello"
+5        in print(b); print_int(a) 
+6        end;
+7        print_int(b);
+8       )
+\end{verbatim}
+Given an initial environment $\sigma_0 = \{\textrm{a} \rightarrow \textrm{int}, \textrm{b} \rightarrow \textrm{string}\}$, 
+derive the type binding environments for the function at each
+use of an identifier and indicate in which type environment
+type lookups will occur.
+\marks{35}
+
+\begin{modelanswer}
+0 $\sigma_0$ is starting environment\\
+1 $\sigma_1 = \sigma_0 + \{a\rightarrow string,b\rightarrow int,c\rightarrow int\}$\\
+2 lookup ids b, c  in $\sigma_1$\\
+3 lookup id b, then $\sigma_2 = \sigma_1 + \{a\rightarrow int\}$ (overrides arg a)\\
+4 $\sigma_3 = \sigma_2 + \{b\rightarrow string\}$ (overrides arg b\\
+5 lookup id b, then a in $\sigma_3$\\
+6 discard $\sigma_3$, $\sigma_2$, revert to $\sigma_1$\\
+7 lookup b in $\sigma_1$\\
+8 discard $\sigma_1$ revert to $\sigma_0$
+\end{modelanswer}
+
+
+\end{subquestions}
+
+\newpage
+
+\question
+
+The reference manual for a Tiger'01-like programming language contains
+the following definition for a kind of expression: 
+
+The for-expression
+\[
+\<for> \; \<id> \; = \; \<exp>_1 \; \<to> \; \<exp>_2 \; \<do> \; \<exp>_3
+\] 
+iterates $\<exp>_3$ over each integer value of \<id> from the
+value of $\<exp>_1$ to that of $\<exp>_2$.
+The variable \<id> is a new variable implicitly declared by the
+\<for> statement, whose
+scope covers only $\<exp>_3$,
+and may not be assigned to. 
+The lower and upper bounds $\<exp>_1$ and $\<exp>_2$
+are evaluated only once,
+prior to entering the body of the loop $\<exp>_3$.
+If the upper bound is less than the lower, the
+body is not executed.
+
+
+\begin{subquestions}
+\subquestion
+Write down a BNF concrete syntax for the for-expression. 
+\marks{10}
+
+\begin{modelanswer}
+Terminals in CAPS (trivial).
+\begin{verbatim}
+for-exp -> FOR id = exp TO exp DO exp
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Sketch a possible abstract syntax for the for-expression.
+\marks{10}
+
+\begin{modelanswer}
+\begin{verbatim}
+ForExp id (Exp lowerbound upperbound body) 
+(be flexible about how this is expressed - it might be Java)
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Show how semantic actions in a grammar for a parser-generator such as CUP
+can be used to produce abstract syntax trees for the for-expression.
+\marks{30}
+
+\begin{modelanswer}
+\begin{verbatim}
+        |   FOR:f ID:i ASSIGN exp:e1 TO exp:e2 DO exp:e3
+            {: RESULT = new Absyn.ForExp(fleft, 
+                  new Absyn.VarDec(ileft,sym(i),
+                          inttype,e1),e2,e3); :}
+\end{verbatim}
+\end{modelanswer}
+
+\subquestion
+Explain how the scope rules for the implicitly declared variable might
+be implemented.
+\marks{15}
+
+\begin{modelanswer}
+By pushing a new scope for the for-loop itself. More marks if consideration
+given to not assigning to it.
+\end{modelanswer}
+
+\subquestion
+        Outline the intermediate representation
+        that might be generated from your
+	abstract syntax trees in translation of
+        a for-expression.
+	You may wish to use a simple example to explain your 
+	translation, eg:
+\begin{verbatim}
+for i = j to j+10 do ( x := i*i; print(x) )
+\end{verbatim}
+\marks{35}
+
+\begin{modelanswer}
+\begin{verbatim}
+eval exp1 (here, j) into R1 (some TEMP loc ie a virtual reg)
+eval exp2 (here, j+10) into R2 (some TEMP ie a reg)
+MOVE(MEM(i),R1)
+MOVE(MEM(i+16),R2)
+LABEL(Lstart)
+MOVE(R1,MEM(i))
+MOVE(R2,MEM(i+16))
+CJUMP(<,R2,R1,Lend,Lbody)
+LABEL(Lbody)
+code for body (here square and print)
+MOVE(MEM(i),BINOP(+,MEM(i),1))
+JUMP(Lstart)
+LABEL(Lend)
+\end{verbatim}
+\end{modelanswer}
+
+\end{subquestions}
+
+\question
+
+
+\begin{subquestions}
+
+\subquestion
+Choose a programming language you know well and describe
+how run-time storage is organised and managed during program 
+execution.
+Clearly associate any storage structures you
+mention with the implementation of particular 
+language features.
+\marks{35}
+
+\begin{modelanswer}
+Language features: procedure/method call and parameter passing,
+lexical scoping, dynamic storage allocation and deallocation,
+including object creation. Name stack, heap, why different.
+More marks for good exposition of example language
+(eg Java object creation, method call). Operation of
+stack and heap (with mention of garbage collection).
+\end{modelanswer}
+
+
+\subquestion
+What is a stack frame?
+Outline a typical layout for a stack frame and describe 
+each element of a frame and how it is pushed to the stack during
+program execution. 
+%Explain the term {\em static link\/} and explain why a C or Java
+%implementation does not include static links in its stack frames.
+Comment on how local variables, arguments and non-local variables
+are addressed by the code generated for a procedure or method. 
+\marks{35}
+
+\begin{modelanswer}
+A structure to store info local to a proc invocation.
+Args, static link, locals, return address, regs/temp space.
+More marks for mentioning code genned for a proc/func doing the
+pushing.
+Locals, args: offsets from SP or FP; non-locals: follow static links
+(more for description of static link).
+\end{modelanswer}
+
+\subquestion
+Explain why registers might be used for parameter passing and
+suggest situations where passing in registers is particularly
+appropriate. 
+Outline situations where it is necessary for the code generated for a 
+procedure or method to write registers to the stack.
+\marks{30}
+
+\begin{modelanswer}
+Efficiency; particularly appropriate when leaf procs, interproc
+reg alloc, dead variables, reg windows (but\ldots).
+Reg saves: when address is taken,
+when call-by-ref,
+when accessed by inner nesting,
+value too big,
+an array,
+convention of save for partic reg prior to call,
+spilling in exp evaluation,
+saving a reg window.
+\end{modelanswer}
+
+\end{subquestions}
+
+
+\end{questions}
+
+\end{document}
+

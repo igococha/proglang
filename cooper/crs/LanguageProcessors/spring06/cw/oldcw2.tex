@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+\usepackage{a4wide}
+\usepackage{verbatim}
+
+\usepackage{color}
+
+\begin{document}
+
+\subsection*{Language Processors Coursework 2}
+
+\paragraph{Organisation:}
+Do this work in pairs if you wish. You will hand
+work in as individuals but the handin procedure will allow 
+you to say who you collaborated with. 
+\emph{Pairs} only -- not threesomes!
+
+\paragraph{Handin:} 
+The deadline and the electronic handin procedure are
+on WebCT.
+Obviously you should change file and directory permissions so 
+that your work is not visible to others -- 
+remember plagiarism carries penalties. 
+
+\subsubsection*{The work}
+
+You will extend the MiniJava implementation, including
+the typechecker. Copy the MiniJava implementation directory
+to where you want to work, using:  
+\begin{verbatim}
+   cp -R /soi/sw/courses/daveb/IN2009/minijava/chap5 .
+\end{verbatim}
+This is available as a zip file on WebCT too.
+Files README in the various directories give a brief
+description of the structure of the implementation,
+and we studied the symbol table mechanism and 
+typechecker in Session 5.
+
+\begin{enumerate}
+\item Add the operators \verb+/+ (divide), \verb+>+ (greater than),
+\verb+||+ (or), and \verb+?:+ (shortcut if-else) to your implementation.
+They have the same syntax and meaning as they do in Java, 
+and appropriate typechecks should be implemented for them
+(\verb+op1?op2:op3+ returns \verb+op2+ if \verb+op1+ is true,
+and returns \verb+op3+ if \verb+op1+ is false).
+
+
+\item Add appropriate typechecking for the for and switch statements
+you implemented in the first coursework (for those who did
+not handin the first coursework, I will publish some
+guidance on what needs to be added).
+\end{enumerate}
+
+\end{document}

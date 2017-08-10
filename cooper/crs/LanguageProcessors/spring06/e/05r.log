@@ -1,0 +1,126 @@
+This is pdfTeX, Version 3.141592-1.10b (MiKTeX 2.3) (preloaded format=latex 2000.11.28)  2 MAR 2006 10:55
+**05r
+(05r.tex{pdftex.cfg}
+LaTeX2e <2001/06/01>
+Babel <v3.7h> and hyphenation patterns for english, french, german, ngerman, du
+mylang, nohyphenation, loaded.
+(bareexam.cls
+
+LaTeX Warning: You have requested document class `bareexam',
+               but the document class provides `cityexam'.
+
+Document Class: cityexam 
+Style 'Bare City exam'. V1. March 2004 (David Bolton)
+(C:\texmf\tex\latex\base\article.cls
+Document Class: article 2001/04/21 v1.4e Standard LaTeX document class
+(C:\texmf\tex\latex\base\size11.clo
+File: size11.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (C:\texmf\tex\latex\ltxmisc\a4wide.sty
+Package: a4wide 1994/08/30
+
+(C:\texmf\tex\latex\ntgclass\a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+)) (C:\texmf\tex\latex\base\ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(C:\texmf\tex\latex\psnfss\times.sty
+Package: times 2003/03/02 PSNFSS-v9.0c (SPQR) 
+)
+\theinternals=\box26
+\c@totalmarks=\count87
+)
+(C:\texmf\tex\latex\semantic\semantic.sty
+Package: semantic 2003/10/28 v2.0(epsilon) 
+
+Semantic Package v2.0(epsilon) [2003/10/28]
+CVSId: $Id: semantic.dtx,v 1.11 2003/10/28 13:45:57 turtle Exp $
+\c@@@conflict=\count88
+Loading features: 
+(C:\texmf\tex\latex\semantic\ligature.sty
+\@pushedtoks=\toks14
+\@seentoks=\toks15
+)  math mode ligatures,
+(C:\texmf\tex\latex\semantic\infernce.sty
+\@@tempa=\toks16
+\@@tempb=\toks17
+\@@pSpace=\skip43
+\@@pEnd=\skip44
+\@@nSpace=\skip45
+\@@aLineBox=\box27
+)  inference rules,
+(C:\texmf\tex\latex\semantic\tdiagram.sty
+\@@xShift=\count89
+\@@yShift=\count90
+\@@symbol=\toks18
+\@@tempSymbol=\toks19
+)  T diagrams,
+(C:\texmf\tex\latex\semantic\reserved.sty
+\@@spacing=\toks20
+\@@formating=\toks21
+)  reserved words,
+(C:\texmf\tex\latex\semantic\shrthand.sty)  short hands,
+and general definitions.
+
+\@@maxwidth=\dimen103
+\@@pLineBox=\box28
+\@@cBox=\box29
+\@@pBox=\box30
+) (05r.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 5.
+ (C:\texmf\tex\latex\psnfss\ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+Default is without model answers...use `\withmodelanswers' to see them
+(...I don't think it writes them :->)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 33.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 33.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 33.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 59.
+(C:\texmf\tex\latex\psnfss\ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+) [1
+
+{psfonts.map}]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 151.
+ [2] (05r.aux) ) 
+Here is how much of TeX's memory you used:
+ 748 strings out of 95644
+ 7937 string characters out of 1191534
+ 54851 words of memory out of 1055980
+ 3726 multiletter control sequences out of 35000
+ 11789 words of font info for 31 fonts, out of 500000 for 1000
+ 14 hyphenation exceptions out of 607
+ 29i,4n,21p,235b,538s stack positions out of 1500i,500n,5000p,200000b,32768s
+ 27 PDF objects out of 65536
+ 0 named destinations out of 20000
+ 0 words of extra memory for PDF output out of 65536
+{8r.enc}<cmr8.pfb><cmsy10.pfb><cmr10.pfb><cmmi10.pfb>
+Output written on 05r.pdf (2 pages, 17971 bytes).

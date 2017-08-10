@@ -1,0 +1,224 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+
+\section*{Language Processors Lab 5 - Building an Abstract Syntax Trees (ASTs)}
+
+\medskip\noindent In this lab you will learn how to use JavaCC semantic actions to build Abstract Syntax Trees. You will be given a JavaCC file that implements an arithmetical expression calculator using JavaCC semantic actions (the solution to previous week's lab), and a set of Java classes that implement ASTs for arithmetical expressions. You will be asked to modify the JavaCC file to inlcude the correct constructor calls (that build the AST) and modify the AST classes in order to implement a new calculator. You will then be asked to add a new arithmetical operator.
+
+\subsection*{Downloading the files}
+
+Start a Unix shell window and move to your LanguageProcessors directory. Download the file {\tt lab5.tar.gz} from Moodle (week5) or from \verb+http://www.soi.city.ac.uk/~sbbc287/lab5.tar.gz+. Unzip and untar the file with the following commands:
+
+\begin{verbatim}
+gunzip lab5.tar.gz       // this will genenerate lab5.tar
+tar -xvf lab5.tar
+\end{verbatim}
+
+The last command will generate the {\tt lab5} directory. It is possible that, while downloading, the file system automatically unzips, and even expands (untars), the file. If that's the case, you may have to skip one or both of the above commands, though make sure to copy the new directory. \\
+Load java and javacc by executing the command 
+{\textbf {\tt module add java javacc}}.
+
+
+\subsection*{The Program}
+
+The contents of the {\tt lab5} directory are:
+\begin{itemize}
+\item {\tt Exp.jj}: Defines the grammar for expressions and contains Java code that evaluates arithmetical expressions while they are parsed.
+\item {\tt Main.java}: Entry point of the program. It calls the parser which, in turn, avaluates the parsed arithmetical expression.
+\item The {\tt syntaxtree} directory: It contains the classes that implement the abstract syntax tree for expressions. The file {\tt Exp.java} defines the abstract class {\tt Exp}. All expressions - nodes of the AST - are subclasses of {\tt Exp}: {\tt PlusExp}, {\tt MinusEx}, {\tt TimesExp}, {\tt DivideExp} and {\tt NumExp}.All classes declare the method:
+\begin{verbatim}
+         public int evaluate()
+\end{verbatim}
+which will contain code that implements the new calculator. It currently returns 0. These classes are currently not used by \verb+Exp.jj+; they will by included in the program in the next section/
+
+\end{itemize}
+
+Execute JavaCC, compile the generated java files and execute the program by typing the usual commands:
+
+\begin{verbatim}
+       javacc Exp.jj            javac Main.java            java Main
+\end{verbatim}
+
+\noindent Test the program with a few examples. Double-check that the Calculator returns the correct results.
+
+\subsubsection*{Building Abstract Syntax Trees fron JavaCC}
+
+The JavaCC file {\tt Exp.jj} implements the following EBNF grammar:
+
+\begin{tabular}{lcl}
+E & $\rightarrow$ & T ( \verb-+- T $|$ \verb+-+ T)$^*$ \\
+T & $\rightarrow$ & F ( \verb+*+ F $|$ \verb+/+ F)$^*$ \\
+F & $\rightarrow$ & number $|$ \verb+(+ E \verb+)+\\
+\end{tabular}
+
+The JavaCC file contains semantics actions (Java code) that implement the evaluation of arithmetical expressions into integer values. For example, the specification of \verb+E()+:
+\begin{verbatim}
+int E() :
+{ int e; int t; }
+{
+  e=T() (  "+" t=T() { e=e+t; }
+         | "-" t=T() { e=e-t; } )*
+    { return e; }
+}
+\end{verbatim}
+returns an \verb+int+: the result of adding (or subtracting) the \verb+T()+'s matched by the parser (which also return integers).
+
+We want to change these specifications so they instantiate Java objects (of class Exp) instead. Our first step is to change the return type of all specifications from \verb+int+ to \verb+Exp+. Modify \verb+S()+ so it looks like:
+
+\begin{verbatim}
+Exp S() :    // Note the return type Exp.
+{ Exp s; }   // The temporary variable is also of type Exp
+{
+    s=E() <EOL> { return s; }
+  | <EOL> | <EOF>
+}
+\end{verbatim}
+
+\verb+E()+ must return an object of class \verb+Exp+ that is instantiated to either a \verb+PlusExp+ or a \verb+MinusExp+. These are tree nodes that contain two branches each: the left- and right-hand side operators.  Change \verb+E()+ to:
+
+\begin{verbatim}
+Exp E() :
+{ Exp e; Exp t; }
+{
+  e=T() (  "+" t=T() { e=new PlusExp(e,t); }
+         | "-" t=T() { e=new MinusExp(e,t); } )*
+    { return e; }
+}
+\end{verbatim}
+
+Besides matching T() and the plus and minus operators, the code above gets the intermediate AST's (of type Exp) and  uses them to build a new AST by calling the respective constructors, {\tt PlusExp} or {\tt MinusExp}.
+
+
+
+Similarly, \verb+T()+ must instantiate \verb+TimesExp+ and \verb+DivideExp+ objects:
+
+\begin{verbatim}
+Exp T() :
+{ Exp t; Exp f; }
+{
+  t=F() (  "*" f=F() { t=new TimesExp(t,f); }
+         | "/" f=F() { t=new DivideExp(t,f); } )*
+    { return t; }
+}
+\end{verbatim}
+
+The \verb+F()+ specification - which denotes integer constants and expressions in parenthesis - must return a \verb+NumExp+ object, or the object denoting the expression in parenthesis. Change \verb+F()+ to the following:
+
+\begin{verbatim}
+Exp F() :    // Don't forget the new return type!!
+{ Token t; Exp result; }  // and the new type of result!
+{
+    t=<NUM> { return new NumExp(t.image); }
+  | "(" result=E() ")" { return result; }
+}
+\end{verbatim}
+
+Note that \verb+Exp.jj+ has to import all the Java classes needed to build the AST. Add  the following import declaration (\verb+syntaxtree+ is the package that contains all the AST classes) so the first lines of \verb+Exp.jj+ look like:
+\begin{verbatim}
+     PARSER_BEGIN(ExpParser)
+
+     import syntaxtree.*;
+     public class ExpParser {
+\end{verbatim}
+
+Finally, we must update \verb+Main.java+ so it reflects the new type returned by hte parser. We will also call the \verb+evaluate()+ method on the returned AST. Update \verb+Main+ so it looks like (DON'T include the line numbers!!):
+
+\begin{verbatim}
+1     Exp root;
+2     ExpParser parser = new ExpParser(System.in);
+3     try {
+4       System.out.println("Type in an expression on a single line.");
+5       root = parser.S();                          
+6       int value = root.evaluate();        
+7       System.out.println("Answer is "+value);
+8       /* Add new code after this line */
+9    } catch (ParseException e) {
+10      System.out.println("Expression parser - error in parse");
+11    }
+\end{verbatim}
+
+Line (2) instantiates the parser and stores it in variable {\tt parser}. Recall that the entry point of the grammar is {\tt S()} (check this). Line (5) calls the parser and the result, an object of class {\tt Exp} and root of the AST, is stored in {\tt root}. Line (6) invokes method \verb+evaluate()+ which, in theory, should evluate the parsed arithmetical expression.
+The result is stored in variable {\tt value} and printed in the next line. All this code is enclosed by a try clause given that line (5) can throw a {\tt ParseException} object. 
+
+Run javacc, re-complie the files and execute the program. What happens? You will note that the value of the evaluated arithmetical expressions is always 0.
+
+\subsubsection*{Implementing the Calculator as tree traversal}
+
+So far the parser returns a Java object: the abstract syntax tree of the parsed expression. Expression evaluation can be implemented by traversing the AST and performing arithmetical operations at each node of the tree. Let's have a look at the \verb+PlusExp.java+ file:
+\begin{verbatim}
+package syntaxtree;
+
+public class PlusExp extends Exp {
+  public Exp e1, e2;
+  public PlusExp(Exp a1, Exp a2) { e1=a1; e2=a2; }
+  public int evaluate() { return 0; }
+
+}
+\end{verbatim}
+Note that the class has two fields of class \verb+Exp+, \verb+e1+ and \verb+e2+, storing the ASTs of the left- and right-hand-side operators, respectively. There is also the method \verb+evaluate+, intended to calculate the integer value of the expression. It currently returns 0.\\
+ \textbf{Modify} the method so it computes the integer value of its operators, and adds them together:
+
+\begin{verbatim}
+  public int evaluate() { 
+      return e1.evaluate() + e2.evaluate();
+  }
+\end{verbatim}
+
+Evaluation on a branch terminates when the traversal hits an AST leaf i.e. a numerical constant. This case is taken care of by the \verb+NumExp+ class. Open the \verb+NumExp.java+ file and modify the \verb+evaluate+  method so it looks like:
+
+\begin{verbatim}
+public class NumExp  extends Exp {
+    public int v;  // the numeric value of string s
+    public String s;
+    public NumExp (String s) { v=Integer.parseInt(s); }
+    public int evaluate() { 
+      return v;
+    }
+}
+\end{verbatim}
+The explanation is straightforward: a number evaluates to itself.
+
+\textbf{Update} the \verb+evaluate()+ method in \verb+MinusExp+, \verb+TimesExp+ and \verb+DivideExp+, so they correctly implement the evaluation of arithmetical expression.
+
+Run javacc, recompile and run your new program. Try a few exmples that test all operators.
+
+
+\subsection*{Adding the power operator}
+
+We want to be able to write and evaluate expressions that contain the power operator \verb+^+. For example, we want to type \verb?2^5 + 10? and get back 42.
+In order to do this, follow these steps:
+
+\begin{itemize}
+\item Modify the grammar. The power operator should have precedence to the plus and minus operator. For example, when we write \verb?2^5 + 10?, we mean \verb?(2^5) + 10? and not \verb?2^(5 + 10)?. Therefore, you need to add a line to the definition of T() in {\tt Exp.jj}:
+
+\begin{verbatim}
+Exp T() :
+{ Exp t; Exp f; }
+{
+  t=F() (  "*" f=F() { t=new TimesExp(t,f); }
+         | "/" f=F() { t=new DivideExp(t,f); } 
+         | "^" f=F() { t=new PowerExp(t,f); } )*  // definition of power
+    { return t; }
+}
+\end{verbatim}
+
+Note that we are making a call to the constructor of the {\tt PowerExp} class, which does not exist yet. That's our next step.
+
+\item Create a new file, {\tt PowerExp.java}.
+
+\textbf{Exercise:} Complete the \verb+PowerExp.java+ file.
+
+\end{itemize}
+
+\end{document}
+

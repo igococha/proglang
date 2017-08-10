@@ -1,0 +1,165 @@
+\documentstyle[/homes/daveb/doc/exam_style/cityexam,11pt]{article}
+\begin{document}
+\examnumber{00.00}
+\begin{preamble}
+\degrees{EC2 retread}
+\part{II}
+\title{Programming Systems and Principles of Programming Languages}
+\examdate{XXX, 00 XXX, 1994}
+\examtime{00 to 00}
+\rubric{Two from section A, two from B}
+\end{preamble}
+\externals{XXX \\ XXX}
+\internals{S Hunt \\ DJ Bolton}
+
+\begin{questions}
+
+% Herewith two questions for Principles and Tools
+
+\question
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+
+The following is an extract from a possible BNF syntax for
+a subset of an Eiffel-like programming language: 
+\begin{bnf}
+\Rule{\nt{Compound\ }}{\nt{Instruction} \verb";" \nt{Compound}\Or{\nt{Instruction}}} \\
+\Rule{\nt{Instruction\ }}{\nt{Conditional}\Or{\ldots}} \\
+\Rule{\nt{Conditional}}{\verb"if" \nt{BoolExp} \verb"then" \nt{Compound$_1$} \verb"else" \nt{Compound$_2$} \verb"end"}\\
+\Rule{\nt{IntExp}}{\nt{IntVar}\Or{\nt{IntConstant}}\Or{\nt{IntExp} \verb"+" \nt{IntExp}}
+        \Or{\nt{IntExp} \verb"*" \nt{IntExp}}}\\
+\Rule{\nt{BoolExp}}{\nt{IntExp} \verb"=" \nt{IntExp}\Or{\nt{IntExp} \verb"<=" \nt{IntExp}}}
+\end{bnf}
+where \nt{IntVar} is a variable attribute of type INTEGER, \nt{IntConstant}
+is an INTEGER type constant (eg 3).
+\begin{subquestions}
+\subquestion
+Show that the grammar rules for \nt{IntExp} are ambiguous.
+\marks{20}
+\subquestion
+Write down an abstract syntax for \nt{Conditional}, 
+\nt{BoolExp} and \nt{IntExp}.
+\marks{10}
+\subquestion
+The meaning of a \nt{Conditional} is as follows:
+\begin{itemize}
+\item On entry to the instruction, the \nt{BoolExp} is 
+	evaluated. 
+\item If the value of the \nt{BoolExp} is true, the effect of
+	the \nt{Conditional} is the effect of \nt{Compound$_1$}.
+\item Otherwise, when the \nt{BoolExp} evaluates to false,
+	the effect of the \nt{Conditional} is the effect of
+	of \nt{Compound$_2$}.
+\end{itemize}
+\begin{subsubquestions}
+\subsubquestion
+	Outline the structure of the
+        code that might be generated in translation of
+        a \nt{Conditional} with an example 
+	\nt{BoolExp} (\verb"a+1 <= b*2", say). 
+	Assume code generation for a simple
+        stack machine, and briefly explain the
+	instructions you use in your outline.
+\marks{30}
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{Conditional} and \nt{BoolExp} which produces such code.
+        Describe any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{IntExp}, but you need not produce translations for
+	\nt{IntExp}.
+\marks{40}
+\end{subsubquestions}
+
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+\subquestion
+Draw a diagram of the usual run time memory
+subdivision (memory model) for execution of
+programs compiled from languages such as
+Pascal and C.  
+%Briefly describe the function of each
+%of the subdivisions (areas), 
+%and 
+Discuss the programming language features which influence
+the organisation and functioning of run time storage,
+giving examples from programming languages you
+have encountered.
+Comment on how local variables,
+arguments and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use.
+\marks{30}
+
+\subquestion
+Explain the purpose of the {\em heap} storage structure and
+describe a simple heap allocator.  
+%Explain what is 
+%meant by {\em fragmentation}, and mention some methods
+%for reducing fragmention in heaps.  
+The terms
+{\em garbage\/} and {\em dangling pointer} refer to
+problems which arise in programming languages which
+support explicit deallocation of heap objects. Define
+these terms and explain using simple example program
+fragments how these problems arise.
+Sketch the simple mark-sweep garbage collection algorithm
+for automatic deallocation of inaccessible heap objects.
+\marks{35}
+
+\subquestion
+
+        Explain what is meant by the argument passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+%                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is the effect of
+	the following routine:
+\begin{verbatim}
+       pass (x,y,z: INTEGER) is
+       do
+            y := y + 1;
+            z := z + x
+       end
+\end{verbatim}   
+	when the sequence of assigments and a feature call
+        shown below is executed, assuming that all arguments are
+	passed with the same mechanism, and that \verb"a" and
+	\verb"b" are variable attributes of type INTEGER.
+	Write down what is printed in each case by the \verb"putint"
+	call, and clearly justify your answer by reference to your
+	description of the argument passing mechanism.
+\begin{verbatim}
+       a := 2;
+       b := 3;
+       pass (a+b,a,a);
+       io.putint (a)
+\end{verbatim}
+Although the program is written in Eiffel syntax, the Eiffel
+argument-passing semantics do not apply and you must
+instead consider each of the mechanisms mentioned, and assume
+that it is legal in a routine to assign to a formal argument.
+\marks{35}
+
+\end{subquestions}
+\end{questions}
+
+\end{document}
+

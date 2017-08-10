@@ -1,0 +1,8 @@
+/* multiline /* 
+			nested
+*/ comment */
+0 1996 O372 ZDadaCafe //this is a inline-comment /* nested */
+O777L /* an error will follow*/ something- ZC0B0L b0110 426355690003133711121133114641
+1e1f  2.f  .3f  0f  3.14f  6.022137E23f  1e1  2.  0.3 //another error
+o8
+0.0  3.14 1e-9d 1e137 -5.56e4263 -42f

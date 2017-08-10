@@ -1,0 +1,153 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : /* Comment */
+{
+  < COMMENT: <SINGLECOMMENT> | <DOUBLECOMMENT> >
+}
+
+TOKEN : /* Literal integers. */
+{
+  < INT: (<SIGN>)? (<INT_BINARY> | <INT_DECIMAL> | <INT_HEXADECIMAL> | <INT_OCTAL>) (<SUFFIX>)? >
+}
+
+TOKEN : /* Floating Point Literals. */
+{
+  < FLOAT: (<SIGN>)? ( 
+	( (<DIGIT>)+ "." (<DIGIT>)* (<EXPONENT>)? ("d"|"f")? ) |
+	( (<DIGIT>)* "." (<DIGIT>)+ (<EXPONENT>)? ("d"|"f")? ) |
+	( (<DIGIT>)+ (<EXPONENT> | ("d"|"f")) ) |
+	( (<DIGIT>)+ <EXPONENT> ("d"|"f") )
+    ) >
+}
+
+TOKEN : /* Binary Integer */
+{
+  < INT_BINARY: ("b"|"B") ("0"|"1")+ >
+}
+
+TOKEN : /* Decimal Integer */
+{
+  < INT_DECIMAL: ("0"|(["1"-"9"](<DIGIT>)*)) >
+}
+
+TOKEN : /* Hexadecimal Integer */
+{
+  < INT_HEXADECIMAL: ("Z"|"z") (<DIGIT>|["A"-"F"]|["a"-"f"])+ >
+}
+
+TOKEN : /* Octal Integer */
+{
+  < INT_OCTAL: ("o"|"O") (["0"-"7"])+ >
+}
+
+
+TOKEN : /* Literal booleans. */
+{ 
+  < KEYTRUE: "true" > 
+ |
+  < KEYFALSE: "false" >
+}
+
+TOKEN : /* Error */
+{
+  < ERROR: (~["\n","\r","\f"," ","\t"])+  >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+|
+  < #SIGN: ("+"|"-") >
+|
+  < #SINGLECOMMENT: "//" (~["\n"])* "\n" >
+| 
+  < #DOUBLECOMMENT: "/*" (~["*","/"])* "*/" >
+|
+  < #EXPONENT: (("e"|"E")(<SIGN>)?(<DIGIT>)+) >
+| 
+  < #SUFFIX: ("L") >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <INT> | t = <FLOAT> | t = <ERROR> | t = <KEYTRUE> | t = <KEYFALSE> | 
+         t = <IDENTIFIER> | t = <COMMENT> )
+
+           	{ 
+			if (tokenImage[t.kind] == "<INT>") { 
+				//Prepare Binary value, convert to Integer Literal and then output
+				if ((t.image).startsWith("+b") || (t.image).startsWith("-b") || (t.image).startsWith("b") ||
+					(t.image).startsWith("+B") || (t.image).startsWith("-B") || (t.image).startsWith("B")) {
+					System.out.println ("token found: "+ (tokenImage[t.kind]).replace("<","").replace(">","")+ "(" +
+						Integer.parseInt( (t.image).replace("+","").replace("b","").replace("B","").replace("L",""), 2 ) +")"); 		
+				}
+				//Prepare Hexadecimal value, convert to Integer Literal and then output
+				else if ((t.image).startsWith("+z") || (t.image).startsWith("-z") || (t.image).startsWith("z") ||
+					(t.image).startsWith("+Z") || (t.image).startsWith("-Z") || (t.image).startsWith("Z")) {
+					System.out.println ("token found: "+ (tokenImage[t.kind]).replace("<","").replace(">","")+ "(" +
+						Integer.parseInt( (t.image).replace("+","").replace("z","").replace("Z","").replace("L",""), 16 ) +")");
+				}
+				//Prepare Octal value, convert to Integer Literal and then output
+				else if ((t.image).startsWith("+o") || (t.image).startsWith("-o") || (t.image).startsWith("o") ||
+					(t.image).startsWith("+O") || (t.image).startsWith("-O") || (t.image).startsWith("O")) {
+					System.out.println ("token found: "+ (tokenImage[t.kind]).replace("<","").replace(">","")+ "(" +
+						Integer.parseInt( (t.image).replace("+","").replace("o","").replace("O","").replace("L",""), 8 ) +")");
+				}
+				//Output decimal value
+				else {
+					System.out.println ("token found: "+ (tokenImage[t.kind]).replace("<","").replace(">","")+ "(" +
+						(t.image).replace("+","").replace("L","") +")");
+				}
+			}
+			//process Comments and Errors
+			else if ((tokenImage[t.kind] == "<COMMENT>") || (tokenImage[t.kind] == "<ERROR>")) {
+				System.out.println ("token found: "+ (tokenImage[t.kind]).replace("<","").replace(">","")); 
+			}
+			//process everything else including Floating Point Literals
+		 	else { 
+				System.out.println ("token found: "+ (tokenImage[t.kind]).replace("<","").replace(">","") +
+                                    "("+t.image+")"); 
+			}
+		}
+   )* <EOF>
+}

@@ -1,0 +1,102 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section*{Language Processors Lab 4}
+
+{\bf Note:} Read this through {\em before\/} logging in.
+
+\medskip\noindent The goal for this
+lab is to see some JavaCC parsers working 
+that have embedded actions to do
+calculations and build syntax trees, 
+and how to traverse the trees. 
+
+
+\subsection*{Expression evaluator}
+
+Move to the directory in which you want to do
+your work and copy my directory and set up the shell to 
+use JavaCC etc with the commands:
+\begin{verbatim}
+   cp -R /soi/sw/courses/daveb/IN2009/ebnfcalc .
+   cd ebnfcalc
+   module add java soi javacc/3.2
+\end{verbatim}
+The directory contains a JavaCC specification (tokens and grammar) 
+for a simple expression language in file \verb+Exp.jj+. 
+It also contains actions in the grammar that turns the parser
+into an evaluator for expressions.
+The file \verb+Main.java+ contains a class Main 
+with the \verb+main()+ method that sets 
+everything up and calls the parser. 
+You can create the evaluator with:
+\begin{verbatim}
+   javacc Exp.jj
+   javac Main.java
+\end{verbatim}
+and then run it with:
+\begin{verbatim}
+   java Main
+\end{verbatim}
+If you type in a legal expression (eg \verb=3+4*5+9=), the expression
+will be evaluated and the result printed out.
+Read the \verb+Exp.jj+ and \verb+Main.java+ files and make sure
+you understand how it works.
+
+There is a BNF version of the expression evaluator at
+\verb+/soi/sw/courses/daveb/IN2009/bnfcalc+. Copy it
+and try it in the same way as above. It is a little different 
+to the EBNF version, since the non-terminal rules have to take
+parameters as well as deliver values in order to perform
+the calculations.
+
+\subsection*{Abstract syntax tree}
+
+A version of the expression evaluator that builds abstract
+syntax trees and traverses them to perform the
+evaluation is at \verb+/soi/sw/courses/daveb/IN2009/ebnfastcalc+.
+The \verb+Exp.jj+ file now contains actions in
+the grammar that build syntax trees rather 
+than perform evaluations.
+The syntax tree classes are in the subdirectory \verb+syntaxtree+,
+and each class has an \verb+eval()+ method that performs the
+evaluations and recursively calls \verb+eval()+ on
+any subtrees.  
+Copy it and try it, and then read and understand the various
+files.
+
+\subsection*{Visitors}
+
+A version of the expression evaluator that builds
+abstract syntax trees and then traverses them using
+the visitor pattern is at
+\verb+/soi/sw/courses/daveb/IN2009/ebnfviscalc+.
+The visitor classes are in subdirectory \verb+visitor+;
+each syntax tree class now contains an \verb+accept()+
+method for a visitor.
+Copy it and try it, and then read and understand the various
+files. 
+
+This example is extended with a simple pretty printer for
+the syntax trees in \\
+\verb+/soi/sw/courses/daveb/IN2009/ebnfvisprint+.
+Before you look at how I have done it (see file \verb+visitor/AstPrint.java+),
+work out how you would do it.
+
+\subsection*{MiniJava abstract syntax trees and visitors}
+
+The MiniJava parser that constructs abstract syntax trees is at
+\\
+ \verb+/soi/sw/courses/daveb/IN2009/minijava/chap4+.
+The \verb+README+ file explains how to compile and
+run it.
+
+
+\end{document}
+

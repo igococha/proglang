@@ -1,0 +1,217 @@
+\documentstyle[/homes/daveb/doc/exam_style/cityexam,11pt]{article}
+\begin{document}
+\examnumber{00.00}
+\begin{preamble}
+\degrees{EC2 retread}
+\part{II}
+\title{Programming Systems and Principles of Programming Languages}
+\examdate{XXX, 00 XXX, 1994}
+\examtime{00 to 00}
+\rubric{Two from section A, two from B}
+\end{preamble}
+\externals{XXX \\ XXX}
+\internals{S Hunt \\ DJ Bolton}
+
+\begin{questions}
+
+% Herewith two questions for Resit Lang Processors
+
+\question
+
+\newenvironment{bnf}{
+    \begin{tabbing}
+    XXXXXXX \= XXXX \= XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\kill}{
+    \end{tabbing}
+    }
+
+\newcommand{\nt}[1]{{\it #1\/}}
+\newcommand{\Or}[1]{\ \ $|$ \ \ #1}
+\newcommand{\Rule}[2]{{\it #1} \> $\rightarrow$ \> #2}
+
+The following is an extract from the BNF syntax for
+a programming language:
+\begin{bnf}
+\Rule{\nt{stms}}{\nt{stm stms}\Or{\nt{stm}}} \\
+\Rule{\nt{stm}}{\nt{loop}\Or{\nt{assign}}} \\
+\Rule{\nt{assign}}{\nt{id} \verb":=" \nt{exp} \verb";"} \\
+\Rule{\nt{loop}}{\verb"for" \nt{id} \verb"=" \nt{exp$_1$} \verb"to" \nt{exp$_2$}
+ \verb"do" \nt{stms} \verb"endfor ;"} \\
+\Rule{\nt{exp}}{\nt{id}\Or{\nt{integer}}\Or{\nt{exp} \verb"+" \nt{exp}}
+        \Or{\nt{exp} \verb"-" \nt{exp}} \Or{\nt{exp} \verb"*" \nt{exp}}}
+\end{bnf}
+where \nt{id} and \nt{integer} have obvious interpretations.
+\begin{subquestions}
+\subsubquestion
+Show that this is an ambiguous grammar by constructing different
+syntax trees for the assignment:\marks{20}
+\begin{verbatim}
+       t := m + 60 * h
+\end{verbatim}
+%\subquestion
+%Modify the grammar so that the \verb"+" and \verb"-" operators
+%have equal precedence lower than that of \verb"*".
+%\marks{4}
+\subquestion
+The meaning of a \nt{loop} is as follows:
+\begin{itemize}
+\item On entry to the loop, arithmetic expressions \nt{exp$_1$} and \nt{exp$_2$}
+        are evaluated. The value of \nt{exp$_1$} is the {\em lower
+        bound}, and is assigned to the identifier \nt{id}.
+        The value of \nt{exp$_2$} is the {\em upper bound}.
+        Neither may be changed after entry to the loop by 
+        execution of \nt{stms}.
+\item If the value of \nt{exp$_2$} is less than \nt{id},
+        the loop body \nt{stms} is
+        not executed and control transfers to the statement following
+        the \verb"endfor" (leaving the loop).
+\item Otherwise, the loop body \nt{stms} is
+        executed,  
+        then the value of \nt{id} is incremented by 1,
+        and control tranfers back to the start of the loop.
+\end{itemize}
+
+\begin{subsubquestions}
+\subsubquestion
+        Outline and describe the structure of the
+        code that might be generated in translation of
+        a \nt{loop}.  Assume code generation for a simple
+        stack or register machine, and briefly explain the
+        instructions you use in your outline.
+\marks{30}
+\subsubquestion
+        Construct a syntax-directed translation for 
+        \nt{loop} which produces such code.
+        Describe, in detail, any attributes you
+        introduce, and make clear any assumptions you make about 
+        the attributes and code generated for the
+        expressions \nt{exp}, but do not produce translations for
+        \nt{exp}.
+\marks{50}
+\end{subsubquestions}
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+\subquestion
+Draw a diagram of the usual run time memory
+subdivision (memory model) for execution of
+programs compiled from languages such as
+Pascal and C.  Briefly describe the function of each
+of the subdivisions (areas), and discuss
+the programming language features which influence
+the organisation and functioning of run time storage.
+Comment on how local variables,
+parameters and non-local variables
+are addressed by the code generated for a
+procedure when a run-time stack is in use.
+\marks{30}
+
+
+\subquestion
+
+        Explain what is meant by the parameter passing mechanisms usually
+        known as
+                \begin{enumerate}
+                \item call-by-value
+                \item call-by-reference
+                \item call-by-value-result
+%                \item call-by-name
+                \end{enumerate}
+        Deduce for each mechanism what is printed by the 
+	following routine:
+\begin{verbatim}
+       PROCEDURE mult (m, n: INTEGER); 
+       BEGIN
+          m := m * n;
+          InOut.WriteInt (m);
+          InOut.WriteInt (n)
+       END; 
+\end{verbatim}   
+	for the sequence of assigments and two procedure calls
+        shown below, assuming that both parameters are
+	passed with the same mechanism, and that \verb"i" and
+	\verb"j" are variables attributes of type \verb"INTEGER".
+        In each case you must clearly justify your answer.
+\begin{verbatim}
+       i := 2;
+       j := 3;
+       mult (i, j);
+       mult (i, i)
+\end{verbatim}
+Although the program is written in Modula-2-like syntax, the 
+Modula-2 parameter-passing semantics do not apply and you must
+instead consider each of the mechanisms mentioned, and assume
+that it is legal in a routine to assign to a formal parameter.
+\marks{70}
+
+\end{subquestions}
+
+\question
+
+\begin{subquestions}
+
+\subquestion
+Explain the purpose of the {\em heap} storage structure and
+describe a simple heap allocator.  Explain what is 
+meant by {\em fragmentation}, and mention some methods
+for reducing fragmention in heaps.  
+%The terms
+%{\em garbage\/} and {\em dangling pointer} refer to
+%problems which arise in programming languages which
+%support explicit deallocation of heap objects. Define
+%these terms and explain using simple example program
+%fragments how these problems arise.
+Sketch the simple mark-sweep garbage collection algorithm
+for automatic deallocation of inaccessible heap objects.
+\marks{50}
+
+\subquestion
+Assume we have the following import and pointer variable
+declarations, where \verb"ptrTYPE" is a POINTER type for pointers
+to objects of type \verb"TYPE":
+\begin{verbatim}
+IMPORT Storage
+...
+VAR ptr1, ptr2: ptrTYPE;
+\end{verbatim}
+Identify the particular problem, 
+associated 
+with programming languages
+which support explicit deallocation of heap objects,
+which is caused by the following code examples:
+\begin{subsubquestions}
+\subsubquestion
+%Dangling pointer:
+\begin{verbatim}
+   Storage.Allocate (ptr1,SIZE(TYPE));
+   ...some code involving ptr1...
+   ptr2 := ptr1;
+   Storage.DeAllocate (ptr2,SIZE(TYPE));
+   ...further code...
+\end{verbatim}
+Hint: consider uses of \verb"ptr1" within \verb"...further code...".
+\marks{25}
+\subsubquestion
+%Garbage:
+\begin{verbatim}
+   Storage.Allocate (ptr1,SIZE(TYPE));
+   Storage.Allocate (ptr2,SIZE(TYPE));
+   ...code involving ptr1 and ptr2...
+   ptr2 := ptr1;
+   ...further code...
+\end{verbatim}
+Hint: consider what happens to the space allocated for 
+\verb"ptr2" during execution of \verb"...further code...".
+\marks{25}
+\end{subsubquestions}
+In each case give the usual term for the problem and 
+discuss the effects of the problem.
+
+\end{subquestions}
+
+
+\end{questions}
+
+\end{document}
+

@@ -1,0 +1,127 @@
+PARSER_BEGIN(RegEx)
+
+public class RegEx {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    RegEx parser = new RegEx(System.in);	
+    parser.TokenList();	
+  }
+}
+
+PARSER_END(RegEx)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+
+TOKEN : /* Literal integers. */
+{
+  < INT: ("+"|"-")?(<BIN>|<DEC>|<HEX>|<OCT>) >
+|
+  < LONG: ("+"|"-")?(<BIN>|<DEC>|<HEX>|<OCT>)"L" >
+}
+
+TOKEN : /* Literal floats. */
+{ 
+  < FLOAT: ("+"|"-")?((["0" - "9"])+(".")?(["0" - "9"])*|"."(["0" - "9"])+)(("e"|"E")("+"|"-")?(["0"-"9"])+)?("d"|"f")? > 
+}
+
+MORE : /* Multiple-lines comment - Start */
+{
+  < START_M_COMMENT: "/*" > : IN_MULTIPLE_COMMENT
+}
+
+< IN_MULTIPLE_COMMENT > MORE : /* Multiple-lines comment - Middle */
+{
+  < C_M_COMMENT: ~[] >
+}
+
+< IN_MULTIPLE_COMMENT > TOKEN : /* Multiple-lines comment - End */
+{
+  < MULTIPLE_COMMENT: "*/" > : DEFAULT
+}
+
+MORE : /* Single-line comment - Start */
+{
+  < START_S_COMMENT: "//" > : IN_SINGLE_COMMENT
+}
+
+< IN_SINGLE_COMMENT > MORE : /* Single-line comment - Middle */
+{
+  < C_S_COMMENT: ~[] >
+}
+
+< IN_SINGLE_COMMENT > TOKEN : /* Single-line comment - End */
+{
+  < SINGLE_COMMENT: "\n"|"\r"|"\r\n" > : DEFAULT
+}
+
+TOKEN: /* Error */
+{
+	< ERROR: (~[" ","\t","\r","\n","\f"])+ >
+}
+
+TOKEN : /* Definitions for use in integer literal 
+           (signified by the `#'). */
+{
+  < #BIN: ("b"|"B")("0"|"1")+ >
+|
+  < #DEC: ("0"|(["1" - "9"](["0" - "9"])*)) >
+|
+  < #HEX: ("z"|"Z")(["0" - "9", "a" - "f", "A" - "F"])+ >
+|
+  < #OCT: ("o"|"O")(["0" - "7"])+ >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+void TokenList() :
+{Token t;}
+{
+   (   
+     (t = <INT> | t = <LONG>){
+		// convert to decimal value
+		String str = t.image;
+		if (t.kind == LONG)
+			str = str.substring(0, str.length() - 1);
+		long sign = 1;
+		long val = 0;
+		if (str.charAt(0) == '+' || str.charAt(0) == '-'){
+			if (str.charAt(0) == '-')
+				sign = -1;
+			str = str.substring(1);			
+		}
+		if (str.charAt(0) == 'b' || str.charAt(0) == 'B') // bin
+			val = Long.parseLong(str.substring(1), 2);		
+		else if (str.charAt(0) == 'z' || str.charAt(0) == 'Z') // hex
+			val = Long.parseLong(str.substring(1), 16);		
+		else if (str.charAt(0) == 'o' || str.charAt(0) == 'O') // oct
+			val = Long.parseLong(str.substring(1), 8);		
+		else // dec
+			val = Long.parseLong(str);	
+		val *= sign;
+		System.out.print(tokenImage[t.kind] + "(" + val + ") "); 
+	}	
+	|(t = <FLOAT>){
+		System.out.print(tokenImage[t.kind] + "(" + t.image + ") "); 
+	}
+	|(t = <MULTIPLE_COMMENT> | t = <SINGLE_COMMENT>){
+		System.out.print("COMMENT "); 
+	}
+	|(t = <ERROR>){
+		System.out.print("ERROR "); 
+	}
+   )* <EOF>
+}

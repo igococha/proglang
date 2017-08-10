@@ -1,0 +1,11 @@
+package ast;
+import visitor.*;
+
+public abstract class Stm { 
+    //    void interp(Table t) throws TableLookupException { return;}
+    public abstract int accept(Visitor v);
+}
+
+
+
+

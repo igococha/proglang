@@ -1,0 +1,105 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space");
+    System.out.println ("Press ENTER to finish");
+    LexTest parser = new LexTest(System.in);
+    System.out.print("Enter Input > ");
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+/* SKIP is a special token that is ignored by the lexer i.e. it defines the 
+   sequence of characters that will be considered as Whitespace.
+   According to the definition below, blanks and tabs will be ignored 
+*/
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+}
+
+TOKEN : /* Token defined to end input */
+{
+ < END_INPUT:  "\n" | "\r" | "\f" >	
+}
+
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: (<DIGIT>)+ >
+}
+
+TOKEN : /* Literal integers. */
+{
+  < FLOAT_LITERAL: (<DIGIT>)+ "." (<DIGIT>)+ >
+}
+
+
+TOKEN : /* Literal booleans. */
+{ 
+  < PLUS: "+" > 
+ | < MINUS: "-" >
+ | < MULT: "*" >
+ | < DIV: "/" >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;
+StackMachine machine = new StackMachine();}
+{
+   (
+     (t = <INTEGER_LITERAL> | t = <PLUS> | t = <MINUS> | t = <MULT> |
+      t = <DIV> | t = <IDENTIFIER> | t = <FLOAT_LITERAL>)
+{ 
+  try {
+  switch (t.kind) {          // inspects type of token
+     case INTEGER_LITERAL: 
+        machine.pushInteger(Integer.parseInt(t.image));
+        break;
+     case PLUS: machine.plus(); break;
+     case MINUS: machine.subtract(); break;
+     case MULT: machine.multiply(); break;
+     case DIV: machine.divide(); break;
+     default: System.out.println("Unknown Token "+tokenImage[t.kind]); return;
+   }
+  } catch (StackMachineException sme) {
+    	System.out.println(sme);
+        return;
+  }
+}
+)* <END_INPUT>
+
+{
+  try {
+    System.out.println("Result: "+machine.popInteger());
+  } catch (StackMachineException sme) {
+    System.out.println("Error while reading result\n"+sme);
+  }
+}
+
+}
+

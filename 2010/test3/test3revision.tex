@@ -1,0 +1,188 @@
+\documentclass{article}
+
+\usepackage{a4wide}
+\usepackage[breaklinks=true,
+        colorlinks=true,urlcolor=blue,pdfpagemode=None]{hyperref}
+
+
+\newcommand{\regla}[1]{$\;\mathbf{\stackrel{{}_{#1}}{\longrightarrow}}\;$}
+%\newcommand{\regla}[1]{$\mathbf{\rightarrow^{#1}}$}
+
+\begin{document}
+\thispagestyle{empty}
+
+\newcommand{\negra}[1]{\textbf{#1}}
+\newcommand{\fname}[1]{$\mathit{#1}$}
+
+
+\section*{Test 3 - Revision}
+
+\medskip\noindent Test 3 will cover the following topics:
+
+\begin{itemize}
+\item Typechecking. You should be able to:
+\begin{itemize}
+\item Define typechecking specifications for new expressions and statements.
+\item Point out type errors in SPL programs i.e. you should know the typechecking rules of SPL.
+\end{itemize}
+\item Stack Frames.
+\begin{itemize}
+\item Stack frame layout. Given a set of SPL functions, you should be able to determine the stack frame layout of each function declaration.
+\item You should be able to write TPL code that accesses the elements (local variables, parameters, etc) allocated in the stack frame.
+\end{itemize}
+\end{itemize}
+
+\section{Typechecking}
+
+\begin{itemize} 
+
+\item Write down the abstract syntax tree (AST) representation and the typecheck specification of the new expression \fname{CondExp} (Conditional Expression) defined by the following concrete syntax:
+$$
+\mathit{CondExp} \;\rightarrow\; \mathit{Exp} \;\negra{?}\; \mathit{Exp} \;\negra{:}\; \mathit{Exp}
+$$
+\fname{CondExp} behaves like a short version of the IF statement. It contains three subexpressions and is evaluated as follows:
+\begin{itemize}
+\item The first expression is evaluated to a boolean value t.
+\item If t is true then the second expression is evaluated. The result of that evaluation is the result of the evaluation of the whole expression.
+\item If t is false then the third expression is evaluated. The result of that evaluation is the result of the evaluation of the whole expression.
+\item \fname{CondExp} is an expression and, therefore, returns a value.
+\end{itemize}
+
+For example, we can use \fname{CondExp} to write the following code:
+\begin{verbatim}
+float a,b;
+int x,y,z;
+boolean t,r;
+// some code here
+x := (x > 0) ? y : (y + z);  // CondExp is the right-habd side of the assignments
+a := (y >=10) ? 10.0 : a * b;
+t := r ? (x > 0) : (x > 1)
+\end{verbatim}
+
+\textbf{Solution:} The AST representation of \fname{CondExp} can be defined as follows:
+
+\begin{tabular}{ll}
+$\;\;\;\;\;\;\;$ & \\
+& CondExp(Exp b, Exp e1, Exp e2)
+\end{tabular}
+
+The AST representation throws away unnecessary syntax (punctuation symbols, operators, etc). In this case, we only keep the three sub-expressions that make up \fname{CondExp}.
+
+I have asked ypu to define the AST representation because it's the best way to express the typechecking specification (and other properties) of parts of a programming language. The typechecking specification for \fname{CondExp} is:
+
+\begin{tabular}{ll}
+\multicolumn{2}{l}{\textbf{typecheck}(CondExp(b,e1,e2), f, stable) =} \\
+$\;\;\;$ & t = typecheck(b,f,stable) \\
+& ReportError if t $\neq$ boolean \\
+& t1 = typecheck(e1,f,stable) \\
+& t2 = typecheck(e2,f,stable) \\
+& ReportError if (t1 $\neq$ t2) \\
+& return t1
+\end{tabular}
+
+The first expression must be boolean. The second and third expressions can be of any type, as long as they are the same. All three subexpressions must be correctly typed.
+
+\textbf{Note:} Think how you can express the typing rules of repeat-until, do-while, etc.
+
+\item Consider the two SPL function declarations of Figure~\ref{fig:typeerror}. There are four type errors: identify them.
+
+\begin{figure}
+\begin{verbatim}
+1.  int ping(boolean t, int p1) {
+2.    boolean q;
+3.    int x, y;
+4.    float w,z;
+5.    w = 10.0;
+6.    x := p1 + 5;
+7.    q := t and p1
+8.    if (q and (50 > x)) then {
+9.      z := pong(x,w);
+10.    } else {
+11.     z := pong(w,x,12); 
+12.   }
+13.   return x + z;
+14. }
+ 
+15. float pong(float p1, int p2, int p3) {
+16.      // some code here
+17.   return (int) p1 + p2*p3;
+18. }
+\end{verbatim}
+\caption{SPL Program with type errors}\label{fig:typeerror}
+\end{figure}
+
+\textbf{solution}:
+\begin{itemize}
+\item Line 7: Operator \textbf{and} expects both oprans to be of type boolean. However, variable p1 is of type int. 
+\item Line 9: Incorrect number of arguments sent to function \textbf{pong}. Also, the type of the first two arguments is incorrect ie.e the first argument should be float..
+\item Line 13: Operator + expects the type of both operands to be the same, either integer or float. Here, we have x of type int and z of type z (we are not assuming that there's automatic conversion between types).
+\item Line 17: The return type of pong is float but the expression being returned has type int (the subexpression is correctly typed though)
+\end{itemize}
+
+Figure~\ref{fig:typecorrect} shows are correctly typed version of this code.
+
+\end{itemize}
+
+\begin{figure}
+\begin{verbatim}
+1.  int ping(boolean t, int p1) {
+2.    boolean q;
+3.    int x, y;
+4.    float w,z;
+5.    w = 10.0;
+6.    x := p1 + 5;
+7.    q := t and (p1 > 0)  // both operands are boolean
+8.    if (q and (50 > x)) then {
+9.      z := pong(w,x,p1); // correct number and type of argument
+10.    } else {
+11.     z := pong(w,x,12); 
+12.   }
+13.   return x + (int) z;  // z is casted to int. The type of the return is now int.
+14. }
+ 
+15. float pong(float p1, int p2, int p3) {
+16.      // some code here
+17.   return p1 + (float) (p2*p3);   // the return expression is now float
+18. }
+\end{verbatim}
+\caption{SPL Program with type errors}\label{fig:typecorrect}
+\end{figure}
+
+
+\section{Stack Frames}
+
+Consider the SPL function declations in Figure~\ref{fig:typecorrect}. Assuming that there's enough registers for temporaries, even acrros function calls:
+\begin{itemize}
+\item Determine the stack frame layout for function ping.
+
+A stack frame (when is on top of the stack) is demarked by the Frame Pointer (FP) and the Stack Pointer. Starting from FP, the layout of ping's frame is:
+\begin{itemize}
+\item Offset 0: local var q (boolean, size 1)
+\item Offset 1: local var x (integer, size 1). 
+\item Offset 2: local var y 
+\item Offset 3: local var w (float, size 2)
+\item Offset 5: local var z 
+\item Offset 7: Return address (address, size 1)
+\item Offset 8: Returned value (from pong, float, size 2)
+\item Offset 10: pong's third parameter, p3 (int)
+\item Offset 11: pong's third parameter, p2 (int) 
+\item Offset 12: pong's third parameter, p1 (float)
+\end{itemize}  
+
+\item What's ping's stack frame size? It's 14. Note that the last element, a float (size 2), has offset 12.
+
+\item How does pong access its second parameter? When pong is called, it's parameters will be located above FP, that is, they will have a negative offset with respect to FP. In p2's case, the offset is -3. For example, if we want to increment the value of p1 by 1 we should write:
+\begin{verbatim}
+       ADDI FP(-3), 1, FP(-3)
+\end{verbatim}
+
+\item How does ping access local variable z? Local variable is lcoated an an offset of 5 from FP. If we want to read the value of x and, for example, store it in R5, we should write:
+
+\begin{verbatim}
+       STORE FP(5), R5
+\end{verbatim}
+
+\end{itemize}
+
+\end{document}
+

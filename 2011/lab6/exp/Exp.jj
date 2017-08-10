@@ -1,0 +1,46 @@
+PARSER_BEGIN(ExpParser)
+
+public class ExpParser {
+}
+
+PARSER_END(ExpParser)
+
+SKIP :
+{
+  " " | "\t" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: (["0"-"9"])+ > | < EOL: "\n" >
+}
+
+void S() :
+{  }
+{
+     E() <EOL>
+  | <EOL>
+  | <EOF>
+}
+
+void E() :
+{  }
+{
+    T() (  "+" T()
+         | "-" T() )*
+}
+
+void T() :
+{  }
+{
+   F() (  "*"  F() 
+         | "/" F() )*
+}
+
+void F() :
+{ }
+{
+     <NUM> 
+  | "(" E() ")"
+}
+

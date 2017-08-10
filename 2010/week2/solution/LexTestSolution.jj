@@ -1,0 +1,83 @@
+
+PARSER_BEGIN(LexTest)
+/* Java declarations to be inserted by JavaCC */
+
+/* Class declaration for LexTest used instead of default */
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList(); /* TokenList declared below */
+  }
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : { < KEYENDWHILE: "endwhile" > }   /* lab2 - new */
+
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: "0" | (["1"-"9"] (<DIGIT>)*) >
+}
+
+TOKEN : /* Literal integers. */
+{
+  < REAL: ("-")? ("0" | (["1"-"9"] (<DIGIT>)*)) "." (<DIGIT>)+
+          <EXPONENT> >           
+}
+
+TOKEN : /* Literal booleans. */
+{ 
+  < KEYTRUE: "true" > 
+ |
+  < KEYFALSE: "false" >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+|
+  < #EXPONENT: (("e" | "E") ("-")? ("0" | (["1"-"9"] (<DIGIT>)*)))? >
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <INTEGER_LITERAL> | t = <KEYTRUE> | 
+      t = <KEYFALSE> |  t = <IDENTIFIER> |
+      /* lab2: New tokens added here */
+      t = <KEYENDWHILE> | t=<REAL> )
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+   )* <EOF>
+}
+

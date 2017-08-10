@@ -1,0 +1,17 @@
+class Main1
+{
+	public static void main(String[] args)
+	{
+		try{
+			repeat{
+			
+			}until(a || b);
+		}
+		catch(Exception e)
+		{	
+			throw new MyException();
+		}
+		finally{
+		}		
+	}
+}

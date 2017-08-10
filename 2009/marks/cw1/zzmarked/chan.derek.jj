@@ -1,0 +1,119 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+
+    //this method removes chars from a string
+    public static String removeChar(String s, char c) {
+
+    String r = "";
+
+    for (int i = 0; i < s.length(); i ++) {
+       if (s.charAt(i) != c) r += s.charAt(i);
+    }
+ 
+    return r;
+    }
+
+
+
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+SKIP : 
+{
+  " "		/* WHITE SPACE */
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : /* Literal integers. */
+{
+  <BINARY: ("+"|"-")?("b"|"B") ("0"|"1")+ ("L")?  >
+  |<DEC: ("+"|"-")? ("0"|<DECDIGIT>)+ ("L")?>
+  |<HEX: ("+"|"-")? ("z"|"Z") (<DIGIT>|<HEXLETTER>)+ ("L")?>
+  |<OCT: ("+"|"-")? ("o"|"O") (<OCTDIGIT>)+ ("L")?>
+  |<FLOAT: (<FLOAT1>|<FLOAT2>|<FLOAT3>) >
+  |<COMMENT: (<COMMENT1>|<COMMENT2>) >
+  |<ERROR: (<ANYTHING>)>
+}
+
+//TOKEN : /* Literal booleans. */
+//{ 
+//  < KEYTRUE: "true" > 
+// |
+//  < KEYFALSE: "false" >
+//}
+
+//TOKEN : /* Identifiers. */
+//{
+//  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+//}
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+ |< #DIGIT: [ "0"-"9"] >
+ |< #DECDIGIT: ["1"-"9"] >
+ |< #HEXLETTER: ["a"-"f","A"-"F"] >
+ |< #OCTDIGIT: ["0"-"7"] >
+ |< #FLOATERROR: ("e"|"."|"d"|"f")>
+ |< #FLOAT1: ("-")?(<DIGIT>)*("e"|"E")?("-")?(<DIGIT>)+(".")(<DIGIT>)*("d"|"f")? | ("-")?(<DIGIT>)*(".")(<DIGIT>)+("e"|"E")?("-")?(<DIGIT>)*("d"|"f")? >
+ |< #FLOAT2: ("-")?(<DIGIT>)*("e"|"E")?("-")?(<DIGIT>)*(".")?(<DIGIT>)+("d"|"f") | ("-")?(<DIGIT>)*(".")?(<DIGIT>)*("e"|"E")?("-")?(<DIGIT>)+("d"|"f") >
+ |< #FLOAT3: ("-")?(<DIGIT>)*("e"|"E")("-")?(<DIGIT>)+(".")?(<DIGIT>)*("d"|"f")? | ("-")?(<DIGIT>)*(".")?(<DIGIT>)*("e"|"E")("-")?(<DIGIT>)+("d"|"f")?>
+ |< #COMMENT1: ("/*")(~["*","/"])*("*/")("\n"|"\r"|"\f")>
+ |< #COMMENT2: ("//")(~["\n","\r"])*>
+ |< #ANYTHING: (~[" ","\n", "\r","\t","\f"])+>
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <BINARY> | t = <DEC>  | t = <HEX> | t = <OCT> | t = <FLOAT> | t = <COMMENT> | t = <ERROR> )
+           { //System.out.println ("token found: "+ tokenImage[t.kind]+ " (`"+t.image+"')");
+		if (tokenImage[t.kind] == "<BINARY>") {
+	          System.out.println ("INT" + " ("+ Integer.parseInt(removeChar(removeChar(removeChar(removeChar(removeChar(t.image, 'b'),'B'),'L'),'-'),'+'), 2) + ")");
+		}
+		if (tokenImage[t.kind] == "<HEX>") {
+		  System.out.println ("INT" + " (" + Integer.parseInt(removeChar(removeChar(removeChar(removeChar(removeChar(t.image, 'z'),'Z'),'L'),'-'),'+'),16) + ")");
+		}
+		if (tokenImage[t.kind] == "<OCT>") {
+		  System.out.println ("INT" + " (" + Integer.parseInt(removeChar(removeChar(removeChar(removeChar(removeChar(t.image, 'o'),'O'),'L'),'-'),'+'),8) + ")");
+		}
+		if (tokenImage[t.kind] == "<COMMENT>") {
+		  System.out.println ("COMMENT");
+		}
+		if (tokenImage[t.kind] == "<FLOAT>") {
+		  System.out.println ("FLOAT" + " ("+t.image+")");
+		}
+		if (tokenImage[t.kind] == "<ERROR>") {
+		  System.out.println ("ERROR");
+		}
+		if (tokenImage[t.kind] == "<DEC>") {
+		  System.out.println ("INT" + " (" + removeChar(removeChar(t.image, '+'),'L') +")" );
+		}
+	   }
+
+   )* <EOF>
+}
+

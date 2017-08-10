@@ -1,0 +1,41 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>lab2</TITLE>
+<META NAME="Template" CONTENT="C:\Program Files\Microsoft Office\Office\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<H3>MSc Principles of Programming Language - Lab 2 - Spring 2003<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"></H3>
+<H4>Where should I do my PPL work?</H4>
+<P>Your SOI home directory is at <TT>/soi/homes/your-account-name</TT>. To hand in your work, I will ask you to create a subdirectory of your SOI home directory called <TT>p213cw1</TT> and place your coursework files and directories there (see the coursework sheet for details). You have two possible places where you could create subdirectories to do your P213 work: </P>
+<OL>
+
+<LI>your CSD Unix home directory (the one you see in the Unix lab when you fire up a shell window), or</LI>
+<LI>your SOI home directory.</LI></OL>
+
+<P>If you choose alternative (1), you will have to copy your coursework in order to hand it in. If you choose (2), you can do your coursework directly in the subdirectories you will hand in. </P>
+<P>If you choose (2) you may well also wish to do your labs in your SOI home directory (in a subdirectory called <TT>p213labs</TT>, say), in which case you should create this directory and move into it before issuing any of the commands below. For example, do this: </P>
+<PRE>
+   cd /soi/homes/your-account-name
+   mkdir p213labs
+   cd p213labs</PRE>
+<H4>Doing lexical analysis using JavaCC</H4>
+<P>Before moving on to full parsing, we will study JavaCC's token recognition. To use JavaCC, you first need to add the appropriate modules: </P>
+<PRE>
+   module add soi java javacc</PRE>
+<P>I have written a simple JavaCC input file, which recognises a subset of the TPL tokens. </P>
+<B><P>Exercise:</B> Copy this file, compile and run it with the commands: </P>
+<PRE>
+   cp -R /soi/sw/courses/daveb/PPL/lextest .
+   cd lextest
+   javacc LexTest.jj
+   javac *.java
+   java LexTest</PRE>
+<P>Type in some identifier names and integers and see what happens. </P>
+<P>Now look at the file <TT>LexTest.jj</TT>. The two forms of token (SKIP and TOKEN) are demonstrated, along with most of the kind of JavaCC regular expression, and also local definitions (prefixed by a '<TT>#</TT>' in a TOKEN definition). See the JavaCC and JJTree introductory document, and the JavaCC documentation for full details. The syntax-definitions part of this file simply matches tokens and prints them out. Notice that it is possible to capture the token recognised in a Token object (here <TT>Token t</TT>) and then to access and print its kind (from the table <TT>tokenImage</TT> indexed by <TT>Token</TT> field '<TT>kind</TT>') and the string that was matched (from <TT>Token</TT> field '<TT>image</TT>'). TOKENs which are defined as simple strings (e.g. <TT>KEYTRUE</TT>) will be printed as the string rather than the name (<TT>KEYTRUE</TT>), whereas for those with more complex definitions, the names are printed (e.g. <TT>&lt;IDENTIFIER&gt;</TT>). </P>
+<B><P>Exercise:</B> Now you can embark on the first part of the coursework. Simply copy the <TT>LexTest</TT>.jj file contents to a new file (<TT>Float.jj</TT>, say), change the Parser-name (<TT>LexTest</TT>) appropriately (to <TT>Float</TT>, say), and delete the expressions currently recognised and replace them with your floating point number regular expressions, and hence recognise floating point numbers. </P>
+<P><HR></P>
+<P><small></P></BODY>
+</HTML>

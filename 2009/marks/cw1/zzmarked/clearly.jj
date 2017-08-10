@@ -1,0 +1,96 @@
+/***************************************************************
+ Coursework 1 of Language Processing module IN2009
+ by Paul Cleary and Michael Whittet. Feb 2009
+****************************************************************/
+
+PARSER_BEGIN(Coursework)
+
+public class Coursework {
+    public static void main(String args[]) throws ParseException {
+        System.out.println ("Language Processing Coursework 1 - February 2009 - by Paul Cleary & Michael Whittet");
+        System.out.println ("Enter your statements below:");
+        Coursework parser = new Coursework(System.in);
+        parser.TokenList();
+    }
+}
+
+PARSER_END(Coursework)
+
+/* Integer Literals */
+TOKEN : { < HEXADECIMAL: (("z"|"Z")((["0"-"9"])*(["a"-"f"])*(["A"-"F"])*)+) > }
+TOKEN : { < BINARY: (("b"|"B")("0"|"1")+) > }
+TOKEN : { < OCTAL: (("o"|"O")(["0"-"7"])+) > }
+TOKEN : { < DECIMAL: ("+"|"-")?("0"|((["1"-"9"])(["0"-"9"])*)) > }
+
+TOKEN : { < HEXADECIMALSIGN: ("+"|"-")(("z"|"Z")((["0"-"9"])*(["a"-"f"])*(["A"-"F"])*)+) > }
+TOKEN : { < BINARYSIGN: ("+"|"-")(("b"|"B")("0"|"1")+) > }
+TOKEN : { < OCTALSIGN: ("+"|"-")(("o"|"O")(["0"-"7"])+) > }
+
+/* Floating Point Literals */
+TOKEN : { < FLOAT: 
+
+        (<WHOLE>)+ <DECIMAL_POINT> <WHOLE> (<EXPONENT>)? (<TYPE_SUFFIX>)? 
+|
+        <DECIMAL_POINT> <FRACTIONAL> (<EXPONENT>)? (<TYPE_SUFFIX>)? 
+| 
+        <FRACTIONAL> <EXPONENT> (<TYPE_SUFFIX>)? | <FRACTIONAL> (<EXPONENT>)? (<TYPE_SUFFIX>)?
+|
+        <WHOLE> <TYPE_SUFFIX>
+|
+        <WHOLE> <DECIMAL_POINT> (<TYPE_SUFFIX>)? > 
+
+}
+
+TOKEN : { < #WHOLE: ("+"|"-")?(["0"-"9"])((["0"-"9"])*) > }
+TOKEN : { < #DECIMAL_POINT: "." > }
+TOKEN : { < #FRACTIONAL: (["0"-"9"])+ > }
+TOKEN : { < #EXPONENT: ("e"|"E")(("+"|"-")?)(["0"-"9"])* > }
+TOKEN : { < #TYPE_SUFFIX: "d"|"f" > }
+
+/* Comments */
+TOKEN : { < COMMENT: (<SINGLE_LINE_COMMENT>)|(<MULTI_LINE_COMMENT>) > }
+TOKEN : { < #SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n" | "\r" | "\r\n") > }
+TOKEN : { < #MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | ~["*","/"] (~["*"])* "*")* "/" > }
+
+/* Whitespace to be ignored */
+SKIP : { " "|"\t"|"\n"|"\r"|"\f" }
+
+/* Error Handling */
+TOKEN : { < ERROR: (~[" ","\n","\r","\f"])+ > }  
+
+void TokenList() :
+{Token t;}
+{
+    (
+        (t = <DECIMAL>)
+            { System.out.println ("INT"+ "("+t.image+")"); }
+|
+        (t = <BINARY>)
+            { System.out.println ("INT"+ "("+Integer.parseInt((t.image).substring(1),2)+")"); }
+|
+        (t = <BINARYSIGN>)
+            { System.out.println ("INT"+ "("+Integer.parseInt((t.image).substring(2),2)+")"); }
+|
+        (t = <OCTAL>)
+            { System.out.println ("INT"+ "("+Integer.parseInt((t.image).substring(1),8)+")"); }
+|
+        (t = <OCTALSIGN>)
+            { System.out.println ("INT"+ "("+Integer.parseInt((t.image).substring(2),8)+")"); }
+|
+        (t = <HEXADECIMAL>)
+            { System.out.println ("INT"+ "("+Integer.parseInt((t.image).substring(1),16)+")"); }
+|
+        (t = <HEXADECIMALSIGN>)
+            { System.out.println ("INT"+ "("+Integer.parseInt((t.image).substring(2),16)+")"); }
+|
+        (t = <FLOAT>)
+            { System.out.println ("FLOAT"+ "("+t.image+")"); }
+|
+        (t = <COMMENT>)
+            { System.out.println ("COMMENT"); }
+|
+        (t = <ERROR>)
+            { System.out.println ("ERROR"); }
+
+    )* <EOF>
+}

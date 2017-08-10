@@ -1,0 +1,248 @@
+PARSER_BEGIN(Task)    
+/** ID lister. */
+public class Task {
+  /** Main entry point. */
+  public static void main(String args[]) throws ParseException {
+    Task parser = new Task(System.in);
+    parser.Input();
+  }
+}
+
+PARSER_END(Task)
+
+SKIP :
+{
+  
+"\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  <  TWO: ( ["+","-"] )?["B","b"] ( ["0","1"] )*("L")?>    
+| <FLOAT: ( ["+","-"] )? (["0"-"9"])* (["e","E"])? (["-"])? [".","e","E","f","d"] (["0"-"9","E","e"])* (["f","d"])?>
+| <EIGHT:( ["+","-"] )?["O","o"] ( ["0"-"9"] )*("L")?>    
+| <  TEN:( ["+","-"] )?(["0"])? (["1"-"9"])? ( ["0"-"9"] )*("L")?>      
+| <SIXTEEN:( ["+","-"] )?["Z","z"] ( ["0"-"9","a"-"f","A"-"F"] )*("L")?>  
+| <ERROR:( ["a"-"z","A"-"Z","_","0"-"9",".","`","~","!",";","#","%","^","&","*","(",")","'","-","+","="])+>
+| <SHUANG:( ["/"]["*"](["a"-"z","A"-"Z","_","0"-"9"])* ["*"]["/"])>   
+| <DAN:(["/"]["/"](["a"-"z","A"-"Z","_","0"-"9"])*)>
+}
+
+/** Top level production. */
+void Input() :
+{
+	String s;
+}
+{
+	{
+         System.out.println("-------------------------------------------------------------------------------");
+	  System.out.print("Input:");
+	 }
+ ( s=Expression() "@"      
+	{
+         //System.out.println("");
+         System.out.println("-------------------------------------------------------------------------------");
+	  System.out.print("Input:");
+		}
+  )*
+  <EOF>
+}
+String Expression() :
+{
+	java.util.Vector termimage = new java.util.Vector();
+	String s;
+       int j;
+j=0;
+}
+{ 
+  
+  s=Term()
+	{
+	  termimage.addElement(s);
+         System.out.print("Output:");
+         System.out.print((String)termimage.elementAt(0));
+         
+	}
+  ( " " s=Term()
+	{ j++;
+	  termimage.addElement(s);
+          System.out.print(" ");
+         System.out.print((String)termimage.elementAt(j));  
+	}
+  )*
+      {  
+	  if (termimage.size() == 1) {
+	    return (String)termimage.elementAt(0);
+          } 
+        else {
+            s = (String)termimage.elementAt(0);
+	    for (int i = 1; i < termimage.size()-1; i++) {
+	      s += " " + (String)termimage.elementAt(i);
+	    }
+	    if (termimage.size() > 2) {
+	      s += " ";
+	    }
+	    s += (String)termimage.elementAt(termimage.size()-1);
+            return s;
+          }
+	}
+}
+/** A Term.*/
+String Term():
+{
+	Token t;
+	String s;
+       String b;
+       int longdu;
+       int ji;
+       int sum;
+       sum=0;
+       ji=1;
+       int ll;
+       ll=0;
+      }
+{
+  t=<TWO>             
+	{ 
+         longdu=t.image.length()-1;
+         if((t.image.charAt(longdu))=='L')   
+            {longdu--;ll=1;}
+         while((t.image.charAt(longdu))!='B'&&(t.image.charAt(longdu)!='b'))
+		{
+                   sum=sum+(t.image.charAt(longdu)-48)*ji;  
+                   ji=ji*2;
+                    longdu--;
+		}
+        if(longdu==0)
+           {b="INT(";}
+        else if((t.image.charAt(longdu-1))=='+')
+            {b="INT(+";}
+        else 
+            {b="INT(-";}
+          t.image=Integer.toString(sum);
+            
+       
+         t.image= b + t.image;
+          if(ll==0)
+         {t.image=t.image + ")";}
+          else
+         {t.image=t.image + "L)";}
+	  return t.image;
+       
+         
+	}
+|
+  t=<EIGHT>   
+	{
+         longdu=t.image.length()-1;
+ if((t.image.charAt(longdu))=='L')  
+            {longdu--;ll=1;}
+
+         while((t.image.charAt(longdu))!='o'&&(t.image.charAt(longdu)!='O')) 
+		{
+                   sum=sum+(t.image.charAt(longdu)-48)*ji; 
+                   ji=ji*8;
+                    longdu--;
+		}
+         if(longdu==0)
+           {b="INT(";}
+        else if((t.image.charAt(longdu-1))=='+')
+            {b="INT(+";}
+        else 
+            {b="INT(-";}
+
+         t.image=Integer.toString(sum);
+
+
+                  t.image= b + t.image;
+            if(ll==0)
+         {t.image=t.image + ")";}
+          else
+         {t.image=t.image + "L)";}
+
+	  return t.image;
+	}
+|
+  t=<TEN> 
+	{
+         b="INT(" ;
+         t.image= b + t.image;
+         t.image=t.image + ")";
+      	  return t.image;
+       	}
+|
+  t=<SIXTEEN>
+	{
+          longdu=t.image.length()-1;
+if((t.image.charAt(longdu))=='L')    
+            {longdu--;ll=1;}
+
+         while((t.image.charAt(longdu))!='z'&&(t.image.charAt(longdu)!='Z')) 
+		{    
+                   if((t.image.charAt(longdu)-65>=0))
+                       {
+                         sum=sum+(t.image.charAt(longdu)-45)*ji;
+		          }
+                    else
+                        {  sum=sum+(t.image.charAt(longdu)-48)*ji;}
+                   ji=ji*16;
+                    longdu--;
+		}
+        if(longdu==0)
+           {b="INT(";}
+        else if((t.image.charAt(longdu-1))=='+')
+            {b="INT(+";}
+        else 
+            {b="INT(-";}
+
+         t.image=Integer.toString(sum);
+
+                 t.image= b + t.image;
+            if(ll==0)
+         {t.image=t.image + ")";}
+          else
+         {t.image=t.image + "L)";}
+
+	  return t.image;
+	}
+|
+  t=<FLOAT>  
+	{
+          b="FLOAT(" ;
+         t.image= b + t.image;
+         t.image=t.image + ")";
+	  return t.image;
+	}
+|
+   t=<SHUANG> 
+	{
+         t.image="COMMENT";
+	  return t.image;
+	}
+|
+   t=<DAN>    
+	{
+         t.image="COMMENT";
+	  return t.image;
+	}
+|
+   t=<ERROR>  
+	{
+         t.image="ERROR";
+	  return t.image;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+PARSER_BEGIN(LexTest)
+
+public class LexTest {
+  public static void main(String args[]) throws ParseException {
+    System.out.println ("Type in tokens separated by white space (including newlines)");
+    System.out.println ("Type EOF to finish...(Ctrl-D on Unix, Ctrl-Z on PC)");
+    LexTest parser = new LexTest(System.in);
+    parser.TokenList();
+  }
+}
+
+PARSER_END(LexTest)
+
+/* 
+ * Lexical items. 
+ */
+
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"		/* Tab */
+| "\n"		/* Newline */
+| "\r"		/* Return */
+| "\f"		/* Formfeed */
+}
+
+TOKEN : { < KEYWHILE: "while" > }
+
+TOKEN : /* Literal integers. */
+{
+  < INTEGER_LITERAL: (<DIGIT>)+ >
+}
+
+TOKEN : /* Literal booleans. */
+{ 
+  < KEYTRUE: "true" > 
+ |
+  < KEYFALSE: "false" >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN :
+{
+ < COMMENT: "//" (~["\n","\r"])* ["\n","\r"] >
+}
+
+TOKEN : /* Identifiers. */
+{
+  < HORROR: (~[" ","\n","\r","\f"])+  >
+}
+
+
+TOKEN : /* Definitions for use in other lexical definitions 
+           (signified by the `#'). */
+{
+  < #LETTER: [ "a"-"z", "A"-"Z" ] >
+|
+  < #DIGIT: [ "0"-"9"] >
+
+//  < #WHITESPACE:  (" "
+//| "\t"		/* Tab */
+//| "\n"		/* Newline */
+//| "\r"		/* Return */
+//| "\f"		/* Formfeed */
+
+}
+
+/*
+ * A simple grammar to match tokens and print them.
+ */
+
+void TokenList() :
+{Token t;}
+{
+   (
+     (t = <KEYWHILE> | t = <INTEGER_LITERAL> | t = <KEYTRUE> | t = <KEYFALSE> | 
+         t = <IDENTIFIER> | t = <COMMENT> | t=<HORROR> )
+           { System.out.println ("token found: "+ tokenImage[t.kind]+
+                                    " (`"+t.image+"')"); }
+     
+   )* <EOF>
+}
+

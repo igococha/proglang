@@ -1,0 +1,51 @@
+Tests for INT (40% - see mark sheet)
+0
+894
+0L
+0123
+0267
+0777L
+0xbacad00d
+0xC0B0L
+0x00FF00FF
+0b10110110
+0B00011011
+0b0L
+
+
+(NEG - lose 3% for each matched as *single* token)
+0x0G11
+0778
+L
+0b1021
+
+Tests for FLOAT (40%)
+1e2f
+6.f
+.4f
+1.337f
+5.5642e63f
+1e1
+1.
+2.27
+4e-9d
+1e337
+
+(NEG - lose 3% for each matched)
+e
+f
+e42
+.
+
+CORRECT TOKEN DELIMITATION (10%)
+If both INT and FLOAT scores >=30, and no part of the following token is recognised:
+1.1W1.1
+2E4.263
+
+TEST CASES (10%)
+Test case file Exists		5%
+and has reasonable test cases	5%
+
+Notes:
+* Fix small compile errors (in parser or main section) for a 20% penalty
+* Fix missing whitespace skipping (-10% if just \r, else -15%)

@@ -1,0 +1,132 @@
+This is pdfTeX, Version 3.14159-1.10b (Web2C 7.4.5) (format=pdflatex 2005.10.11)  2 APR 2009 15:52
+**cw3.tex
+(./cw3.tex{/sw/share/texmf/pdftex/config/pdftex.cfg}
+LaTeX2e <2001/06/01>
+Babel <v3.7h> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/sw/share/texmf/tex/latex/base/article.cls
+Document Class: article 2001/04/21 v1.4e Standard LaTeX document class
+(/sw/share/texmf/tex/latex/base/size11.clo
+File: size11.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/sw/share/texmf/tex/latex/misc/a4wide.sty
+Package: a4wide 1994/08/30
+
+(/sw/share/texmf/tex/latex/ntgclass/a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+))
+(/sw/share/texmf/tex/latex/tools/verbatim.sty
+Package: verbatim 2001/03/12 v1.5p LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks14
+\verbatim@line=\toks15
+\verbatim@in@stream=\read1
+)
+(/sw/share/texmf/tex/latex/graphics/color.sty
+Package: color 1999/02/16 v1.0i Standard LaTeX Color (DPC)
+
+(/sw/share/texmf/tex/latex/config/color.cfg
+File: color.cfg 2001/08/31 v1.1 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 125.
+
+(/sw/share/texmf/tex/latex/graphics/pdftex.def
+File: pdftex.def 2002/06/19 v0.03k graphics/color for pdftex
+\Gread@gobject=\count87
+)) (./cw3.aux)
+\openout1 = `cw3.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+
+(/sw/share/texmf/tex/context/base/supp-pdf.tex
+(/sw/share/texmf/tex/context/base/supp-mis.tex
+loading : Context Support Macros / Missing
+\protectiondepth=\count88
+\scratchcounter=\count89
+\scratchtoks=\toks16
+\scratchdimen=\dimen103
+\scratchskip=\skip43
+\scratchmuskip=\muskip10
+\scratchbox=\box26
+\scratchread=\read2
+\scratchwrite=\write3
+\zeropoint=\dimen104
+\minusone=\count90
+\thousandpoint=\dimen105
+\emptytoks=\toks17
+\nextbox=\box27
+\nextdepth=\dimen106
+\everyline=\toks18
+\!!counta=\count91
+\!!countb=\count92
+\recursecounter=\count93
+)
+loading : Context Support Macros / PDF
+\nofMPsegments=\count94
+\nofMParguments=\count95
+\everyMPtoPDFconversion=\toks19
+)
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 17.
+ (/sw/share/texmf/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 17.
+
+Overfull \hbox (0.2732pt too wide) in paragraph at lines 49--50
+[]/cmr10@10.95pt/Update the pretty-printer vis-i-tor by adding the new []/cmtt1
+0@10.95pt/visit /cmr10@10.95pt/dec-la-ra-tions to []/cmtt10@10.95pt/Visitor.jav
+a
+ []
+
+
+Overfull \hbox (18.00586pt too wide) in paragraph at lines 50--51
+[]/cmr10@10.95pt/Update the de-fault Type vis-i-tor by adding the new []/cmtt10
+@10.95pt/visit /cmr10@10.95pt/dec-la-ra-tions to []/cmtt10@10.95pt/TypeVisitor.
+java
+ []
+
+[1
+
+{/sw/share/texmf/dvips/config/pdftex.map}] [2] (./cw3.aux) ) 
+Here is how much of TeX's memory you used:
+ 794 strings out of 95437
+ 9644 string characters out of 1190294
+ 57027 words of memory out of 1000001
+ 3841 multiletter control sequences out of 10000+50000
+ 5624 words of font info for 21 fonts, out of 500000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 22i,5n,19p,511b,251s stack positions out of 1500i,500n,5000p,200000b,5000s
+ 25 PDF objects out of 300000
+ 0 named destinations out of 131072
+ 0 words of extra memory for PDF output out of 65536
+{/sw/share/texmf/dv
+ips/tetex/09fbbfac.enc}</sw/share/texmf/fonts/type1/bluesky/cm/cmtt10.pfb>{/sw/
+share/texmf/dvips/tetex/bbad153f.enc}</sw/share/texmf/fonts/type1/bluesky/cm/cm
+sy10.pfb>{/sw/share/texmf/dvips/tetex/74afc74c.enc}</sw/share/texmf/fonts/type1
+/bluesky/cm/cmti10.pfb>{/sw/share/texmf/dvips/tetex/f7b6d320.enc}</sw/share/tex
+mf/fonts/type1/bluesky/cm/cmr10.pfb></sw/share/texmf/fonts/type1/bluesky/cm/cmb
+x10.pfb></sw/share/texmf/fonts/type1/bluesky/cm/cmbx12.pfb>
+Output written on cw3.pdf (2 pages, 47953 bytes).

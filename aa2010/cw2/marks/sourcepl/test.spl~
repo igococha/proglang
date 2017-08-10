@@ -1,0 +1,10 @@
+void main() {
+  x := 0;
+repeat{
+  if (x%3 == 0) then{
+     print (x);
+    }
+  x := x + 1;
+ }
+ until (x == 16)
+}

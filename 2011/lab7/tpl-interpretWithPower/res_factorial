@@ -1,0 +1,51 @@
+TPL Interpreter Version 0.1:  Reading from file /export/SOI-2/staff/ck655/LecturesAndLabs/PPL/2003_cw1/marking/TestFiles/factorial.tpl . . .
+CompilationUnit
+ VarDeclaration i INT
+ VarDeclaration n INT
+ VarDeclaration fact INT
+ VarDeclaration safety INT
+ AssignStatement
+  Id n
+  IntConst 6
+ AssignStatement
+  Id fact
+  IntConst 1
+ AssignStatement
+  Id safety
+  IntConst 0
+ ForStatement
+  AssignStatement
+   Id i
+   IntConst 1
+  And
+   LE
+    Id i
+    Id n
+   LT
+    Id safety
+    IntConst 10
+  UpdateStatement
+   Id i
+   Add
+    Id i
+    IntConst 1
+  StatementBlock
+   AssignStatement
+    Id fact
+    Mul
+     Id fact
+     Id i
+   AssignStatement
+    Id safety
+    Add
+     Id safety
+     IntConst 1
+   WriteStatement i
+ WriteStatement fact
+Value of i : 1
+Value of i : 2
+Value of i : 3
+Value of i : 4
+Value of i : 5
+Value of i : 6
+Value of fact : 720

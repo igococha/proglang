@@ -1,0 +1,144 @@
+/*
+ * Grammar for the Straightline Programming Language
+ *
+ * 29/1/2009 Igor Siveroni
+ */
+
+options {
+LOOKAHEAD=1;
+}
+
+PARSER_BEGIN(Parser)
+
+import java.io.*;
+import java.util.Stack;
+
+public class Parser {
+    static int total;
+    static java.util.Stack argStack = new java.util.Stack();
+
+ }
+PARSER_END(Parser)
+
+SKIP :
+{
+ 	" "
+  |	"\r"
+  |	"\t"
+}
+
+
+
+TOKEN :
+{
+	< EOL: "\n" >
+}
+
+TOKEN : /* OPERATORS */
+{
+	< PLUS: "+" >
+  |	< MINUS: "-" >
+  |	< MULTIPLY: "*" >
+  |	< DIVIDE: "/" >
+}
+
+TOKEN :
+{
+    < CONSTANT: ( <DIGIT> )+ >
+|   < ID: ( <LETTER> )+ >
+|   < #DIGIT: ["0" - "9"] >
+|   < #LETTER: ["a"-"z","A"-"Z"] >
+}
+
+
+Stm one_line() :
+{ Stm s=null; }
+{
+    s=prog() <EOF>
+	{ return s; }
+  |  <EOL>
+	{ return null; }
+  |  <EOF>
+	{ return null; }
+}
+
+Stm prog() :
+{ Stm s,s2=null; }
+{
+  s=stm() ( ";" s2=stm() { s = new CompoundStm(s,s2); } )*
+  { return s; }
+}
+
+Stm stm() :
+{ Token t; Exp e=null; ExpList el=null; }
+{
+   t=<ID> ":=" e=exp() { return new AssignStm(t.image,e); }
+|  "print(" el=explist() ")" { return new PrintStm(el); }
+}
+
+ExpList explist() :
+{ Exp e; Stack<Exp> stack = new Stack<Exp>(); ExpList el;}
+{
+   e=exp() { stack.push(e); } ( 
+    ","   e=exp() { stack.push(e); }
+       )* 
+   { e = stack.pop(); 
+     el = new LastExpList(e);
+     while (!stack.empty())
+        el = new PairExpList(stack.pop(),el);
+     return el;
+   }
+}
+
+Exp exp() : 
+{ Exp e; Stm s=null; }
+{
+   e=sum() { return e; }
+|  "(" s=prog() "," e=exp() ")" { return new EseqExp(s,e); }
+}
+
+Exp sum() :
+{Token x; Exp e,e2=null; int op;}
+{
+    e=term() ( 
+	( x = <PLUS> | x = <MINUS> ) e2=term()
+	{ 
+	  if (x.kind == PLUS ) 
+	      op = OpExp.Plus;
+	  else
+	      op = OpExp.Minus;
+	  e = new OpExp(e,op,e2);
+	    	}
+    )*
+    { return e; }
+}
+
+Exp term() :
+{Token x; Exp e,e2=null; int op;}
+{
+    e=element() ( 
+	( x = <MULTIPLY> | x = <DIVIDE> ) e2=element()
+	{
+	    if ( x.kind == MULTIPLY )
+	        op = OpExp.Times;
+	    else
+		op = OpExp.Div;
+	    e = new OpExp(e,op,e2);
+	}
+    )*
+    { return e; }
+}
+
+Exp element() :
+{ Token token; int x=0;}
+{
+      token=<CONSTANT>
+	{   try {
+	    	x = Integer.parseInt(token.image);
+	    	return new NumExp(x);
+	    } catch (NumberFormatException ee) {
+		return new NumExp(x);
+	    }
+	}
+|     token=<ID> { return new IdExp(token.image); }
+}
